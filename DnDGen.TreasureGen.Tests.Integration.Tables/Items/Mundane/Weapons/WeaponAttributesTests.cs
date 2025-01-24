@@ -407,7 +407,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Mundane.Weapons
             AttributeConstants.TwoHanded)]
         public void WeaponAttributes(string name, params string[] attributes)
         {
-            base.Collections(name, attributes);
+            base.AssertCollection(name, attributes);
         }
 
         [Test]

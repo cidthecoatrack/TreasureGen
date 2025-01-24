@@ -322,9 +322,9 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.WondrousItem
         [TestCase(WondrousItemConstants.BottleOfAir)]
         [TestCase(WondrousItemConstants.BagOfHolding_III)]
         [TestCase(WondrousItemConstants.PeriaptOfHealth)]
-        public override void Collections(string name, params string[] attributes)
+        public override void AssertCollection(string name, params string[] attributes)
         {
-            base.Collections(name, attributes);
+            base.AssertCollection(name, attributes);
         }
     }
 }

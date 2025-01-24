@@ -146,7 +146,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical
         [TestCase(SpecialAbilityConstants.DESIGNATEDFOEbane)]
         public void SpecialAbilityRequirements(string name, params string[] attributes)
         {
-            base.Collections(name, attributes);
+            base.AssertCollection(name, attributes);
         }
 
         [Test]

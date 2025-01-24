@@ -46,7 +46,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Armor.Specif
             AttributeConstants.Wood)]
         public void SpecificShieldAttributes(string name, params string[] attributes)
         {
-            base.Collections(name, attributes);
+            base.AssertCollection(name, attributes);
         }
     }
 }

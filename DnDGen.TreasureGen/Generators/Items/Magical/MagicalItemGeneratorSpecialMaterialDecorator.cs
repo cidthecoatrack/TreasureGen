@@ -56,7 +56,7 @@ namespace DnDGen.TreasureGen.Generators.Items.Magical
 
             if (item.Magic.Curse == CurseConstants.SpecificCursedItem)
             {
-                var specialMaterials = TraitConstants.SpecialMaterials.All();
+                var specialMaterials = TraitConstants.SpecialMaterials.GetAll();
                 foreach (var specialMaterial in specialMaterials)
                 {
                     item.Traits.Remove(specialMaterial);
@@ -76,7 +76,7 @@ namespace DnDGen.TreasureGen.Generators.Items.Magical
 
             if (item.Magic.Curse == CurseConstants.SpecificCursedItem)
             {
-                var specialMaterials = TraitConstants.SpecialMaterials.All();
+                var specialMaterials = TraitConstants.SpecialMaterials.GetAll();
                 foreach (var specialMaterial in specialMaterials)
                 {
                     item.Traits.Remove(specialMaterial);

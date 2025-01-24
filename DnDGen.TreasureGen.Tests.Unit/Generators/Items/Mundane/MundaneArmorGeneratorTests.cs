@@ -20,7 +20,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Mundane
         private Mock<ICollectionSelector> mockCollectionsSelector;
         private Mock<IArmorDataSelector> mockArmorDataSelector;
         private ItemVerifier itemVerifier;
-        private ArmorSelection armorSelection;
+        private ArmorDataSelection armorSelection;
 
         [SetUp]
         public void Setup()
@@ -30,7 +30,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Mundane
             mockArmorDataSelector = new Mock<IArmorDataSelector>();
             mundaneArmorGenerator = new MundaneArmorGenerator(mockPercentileSelector.Object, mockCollectionsSelector.Object, mockArmorDataSelector.Object);
             itemVerifier = new ItemVerifier();
-            armorSelection = new ArmorSelection();
+            armorSelection = new ArmorDataSelection();
 
             mockPercentileSelector.Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Percentiles.Set.MundaneArmors)).Returns("armor type");
             mockArmorDataSelector.Setup(s => s.Select("armor type")).Returns(armorSelection);
@@ -481,7 +481,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Mundane
             armorSelection.ArmorCheckPenalty = -90210;
             armorSelection.MaxDexterityBonus = 42;
             mockArmorDataSelector.Setup(s => s.Select("armor")).Returns(armorSelection);
-            mockArmorDataSelector.Setup(s => s.Select("wrong armor")).Returns(new ArmorSelection());
+            mockArmorDataSelector.Setup(s => s.Select("wrong armor")).Returns(new ArmorDataSelection());
 
             var item = mundaneArmorGenerator.Generate("armor");
             var armor = item as Armor;
@@ -520,7 +520,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Mundane
             armorSelection.ArmorCheckPenalty = -90210;
             armorSelection.MaxDexterityBonus = 42;
             mockArmorDataSelector.Setup(s => s.Select("armor")).Returns(armorSelection);
-            mockArmorDataSelector.Setup(s => s.Select("wrong armor")).Returns(new ArmorSelection());
+            mockArmorDataSelector.Setup(s => s.Select("wrong armor")).Returns(new ArmorDataSelection());
 
             var item = mundaneArmorGenerator.Generate("armor");
             var armor = item as Armor;
@@ -560,7 +560,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Mundane
             armorSelection.ArmorCheckPenalty = -90210;
             armorSelection.MaxDexterityBonus = 42;
             mockArmorDataSelector.Setup(s => s.Select("shield")).Returns(armorSelection);
-            mockArmorDataSelector.Setup(s => s.Select("wrong shield")).Returns(new ArmorSelection());
+            mockArmorDataSelector.Setup(s => s.Select("wrong shield")).Returns(new ArmorDataSelection());
 
             var item = mundaneArmorGenerator.Generate("shield");
             var armor = item as Armor;
@@ -600,7 +600,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Mundane
             armorSelection.ArmorCheckPenalty = -90210;
             armorSelection.MaxDexterityBonus = 42;
             mockArmorDataSelector.Setup(s => s.Select("shield")).Returns(armorSelection);
-            mockArmorDataSelector.Setup(s => s.Select("wrong shield")).Returns(new ArmorSelection());
+            mockArmorDataSelector.Setup(s => s.Select("wrong shield")).Returns(new ArmorDataSelection());
 
             var item = mundaneArmorGenerator.Generate("shield");
             var armor = item as Armor;
@@ -639,7 +639,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Mundane
             armorSelection.ArmorCheckPenalty = -90210;
             armorSelection.MaxDexterityBonus = 42;
             mockArmorDataSelector.Setup(s => s.Select("armor")).Returns(armorSelection);
-            mockArmorDataSelector.Setup(s => s.Select("wrong armor")).Returns(new ArmorSelection());
+            mockArmorDataSelector.Setup(s => s.Select("wrong armor")).Returns(new ArmorDataSelection());
 
             var item = mundaneArmorGenerator.Generate("armor", "my trait", "my other trait");
             var armor = item as Armor;
@@ -680,7 +680,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Mundane
             armorSelection.ArmorCheckPenalty = -90210;
             armorSelection.MaxDexterityBonus = 42;
             mockArmorDataSelector.Setup(s => s.Select("armor")).Returns(armorSelection);
-            mockArmorDataSelector.Setup(s => s.Select("wrong armor")).Returns(new ArmorSelection());
+            mockArmorDataSelector.Setup(s => s.Select("wrong armor")).Returns(new ArmorDataSelection());
 
             var item = mundaneArmorGenerator.Generate("armor", "my trait", "my trait");
             var armor = item as Armor;
@@ -723,7 +723,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Mundane
             armorSelection.ArmorCheckPenalty = -90210;
             armorSelection.MaxDexterityBonus = 42;
             mockArmorDataSelector.Setup(s => s.Select("armor")).Returns(armorSelection);
-            mockArmorDataSelector.Setup(s => s.Select("wrong armor")).Returns(new ArmorSelection());
+            mockArmorDataSelector.Setup(s => s.Select("wrong armor")).Returns(new ArmorDataSelection());
 
             var item = mundaneArmorGenerator.Generate("armor", "size");
             var armor = item as Armor;

@@ -28,7 +28,7 @@ namespace DnDGen.TreasureGen.Items
                 if (specificNames.Contains(Name))
                     return summary;
 
-                var specialMaterials = TraitConstants.SpecialMaterials.All();
+                var specialMaterials = TraitConstants.SpecialMaterials.GetAll();
                 var materialTraits = Traits.Intersect(specialMaterials);
                 if (materialTraits.Any())
                 {

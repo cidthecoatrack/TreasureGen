@@ -92,7 +92,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Rods
             AttributeConstants.Specific)]
         public void RodAttributes(string name, params string[] attributes)
         {
-            base.Collections(name, attributes);
+            base.AssertCollection(name, attributes);
         }
 
         [TestCase(RodConstants.Alertness, WeaponConstants.LightMace)]

@@ -1,9 +1,8 @@
-﻿using DnDGen.Infrastructure.Generators;
+﻿using DnDGen.Infrastructure.Factories;
 using DnDGen.Infrastructure.Selectors.Collections;
 using DnDGen.TreasureGen.Items;
 using DnDGen.TreasureGen.Items.Magical;
 using DnDGen.TreasureGen.Items.Mundane;
-using DnDGen.TreasureGen.Selectors.Collections;
 using DnDGen.TreasureGen.Selectors.Percentiles;
 using DnDGen.TreasureGen.Tables;
 using System;
@@ -18,20 +17,17 @@ namespace DnDGen.TreasureGen.Generators.Items
         private readonly ITypeAndAmountPercentileSelector typeAndAmountPercentileSelector;
         private readonly ITreasurePercentileSelector percentileSelector;
         private readonly JustInTimeFactory justInTimeFactory;
-        private readonly IRangeDataSelector rangeDataSelector;
         private readonly ICollectionSelector collectionSelector;
 
         public ItemsGenerator(
             ITypeAndAmountPercentileSelector typeAndAmountPercentileSelector,
             JustInTimeFactory justInTimeFactory,
             ITreasurePercentileSelector percentileSelector,
-            IRangeDataSelector rangeDataSelector,
             ICollectionSelector collectionSelector)
         {
             this.typeAndAmountPercentileSelector = typeAndAmountPercentileSelector;
             this.justInTimeFactory = justInTimeFactory;
             this.percentileSelector = percentileSelector;
-            this.rangeDataSelector = rangeDataSelector;
             this.collectionSelector = collectionSelector;
         }
 

@@ -68,14 +68,14 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items
             PowerConstants.Major)]
         public void PowerGroup(string name, params string[] powers)
         {
-            base.Collections(name, powers);
+            base.AssertCollection(name, powers);
         }
 
         [TestCaseSource(typeof(ItemTestData), nameof(ItemTestData.AlchemicalItems))]
         public void AlchemicalItemPowerGroupsMatch(string itemName)
         {
             var powers = table[ItemTypeConstants.AlchemicalItem];
-            base.Collections(itemName, powers.ToArray());
+            base.AssertCollection(itemName, powers.ToArray());
         }
 
         [TestCaseSource(typeof(ItemTestData), nameof(ItemTestData.Armors))]
@@ -107,7 +107,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items
                 }
             }
 
-            base.Collections(itemName, possiblePowers.ToArray());
+            base.AssertCollection(itemName, possiblePowers.ToArray());
         }
 
         [TestCaseSource(typeof(ItemTestData), nameof(ItemTestData.Potions))]
@@ -129,7 +129,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items
                 }
             }
 
-            base.Collections(itemName, possiblePowers.ToArray());
+            base.AssertCollection(itemName, possiblePowers.ToArray());
         }
 
         private bool NameMatchesWithReplacements(string source, string target)
@@ -159,7 +159,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items
                     possiblePowers.Add(power);
             }
 
-            base.Collections(itemName, possiblePowers.ToArray());
+            base.AssertCollection(itemName, possiblePowers.ToArray());
         }
 
         [TestCaseSource(typeof(ItemTestData), nameof(ItemTestData.Rods))]
@@ -178,7 +178,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items
                     possiblePowers.Add(power);
             }
 
-            base.Collections(itemName, possiblePowers.ToArray());
+            base.AssertCollection(itemName, possiblePowers.ToArray());
         }
 
         [TestCaseSource(typeof(ItemTestData), nameof(ItemTestData.Staffs))]
@@ -197,14 +197,14 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items
                     possiblePowers.Add(power);
             }
 
-            base.Collections(itemName, possiblePowers.ToArray());
+            base.AssertCollection(itemName, possiblePowers.ToArray());
         }
 
         [TestCaseSource(typeof(ItemTestData), nameof(ItemTestData.Tools))]
         public void ToolPowerGroupsMatch(string itemName)
         {
             var powers = table[ItemTypeConstants.Tool];
-            base.Collections(itemName, powers.ToArray());
+            base.AssertCollection(itemName, powers.ToArray());
         }
 
         [TestCaseSource(typeof(ItemTestData), nameof(ItemTestData.Weapons))]
@@ -234,7 +234,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items
                 }
             }
 
-            base.Collections(itemName, possiblePowers.ToArray());
+            base.AssertCollection(itemName, possiblePowers.ToArray());
         }
 
         [TestCaseSource(typeof(ItemTestData), nameof(ItemTestData.WondrousItems))]
@@ -254,7 +254,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items
                     possiblePowers.Add(power);
             }
 
-            base.Collections(itemName, possiblePowers.ToArray());
+            base.AssertCollection(itemName, possiblePowers.ToArray());
         }
     }
 }

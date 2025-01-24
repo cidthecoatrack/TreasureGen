@@ -20,9 +20,9 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Armor.Specif
         [TestCase(ArmorConstants.LionsShield)]
         [TestCase(ArmorConstants.SpinedShield)]
         [TestCase(ArmorConstants.WingedShield)]
-        public override void Collections(string name, params string[] attributes)
+        public override void AssertCollection(string name, params string[] attributes)
         {
-            base.Collections(name, attributes);
+            base.AssertCollection(name, attributes);
         }
     }
 }

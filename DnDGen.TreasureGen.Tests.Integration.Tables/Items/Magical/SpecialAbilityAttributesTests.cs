@@ -123,7 +123,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical
                 Convert.ToString(strength)
             };
 
-            base.OrderedCollections(name, attributes);
+            base.AssertOrderedCollections(name, attributes);
         }
 
         [Test]

@@ -1,4 +1,4 @@
-﻿using DnDGen.Infrastructure.Generators;
+﻿using DnDGen.Infrastructure.Factories;
 using DnDGen.Infrastructure.Selectors.Collections;
 using DnDGen.TreasureGen.Generators.Items;
 using DnDGen.TreasureGen.Generators.Items.Magical;

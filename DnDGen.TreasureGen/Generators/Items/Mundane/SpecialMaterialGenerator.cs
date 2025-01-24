@@ -39,7 +39,7 @@ namespace DnDGen.TreasureGen.Generators.Items.Mundane
 
         private bool TraitsAllowForSpecialMaterials(IEnumerable<string> attributes, IEnumerable<string> traits)
         {
-            var allMaterials = TraitConstants.SpecialMaterials.All();
+            var allMaterials = TraitConstants.SpecialMaterials.GetAll();
             var materials = traits.Intersect(allMaterials);
 
             var numberOfMaterialsAlreadyHad = materials.Count();
@@ -59,7 +59,7 @@ namespace DnDGen.TreasureGen.Generators.Items.Mundane
         private Dictionary<string, IEnumerable<string>> GetSpecialMaterialAttributes()
         {
             var specialMaterialAttributeRequirements = new Dictionary<string, IEnumerable<string>>();
-            var allMaterials = TraitConstants.SpecialMaterials.All();
+            var allMaterials = TraitConstants.SpecialMaterials.GetAll();
 
             foreach (var material in allMaterials)
             {

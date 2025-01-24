@@ -282,7 +282,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Weapons.Spec
             AttributeConstants.Exotic)]
         public void SpecificWeaponAttributes(string name, params string[] attributes)
         {
-            base.Collections(name, attributes);
+            base.AssertCollection(name, attributes);
         }
 
         [TestCase(WeaponConstants.BerserkingSword)]

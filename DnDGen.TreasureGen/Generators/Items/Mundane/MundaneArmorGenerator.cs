@@ -1,8 +1,8 @@
 ﻿using DnDGen.Infrastructure.Selectors.Collections;
 using DnDGen.TreasureGen.Items;
 using DnDGen.TreasureGen.Items.Mundane;
-using DnDGen.TreasureGen.Selectors.Collections;
 using DnDGen.TreasureGen.Selectors.Percentiles;
+using DnDGen.TreasureGen.Selectors.Selections;
 using DnDGen.TreasureGen.Tables;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,9 +13,12 @@ namespace DnDGen.TreasureGen.Generators.Items.Mundane
     {
         private readonly ITreasurePercentileSelector percentileSelector;
         private readonly ICollectionSelector collectionsSelector;
-        private readonly IArmorDataSelector armorDataSelector;
+        private readonly ICollectionDataSelector<ArmorDataSelection> armorDataSelector;
 
-        public MundaneArmorGenerator(ITreasurePercentileSelector percentileSelector, ICollectionSelector collectionsSelector, IArmorDataSelector armorDataSelector)
+        public MundaneArmorGenerator(
+            ITreasurePercentileSelector percentileSelector,
+            ICollectionSelector collectionsSelector,
+            ICollectionDataSelector<ArmorDataSelection> armorDataSelector)
         {
             this.percentileSelector = percentileSelector;
             this.collectionsSelector = collectionsSelector;
@@ -49,7 +52,7 @@ namespace DnDGen.TreasureGen.Generators.Items.Mundane
             armor.Size = GetSize(armor);
             armor.Traits.Remove(armor.Size);
 
-            var armorSelection = armorDataSelector.Select(armor.Name);
+            var armorSelection = armorDataSelector.SelectFrom(Config.Name, TableNameConstants.Collections.Set.ArmorData, armor.Name).Single();
             armor.ArmorBonus = armorSelection.ArmorBonus;
             armor.ArmorCheckPenalty = armorSelection.ArmorCheckPenalty;
             armor.MaxDexterityBonus = armorSelection.MaxDexterityBonus;

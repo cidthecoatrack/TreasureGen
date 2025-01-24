@@ -45,7 +45,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Mundane.Armors
         [TestCase(ArmorConstants.FullPlate, AttributeConstants.Metal)]
         public void ArmorAttributes(string name, params string[] attributes)
         {
-            base.Collections(name, attributes);
+            base.AssertCollection(name, attributes);
         }
     }
 }

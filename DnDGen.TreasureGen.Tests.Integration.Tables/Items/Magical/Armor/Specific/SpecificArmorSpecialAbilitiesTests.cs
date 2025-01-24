@@ -28,7 +28,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Armor.Specif
         [TestCase(ArmorConstants.ArmorOfArrowAttraction)]
         public void SpecificArmorSpecialAbilities(string name, params string[] attributes)
         {
-            base.Collections(name, attributes);
+            base.AssertCollection(name, attributes);
         }
     }
 }

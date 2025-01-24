@@ -28,7 +28,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables
             return table[name];
         }
 
-        public virtual void Collections(string name, params string[] items)
+        public virtual void AssertCollection(string name, params string[] items)
         {
             Assert.That(table.Keys, Contains.Item(name), tableName);
             AssertCollection(table[name], items);
@@ -46,7 +46,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables
             }
         }
 
-        public virtual void OrderedCollections(string name, params string[] items)
+        public virtual void AssertOrderedCollections(string name, params string[] items)
         {
             Assert.That(table.Keys, Contains.Item(name), tableName);
             AssertOrderedCollection(table[name], items);

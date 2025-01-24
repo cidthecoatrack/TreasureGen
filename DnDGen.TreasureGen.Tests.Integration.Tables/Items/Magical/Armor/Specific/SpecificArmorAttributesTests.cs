@@ -54,7 +54,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Armor
             AttributeConstants.Metal)]
         public void SpecificArmorAttributes(string name, params string[] attributes)
         {
-            base.Collections(name, attributes);
+            base.AssertCollection(name, attributes);
         }
 
         [TestCase(ArmorConstants.ArmorOfRage)]

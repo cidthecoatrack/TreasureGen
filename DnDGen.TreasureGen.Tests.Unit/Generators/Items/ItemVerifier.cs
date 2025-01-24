@@ -246,7 +246,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
 
         public void AssertSpecificCursedItem(Item item)
         {
-            var materials = TraitConstants.SpecialMaterials.All();
+            var materials = TraitConstants.SpecialMaterials.GetAll();
 
             AssertItem(item);
             Assert.That(item.Magic.Curse, Is.Not.Empty.And.EqualTo(CurseConstants.SpecificCursedItem), item.Summary);
@@ -347,7 +347,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
             Assert.That(item.IsMagical, Is.True, item.Summary);
             Assert.That(item.Magic.Curse, Is.EqualTo(template.Magic.Curse).Or.EqualTo(CurseConstants.SpecificCursedItem), item.Summary);
 
-            var sizes = TraitConstants.Sizes.All();
+            var sizes = TraitConstants.Sizes.GetAll();
             Assert.That(item.Traits, Is.SupersetOf(template.Traits.Except(sizes)), item.Summary);
 
             if (item.Attributes.Contains(AttributeConstants.OneTimeUse) || item.Attributes.Contains(AttributeConstants.Ammunition))

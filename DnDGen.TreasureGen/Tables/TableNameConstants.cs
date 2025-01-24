@@ -94,7 +94,9 @@
                 public const string SpecialMaterials = "SpecialMaterials";
                 public const string SpecificCursedItemItemTypes = "SpecificCursedItemItemTypes";
                 public const string SpecificCursedItemAttributes = "SpecificCursedItemAttributes";
+                public const string AbilityDamages = "AbilityDamages";
                 public const string WeaponDamages = "WeaponDamages";
+                public const string WeaponCriticalDamages = "WeaponCriticalDamages";
                 public const string WeaponData = "WeaponData";
                 public const string WondrousItemContents = "WondrousItemContents";
             }

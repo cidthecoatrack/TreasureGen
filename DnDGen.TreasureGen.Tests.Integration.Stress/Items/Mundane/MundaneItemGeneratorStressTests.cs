@@ -14,7 +14,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Stress.Items.Mundane
         [SetUp]
         public void MundaneItemGeneratorStressSetup()
         {
-            materials = TraitConstants.SpecialMaterials.All();
+            materials = TraitConstants.SpecialMaterials.GetAll();
         }
 
         protected void GenerateAndAssertItem()

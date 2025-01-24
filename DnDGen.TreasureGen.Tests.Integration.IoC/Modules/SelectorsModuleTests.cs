@@ -1,5 +1,7 @@
-﻿using DnDGen.TreasureGen.Selectors.Collections;
+﻿using DnDGen.Infrastructure.Selectors.Collections;
+using DnDGen.TreasureGen.Selectors.Collections;
 using DnDGen.TreasureGen.Selectors.Percentiles;
+using DnDGen.TreasureGen.Selectors.Selections;
 using NUnit.Framework;
 
 namespace DnDGen.TreasureGen.Tests.Integration.IoC.Modules
@@ -45,15 +47,27 @@ namespace DnDGen.TreasureGen.Tests.Integration.IoC.Modules
         }
 
         [Test]
-        public void ArmorDataSelectorIsNotConstructedAsSingleton()
+        public void CollectionData_ArmorDataSelectorIsNotConstructedAsSingleton()
         {
-            AssertNotSingleton<IArmorDataSelector>();
+            AssertNotSingleton<ICollectionDataSelector<ArmorDataSelection>>();
+        }
+
+        [Test]
+        public void CollectionData_WeaponDataSelectorIsNotConstructedAsSingleton()
+        {
+            AssertNotSingleton<ICollectionDataSelector<WeaponDataSelection>>();
         }
 
         [Test]
         public void WeaponDataSelectorIsNotConstructedAsSingleton()
         {
             AssertNotSingleton<IWeaponDataSelector>();
+        }
+
+        [Test]
+        public void DamageDataSelectorIsNotConstructedAsSingleton()
+        {
+            AssertNotSingleton<ICollectionDataSelector<DamageDataSelection>>();
         }
 
         [Test]

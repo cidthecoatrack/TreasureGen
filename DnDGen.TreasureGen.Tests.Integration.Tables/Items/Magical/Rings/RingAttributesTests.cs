@@ -70,7 +70,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Rings
         [TestCase(RingConstants.ThreeWishes, AttributeConstants.Charged, AttributeConstants.OneTimeUse)]
         public void RingAttributes(string name, params string[] attributes)
         {
-            base.Collections(name, attributes);
+            base.AssertCollection(name, attributes);
         }
     }
 }

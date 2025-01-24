@@ -24,7 +24,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Mundane
         private string expectedTableName;
         private Mock<Dice> mockDice;
         private ItemVerifier itemVerifier;
-        private WeaponSelection weaponSelection;
+        private WeaponDataSelection weaponSelection;
         private Mock<IWeaponDataSelector> mockWeaponDataSelector;
         private Mock<IReplacementSelector> mockReplacementSelector;
 
@@ -43,7 +43,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Mundane
                 mockWeaponDataSelector.Object,
                 mockReplacementSelector.Object);
             itemVerifier = new ItemVerifier();
-            weaponSelection = new WeaponSelection();
+            weaponSelection = new WeaponDataSelection();
 
             mockPercentileSelector.Setup(p => p.SelectFrom(Config.Name, TableNameConstants.Percentiles.Set.MundaneWeaponTypes)).Returns("weapon type");
             expectedTableName = string.Format(TableNameConstants.Percentiles.Formattable.WEAPONTYPEWeapons, "weapon type");
@@ -64,7 +64,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Mundane
             weaponSelection.CriticalDamagesBySize["size"].Add(new Damage { Roll = "normal amount+", Type = "emotional" });
             weaponSelection.CriticalDamagesBySize["other size"].Add(new Damage { Roll = "other amount+", Type = "emotional" });
 
-            var defaultSelection = new WeaponSelection();
+            var defaultSelection = new WeaponDataSelection();
             defaultSelection.DamagesBySize["size"] = new List<Damage>();
 
             mockWeaponDataSelector.Setup(s => s.Select(It.IsAny<string>())).Returns(defaultSelection);

@@ -27,7 +27,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Intelligence
             data[DataIndexConstants.Intelligence.LesserPowersCount] = Convert.ToString(lesserPowersCount);
             data[DataIndexConstants.Intelligence.Senses] = senses;
 
-            OrderedCollections(strength, data);
+            AssertOrderedCollections(strength, data);
         }
     }
 }

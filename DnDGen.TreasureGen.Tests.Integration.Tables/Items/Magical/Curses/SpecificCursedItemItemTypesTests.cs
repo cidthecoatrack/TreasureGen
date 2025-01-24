@@ -42,9 +42,9 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Curses
         [TestCase(WondrousItemConstants.NecklaceOfStrangulation, ItemTypeConstants.WondrousItem)]
         [TestCase(WondrousItemConstants.CloakOfPoisonousness, ItemTypeConstants.WondrousItem)]
         [TestCase(WondrousItemConstants.ScarabOfDeath, ItemTypeConstants.WondrousItem)]
-        public override void Collections(string name, params string[] attributes)
+        public override void AssertCollection(string name, params string[] attributes)
         {
-            base.Collections(name, attributes);
+            base.AssertCollection(name, attributes);
             Assert.That(attributes, Has.Length.EqualTo(1));
         }
     }

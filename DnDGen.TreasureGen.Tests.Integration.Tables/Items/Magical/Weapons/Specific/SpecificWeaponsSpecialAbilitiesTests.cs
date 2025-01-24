@@ -55,7 +55,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Weapons.Spec
         [TestCase(WeaponConstants.MaceOfBlood)]
         public void SpecificWeaponSpecialAbilities(string name, params string[] attributes)
         {
-            base.Collections(name, attributes);
+            base.AssertCollection(name, attributes);
         }
     }
 }

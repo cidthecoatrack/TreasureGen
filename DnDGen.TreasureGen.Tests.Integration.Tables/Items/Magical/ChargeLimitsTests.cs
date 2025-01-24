@@ -42,7 +42,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical
         public void ChargeLimits(string name, int min, int max)
         {
             var limits = new[] { min.ToString(), max.ToString() };
-            base.OrderedCollections(name, limits);
+            base.AssertOrderedCollections(name, limits);
         }
     }
 }

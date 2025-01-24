@@ -1,10 +1,9 @@
-﻿using DnDGen.Infrastructure.Generators;
+﻿using DnDGen.Infrastructure.Factories;
 using DnDGen.Infrastructure.Selectors.Collections;
 using DnDGen.TreasureGen.Generators.Items;
 using DnDGen.TreasureGen.Items;
 using DnDGen.TreasureGen.Items.Magical;
 using DnDGen.TreasureGen.Items.Mundane;
-using DnDGen.TreasureGen.Selectors.Collections;
 using DnDGen.TreasureGen.Selectors.Percentiles;
 using DnDGen.TreasureGen.Selectors.Selections;
 using DnDGen.TreasureGen.Tables;
@@ -23,7 +22,6 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
         private Mock<MundaneItemGenerator> mockMundaneItemGenerator;
         private Mock<ITreasurePercentileSelector> mockPercentileSelector;
         private Mock<MagicalItemGenerator> mockMagicalItemGenerator;
-        private Mock<IRangeDataSelector> mockRangeDataSelector;
         private IItemsGenerator itemsGenerator;
         private TypeAndAmountSelection selection;
         private Mock<ICollectionSelector> mockCollectionSelector;
@@ -37,14 +35,12 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
             mockMagicalItemGenerator = new Mock<MagicalItemGenerator>();
             mockTypeAndAmountPercentileSelector = new Mock<ITypeAndAmountPercentileSelector>();
             mockMundaneItemGenerator = new Mock<MundaneItemGenerator>();
-            mockRangeDataSelector = new Mock<IRangeDataSelector>();
             mockCollectionSelector = new Mock<ICollectionSelector>();
 
             itemsGenerator = new ItemsGenerator(
                 mockTypeAndAmountPercentileSelector.Object,
                 mockJustInTimeFactory.Object,
                 mockPercentileSelector.Object,
-                mockRangeDataSelector.Object,
                 mockCollectionSelector.Object);
 
             selection.Type = "power";

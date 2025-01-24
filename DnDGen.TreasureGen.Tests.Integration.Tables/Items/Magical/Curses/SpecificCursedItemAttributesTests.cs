@@ -80,7 +80,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Curses
         [TestCase(WondrousItemConstants.VacousGrimoire, AttributeConstants.Specific)]
         public void SpecificCursedItemAttributes(string name, params string[] attributes)
         {
-            base.Collections(name, attributes);
+            base.AssertCollection(name, attributes);
         }
 
         [TestCase(WeaponConstants.BerserkingSword, WeaponConstants.Greatsword)]
