@@ -21,10 +21,15 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Mundane.Weapons
         private ICollectionDataSelector<WeaponDataSelection> weaponDataSelector;
         private ICollectionDataSelector<DamageDataSelection> damageDataSelector;
 
+        [OneTimeSetUp]
+        public void OneTimeSetup()
+        {
+            weaponDamages = GetWeaponDamages();
+        }
+
         [SetUp]
         public void Setup()
         {
-            weaponDamages = GetWeaponDamages();
             weaponDataSelector = GetNewInstanceOf<ICollectionDataSelector<WeaponDataSelection>>();
             damageDataSelector = GetNewInstanceOf<ICollectionDataSelector<DamageDataSelection>>();
         }

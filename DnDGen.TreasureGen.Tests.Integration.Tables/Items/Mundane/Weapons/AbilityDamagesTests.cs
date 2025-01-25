@@ -17,8 +17,8 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Mundane.Weapons
 
         private Dictionary<string, List<string>> abilityDamages;
 
-        [SetUp]
-        public void Setup()
+        [OneTimeSetUp]
+        public void OneTimeSetup()
         {
             abilityDamages = GetAbilityDamages();
         }
@@ -52,205 +52,467 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Mundane.Weapons
             }
         }
 
-        [TestCase(SpecialAbilityConstants.Aberrationbane,
-            "2d6##Against Aberrations",
-            "2d6##Against Aberrations",
-            "2d6##Against Aberrations",
-            "2d6##Against Aberrations")]
-        [TestCase(SpecialAbilityConstants.AcidResistance)]
-        [TestCase(SpecialAbilityConstants.AirOutsiderbane,
-            "2d6##Against Air Outsiders",
-            "2d6##Against Air Outsiders",
-            "2d6##Against Air Outsiders",
-            "2d6##Against Air Outsiders")]
-        [TestCase(SpecialAbilityConstants.Anarchic,
-            "2d6##Against Lawful alignment",
-            "2d6##Against Lawful alignment",
-            "2d6##Against Lawful alignment",
-            "2d6##Against Lawful alignment")]
-        [TestCase(SpecialAbilityConstants.Animalbane,
-            "2d6##Against Animals",
-            "2d6##Against Animals",
-            "2d6##Against Animals",
-            "2d6##Against Animals")]
-        [TestCase(SpecialAbilityConstants.Animated)]
-        [TestCase(SpecialAbilityConstants.AquaticHumanoidbane,
-            "2d6##Against Aquatic Humanoids",
-            "2d6##Against Aquatic Humanoids",
-            "2d6##Against Aquatic Humanoids",
-            "2d6##Against Aquatic Humanoids")]
-        [TestCase(SpecialAbilityConstants.ArrowCatching)]
-        [TestCase(SpecialAbilityConstants.ArrowDeflection)]
-        [TestCase(SpecialAbilityConstants.Axiomatic,
-            "2d6##Against Chaotic alignment",
-            "2d6##Against Chaotic alignment",
-            "2d6##Against Chaotic alignment",
-            "2d6##Against Chaotic alignment")]
-        [TestCase(SpecialAbilityConstants.Bane,
-            "2d6##Against DESIGNATEDFOE",
-            "2d6##Against DESIGNATEDFOE",
-            "2d6##Against DESIGNATEDFOE",
-            "2d6##Against DESIGNATEDFOE")]
-        [TestCase(SpecialAbilityConstants.Bashing)]
-        [TestCase(SpecialAbilityConstants.Blinding)]
-        [TestCase(SpecialAbilityConstants.BrilliantEnergy)]
-        [TestCase(SpecialAbilityConstants.ChaoticOutsiderbane,
-            "2d6##Against Chaotic Outsiders",
-            "2d6##Against Chaotic Outsiders",
-            "2d6##Against Chaotic Outsiders",
-            "2d6##Against Chaotic Outsiders")]
-        [TestCase(SpecialAbilityConstants.ColdResistance)]
-        [TestCase(SpecialAbilityConstants.Constructbane,
-            "2d6##Against Constructs",
-            "2d6##Against Constructs",
-            "2d6##Against Constructs",
-            "2d6##Against Constructs")]
-        [TestCase(SpecialAbilityConstants.Dancing)]
-        [TestCase(SpecialAbilityConstants.Defending)]
-        [TestCase(SpecialAbilityConstants.DESIGNATEDFOEbane,
-            "2d6##Against DESIGNATEDFOE",
-            "2d6##Against DESIGNATEDFOE",
-            "2d6##Against DESIGNATEDFOE",
-            "2d6##Against DESIGNATEDFOE")]
-        [TestCase(SpecialAbilityConstants.Disruption)]
-        [TestCase(SpecialAbilityConstants.Distance)]
-        [TestCase(SpecialAbilityConstants.Dragonbane,
-            "2d6##Against Dragons",
-            "2d6##Against Dragons",
-            "2d6##Against Dragons",
-            "2d6##Against Dragons")]
-        [TestCase(SpecialAbilityConstants.Dwarfbane,
-            "2d6##Against Dwarfs",
-            "2d6##Against Dwarfs",
-            "2d6##Against Dwarfs",
-            "2d6##Against Dwarfs")]
-        [TestCase(SpecialAbilityConstants.EarthOutsiderbane,
-            "2d6##Against Earth Outsiders",
-            "2d6##Against Earth Outsiders",
-            "2d6##Against Earth Outsiders",
-            "2d6##Against Earth Outsiders")]
-        [TestCase(SpecialAbilityConstants.ElectricityResistance)]
-        [TestCase(SpecialAbilityConstants.Elementalbane,
-            "2d6##Against Elementals",
-            "2d6##Against Elementals",
-            "2d6##Against Elementals",
-            "2d6##Against Elementals")]
-        [TestCase(SpecialAbilityConstants.Elfbane,
-            "2d6##Against Elfs",
-            "2d6##Against Elfs",
-            "2d6##Against Elfs",
-            "2d6##Against Elfs")]
-        [TestCase(SpecialAbilityConstants.Etherealness)]
-        [TestCase(SpecialAbilityConstants.EvilOutsiderbane,
-            "2d6##Against Evil Outsiders",
-            "2d6##Against Evil Outsiders",
-            "2d6##Against Evil Outsiders",
-            "2d6##Against Evil Outsiders")]
-        [TestCase(SpecialAbilityConstants.Feybane,
-            "2d6##Against Feys",
-            "2d6##Against Feys",
-            "2d6##Against Feys",
-            "2d6##Against Feys")]
-        [TestCase(SpecialAbilityConstants.FireOutsiderbane,
-            "2d6##Against Fire Outsiders",
-            "2d6##Against Fire Outsiders",
-            "2d6##Against Fire Outsiders",
-            "2d6##Against Fire Outsiders")]
-        [TestCase(SpecialAbilityConstants.FireResistance)]
-        [TestCase(SpecialAbilityConstants.Flaming,
-            "1d6#Fire#",
-            "1d6#Fire#",
-            "1d6#Fire#",
-            "1d6#Fire#")]
-        [TestCase(SpecialAbilityConstants.FlamingBurst,
-            "1d6#Fire#",
-            "1d6#Fire#,1d10#Fire#",
-            "1d6#Fire#,2d10#Fire#",
-            "1d6#Fire#,3d10#Fire#")]
-        [TestCase(SpecialAbilityConstants.Fortification)]
-        [TestCase(SpecialAbilityConstants.Frost,
-            "1d6#Cold#",
-            "1d6#Cold#",
-            "1d6#Cold#",
-            "1d6#Cold#")]
-        [TestCase(SpecialAbilityConstants.GhostTouch)]
-        [TestCase(SpecialAbilityConstants.GhostTouchArmor)]
-        [TestCase(SpecialAbilityConstants.GhostTouchWeapon)]
-        [TestCase(SpecialAbilityConstants.Giantbane,
-            "2d6##Against Giants",
-            "2d6##Against Giants",
-            "2d6##Against Giants",
-            "2d6##Against Giants")]
-        [TestCase(SpecialAbilityConstants.Glamered)]
-        [TestCase(SpecialAbilityConstants.Gnollbane, "2d6##Against Gnolls", "2d6##Against Gnolls", "2d6##Against Gnolls", "2d6##Against Gnolls")]
-        [TestCase(SpecialAbilityConstants.Gnomebane, "2d6##Against Gnomes", "2d6##Against Gnomes", "2d6##Against Gnomes", "2d6##Against Gnomes")]
-        [TestCase(SpecialAbilityConstants.Goblinoidbane, "2d6##Against Goblinoids", "2d6##Against Goblinoids", "2d6##Against Goblinoids", "2d6##Against Goblinoids")]
-        [TestCase(SpecialAbilityConstants.GoodOutsiderbane, "2d6##Against Good Outsiders", "2d6##Against Good Outsiders", "2d6##Against Good Outsiders", "2d6##Against Good Outsiders")]
-        [TestCase(SpecialAbilityConstants.GreaterAcidResistance)]
-        [TestCase(SpecialAbilityConstants.GreaterColdResistance)]
-        [TestCase(SpecialAbilityConstants.GreaterElectricityResistance)]
-        [TestCase(SpecialAbilityConstants.GreaterFireResistance)]
-        [TestCase(SpecialAbilityConstants.GreaterShadow)]
-        [TestCase(SpecialAbilityConstants.GreaterSilentMoves)]
-        [TestCase(SpecialAbilityConstants.GreaterSlick)]
-        [TestCase(SpecialAbilityConstants.GreaterSonicResistance)]
-        [TestCase(SpecialAbilityConstants.Halflingbane, "2d6##Against Halflings", "2d6##Against Halflings", "2d6##Against Halflings", "2d6##Against Halflings")]
-        [TestCase(SpecialAbilityConstants.HeavyFortification)]
-        [TestCase(SpecialAbilityConstants.Holy, "2d6##Against Evil alignment", "2d6##Against Evil alignment", "2d6##Against Evil alignment", "2d6##Against Evil alignment")]
-        [TestCase(SpecialAbilityConstants.Humanbane, "2d6##Against Humans", "2d6##Against Humans", "2d6##Against Humans", "2d6##Against Humans")]
-        [TestCase(SpecialAbilityConstants.IcyBurst, "1d6#Cold#", "1d6#Cold#,1d10#Cold#", "1d6#Cold#,2d10#Cold#", "1d6#Cold#,3d10#Cold#")]
-        [TestCase(SpecialAbilityConstants.ImprovedAcidResistance)]
-        [TestCase(SpecialAbilityConstants.ImprovedColdResistance)]
-        [TestCase(SpecialAbilityConstants.ImprovedElectricityResistance)]
-        [TestCase(SpecialAbilityConstants.ImprovedFireResistance)]
-        [TestCase(SpecialAbilityConstants.ImprovedShadow)]
-        [TestCase(SpecialAbilityConstants.ImprovedSilentMoves)]
-        [TestCase(SpecialAbilityConstants.ImprovedSlick)]
-        [TestCase(SpecialAbilityConstants.ImprovedSonicResistance)]
-        [TestCase(SpecialAbilityConstants.Invulnerability)]
-        [TestCase(SpecialAbilityConstants.Keen)]
-        [TestCase(SpecialAbilityConstants.KiFocus)]
-        [TestCase(SpecialAbilityConstants.LawfulOutsiderbane, "2d6##Against Lawful Outsiders", "2d6##Against Lawful Outsiders", "2d6##Against Lawful Outsiders", "2d6##Against Lawful Outsiders")]
-        [TestCase(SpecialAbilityConstants.LightFortification)]
-        [TestCase(SpecialAbilityConstants.MagicalBeastbane, "2d6##Against Magical Beasts", "2d6##Against Magical Beasts", "2d6##Against Magical Beasts", "2d6##Against Magical Beasts")]
-        [TestCase(SpecialAbilityConstants.Merciful, "1d6##", "1d6##", "1d6##", "1d6##")]
-        [TestCase(SpecialAbilityConstants.MightyCleaving)]
-        [TestCase(SpecialAbilityConstants.ModerateFortification)]
-        [TestCase(SpecialAbilityConstants.MonstrousHumanoidbane, "2d6##Against Monstrous Humanoids", "2d6##Against Monstrous Humanoids", "2d6##Against Monstrous Humanoids", "2d6##Against Monstrous Humanoids")]
-        [TestCase(SpecialAbilityConstants.Oozebane, "2d6##Against Oozes", "2d6##Against Oozes", "2d6##Against Oozes", "2d6##Against Oozes")]
-        [TestCase(SpecialAbilityConstants.Orcbane, "2d6##Against Orcs", "2d6##Against Orcs", "2d6##Against Orcs", "2d6##Against Orcs")]
-        [TestCase(SpecialAbilityConstants.Plantbane, "2d6##Against Plants", "2d6##Against Plants", "2d6##Against Plants", "2d6##Against Plants")]
-        [TestCase(SpecialAbilityConstants.Reflecting)]
-        [TestCase(SpecialAbilityConstants.ReptilianHumanoidbane, "2d6##Against Reptilian Humanoids", "2d6##Against Reptilian Humanoids", "2d6##Against Reptilian Humanoids", "2d6##Against Reptilian Humanoids")]
-        [TestCase(SpecialAbilityConstants.Returning)]
-        [TestCase(SpecialAbilityConstants.Seeking)]
-        [TestCase(SpecialAbilityConstants.Shadow)]
-        [TestCase(SpecialAbilityConstants.Shapeshifterbane, "2d6##Against Shapeshifters", "2d6##Against Shapeshifters", "2d6##Against Shapeshifters", "2d6##Against Shapeshifters")]
-        [TestCase(SpecialAbilityConstants.Shock, "1d6#Electricity#", "1d6#Electricity#", "1d6#Electricity#", "1d6#Electricity#")]
-        [TestCase(SpecialAbilityConstants.ShockingBurst, "1d6#Electricity#", "1d6#Electricity#,1d10#Electricity#", "1d6#Electricity#,2d10#Electricity#", "1d6#Electricity#,3d10#Electricity#")]
-        [TestCase(SpecialAbilityConstants.SilentMoves)]
-        [TestCase(SpecialAbilityConstants.Slick)]
-        [TestCase(SpecialAbilityConstants.SonicResistance)]
-        [TestCase(SpecialAbilityConstants.Speed)]
-        [TestCase(SpecialAbilityConstants.SpellResistance)]
-        [TestCase(SpecialAbilityConstants.SpellResistance13)]
-        [TestCase(SpecialAbilityConstants.SpellResistance15)]
-        [TestCase(SpecialAbilityConstants.SpellResistance17)]
-        [TestCase(SpecialAbilityConstants.SpellResistance19)]
-        [TestCase(SpecialAbilityConstants.SpellStoring)]
-        [TestCase(SpecialAbilityConstants.Throwing)]
-        [TestCase(SpecialAbilityConstants.Thundering, "", "1d8#Sonic#", "2d8#Sonic#", "3d8#Sonic#")]
-        [TestCase(SpecialAbilityConstants.Undeadbane, "2d6##Against Undead", "2d6##Against Undead", "2d6##Against Undead", "2d6##Against Undead")]
-        [TestCase(SpecialAbilityConstants.UndeadControlling)]
-        [TestCase(SpecialAbilityConstants.Unholy, "2d6##Against Good alignment", "2d6##Against Good alignment", "2d6##Against Good alignment", "2d6##Against Good alignment")]
-        [TestCase(SpecialAbilityConstants.Verminbane, "2d6##Against Vermin", "2d6##Against Vermin", "2d6##Against Vermin", "2d6##Against Vermin")]
-        [TestCase(SpecialAbilityConstants.Vicious, "2d6##,1d6##To the wielder", "2d6##,1d6##To the wielder", "2d6##,1d6##To the wielder", "2d6##,1d6##To the wielder")]
-        [TestCase(SpecialAbilityConstants.Vorpal)]
-        [TestCase(SpecialAbilityConstants.WaterOutsiderbane, "2d6##Against Water Outsiders", "2d6##Against Water Outsiders", "2d6##Against Water Outsiders", "2d6##Against Water Outsiders")]
         private Dictionary<string, List<string>> GetAbilityDamages()
         {
             var damages = new Dictionary<string, List<string>>
             {
+                [SpecialAbilityConstants.AcidResistance] = [],
+                [SpecialAbilityConstants.AcidResistance + "x2"] = [],
+                [SpecialAbilityConstants.AcidResistance + "x3"] = [],
+                [SpecialAbilityConstants.AcidResistance + "x4"] = [],
+                [SpecialAbilityConstants.Animated] = [],
+                [SpecialAbilityConstants.Animated + "x2"] = [],
+                [SpecialAbilityConstants.Animated + "x3"] = [],
+                [SpecialAbilityConstants.Animated + "x4"] = [],
+                [SpecialAbilityConstants.Aberrationbane] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Aberrations" })],
+                [SpecialAbilityConstants.Aberrationbane + "x2"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Aberrations" })],
+                [SpecialAbilityConstants.Aberrationbane + "x3"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Aberrations" })],
+                [SpecialAbilityConstants.Aberrationbane + "x4"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Aberrations" })],
+                [SpecialAbilityConstants.Animalbane] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Animals" })],
+                [SpecialAbilityConstants.Animalbane + "x2"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Animals" })],
+                [SpecialAbilityConstants.Animalbane + "x3"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Animals" })],
+                [SpecialAbilityConstants.Animalbane + "x4"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Animals" })],
+                [SpecialAbilityConstants.AquaticHumanoidbane] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Aquatic Humanoids" })],
+                [SpecialAbilityConstants.AquaticHumanoidbane + "x2"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Aquatic Humanoids" })],
+                [SpecialAbilityConstants.AquaticHumanoidbane + "x3"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Aquatic Humanoids" })],
+                [SpecialAbilityConstants.AquaticHumanoidbane + "x4"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Aquatic Humanoids" })],
+                [SpecialAbilityConstants.ArrowCatching] = [],
+                [SpecialAbilityConstants.ArrowCatching + "x2"] = [],
+                [SpecialAbilityConstants.ArrowCatching + "x3"] = [],
+                [SpecialAbilityConstants.ArrowCatching + "x4"] = [],
+                [SpecialAbilityConstants.ArrowDeflection] = [],
+                [SpecialAbilityConstants.ArrowDeflection + "x2"] = [],
+                [SpecialAbilityConstants.ArrowDeflection + "x3"] = [],
+                [SpecialAbilityConstants.ArrowDeflection + "x4"] = [],
+                [SpecialAbilityConstants.Anarchic] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Lawful alignment" })],
+                [SpecialAbilityConstants.Anarchic + "x2"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Lawful alignment" })],
+                [SpecialAbilityConstants.Anarchic + "x3"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Lawful alignment" })],
+                [SpecialAbilityConstants.Anarchic + "x4"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Lawful alignment" })],
+                [SpecialAbilityConstants.Axiomatic] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Chaotic alignment" })],
+                [SpecialAbilityConstants.Axiomatic + "x2"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Chaotic alignment" })],
+                [SpecialAbilityConstants.Axiomatic + "x3"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Chaotic alignment" })],
+                [SpecialAbilityConstants.Axiomatic + "x4"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Chaotic alignment" })],
+                [SpecialAbilityConstants.Bashing] = [],
+                [SpecialAbilityConstants.Bashing + "x2"] = [],
+                [SpecialAbilityConstants.Bashing + "x3"] = [],
+                [SpecialAbilityConstants.Bashing + "x4"] = [],
+                [SpecialAbilityConstants.Blinding] = [],
+                [SpecialAbilityConstants.Blinding + "x2"] = [],
+                [SpecialAbilityConstants.Blinding + "x3"] = [],
+                [SpecialAbilityConstants.Blinding + "x4"] = [],
+                [SpecialAbilityConstants.BrilliantEnergy] = [],
+                [SpecialAbilityConstants.BrilliantEnergy + "x2"] = [],
+                [SpecialAbilityConstants.BrilliantEnergy + "x3"] = [],
+                [SpecialAbilityConstants.BrilliantEnergy + "x4"] = [],
+                [SpecialAbilityConstants.ColdResistance] = [],
+                [SpecialAbilityConstants.ColdResistance + "x2"] = [],
+                [SpecialAbilityConstants.ColdResistance + "x3"] = [],
+                [SpecialAbilityConstants.ColdResistance + "x4"] = [],
+                [SpecialAbilityConstants.Constructbane] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Constructs" })],
+                [SpecialAbilityConstants.Constructbane + "x2"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Constructs" })],
+                [SpecialAbilityConstants.Constructbane + "x3"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Constructs" })],
+                [SpecialAbilityConstants.Constructbane + "x4"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Constructs" })],
+                [SpecialAbilityConstants.Dancing] = [],
+                [SpecialAbilityConstants.Dancing + "x2"] = [],
+                [SpecialAbilityConstants.Dancing + "x3"] = [],
+                [SpecialAbilityConstants.Dancing + "x4"] = [],
+                [SpecialAbilityConstants.Defending] = [],
+                [SpecialAbilityConstants.Defending + "x2"] = [],
+                [SpecialAbilityConstants.Defending + "x3"] = [],
+                [SpecialAbilityConstants.Defending + "x4"] = [],
+                [SpecialAbilityConstants.Bane] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against DESIGNATEDFOE" })],
+                [SpecialAbilityConstants.Bane + "x2"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against DESIGNATEDFOE" })],
+                [SpecialAbilityConstants.Bane + "x3"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against DESIGNATEDFOE" })],
+                [SpecialAbilityConstants.Bane + "x4"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against DESIGNATEDFOE" })],
+                [SpecialAbilityConstants.DESIGNATEDFOEbane] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against DESIGNATEDFOE" })],
+                [SpecialAbilityConstants.DESIGNATEDFOEbane + "x2"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against DESIGNATEDFOE" })],
+                [SpecialAbilityConstants.DESIGNATEDFOEbane + "x3"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against DESIGNATEDFOE" })],
+                [SpecialAbilityConstants.DESIGNATEDFOEbane + "x4"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against DESIGNATEDFOE" })],
+                [SpecialAbilityConstants.Disruption] = [],
+                [SpecialAbilityConstants.Disruption + "x2"] = [],
+                [SpecialAbilityConstants.Disruption + "x3"] = [],
+                [SpecialAbilityConstants.Disruption + "x4"] = [],
+                [SpecialAbilityConstants.Distance] = [],
+                [SpecialAbilityConstants.Distance + "x2"] = [],
+                [SpecialAbilityConstants.Distance + "x3"] = [],
+                [SpecialAbilityConstants.Distance + "x4"] = [],
+                [SpecialAbilityConstants.Dragonbane] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Dragons" })],
+                [SpecialAbilityConstants.Dragonbane + "x2"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Dragons" })],
+                [SpecialAbilityConstants.Dragonbane + "x3"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Dragons" })],
+                [SpecialAbilityConstants.Dragonbane + "x4"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Dragons" })],
+                [SpecialAbilityConstants.Dwarfbane] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Dwarfs" })],
+                [SpecialAbilityConstants.Dwarfbane + "x2"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Dwarfs" })],
+                [SpecialAbilityConstants.Dwarfbane + "x3"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Dwarfs" })],
+                [SpecialAbilityConstants.Dwarfbane + "x4"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Dwarfs" })],
+                [SpecialAbilityConstants.ElectricityResistance] = [],
+                [SpecialAbilityConstants.ElectricityResistance + "x2"] = [],
+                [SpecialAbilityConstants.ElectricityResistance + "x3"] = [],
+                [SpecialAbilityConstants.ElectricityResistance + "x4"] = [],
+                [SpecialAbilityConstants.Elementalbane] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Elementals" })],
+                [SpecialAbilityConstants.Elementalbane + "x2"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Elementals" })],
+                [SpecialAbilityConstants.Elementalbane + "x3"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Elementals" })],
+                [SpecialAbilityConstants.Elementalbane + "x4"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Elementals" })],
+                [SpecialAbilityConstants.Elfbane] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Elfs" })],
+                [SpecialAbilityConstants.Elfbane + "x2"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Elfs" })],
+                [SpecialAbilityConstants.Elfbane + "x3"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Elfs" })],
+                [SpecialAbilityConstants.Elfbane + "x4"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Elfs" })],
+                [SpecialAbilityConstants.Etherealness] = [],
+                [SpecialAbilityConstants.Etherealness + "x2"] = [],
+                [SpecialAbilityConstants.Etherealness + "x3"] = [],
+                [SpecialAbilityConstants.Etherealness + "x4"] = [],
+                [SpecialAbilityConstants.Feybane] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Feys" })],
+                [SpecialAbilityConstants.Feybane + "x2"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Feys" })],
+                [SpecialAbilityConstants.Feybane + "x3"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Feys" })],
+                [SpecialAbilityConstants.Feybane + "x4"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Feys" })],
+                [SpecialAbilityConstants.AirOutsiderbane] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Air Outsiders" })],
+                [SpecialAbilityConstants.AirOutsiderbane + "x2"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Air Outsiders" })],
+                [SpecialAbilityConstants.AirOutsiderbane + "x3"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Air Outsiders" })],
+                [SpecialAbilityConstants.AirOutsiderbane + "x4"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Air Outsiders" })],
+                [SpecialAbilityConstants.EarthOutsiderbane] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Earth Outsiders" })],
+                [SpecialAbilityConstants.EarthOutsiderbane + "x2"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Earth Outsiders" })],
+                [SpecialAbilityConstants.EarthOutsiderbane + "x3"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Earth Outsiders" })],
+                [SpecialAbilityConstants.EarthOutsiderbane + "x4"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Earth Outsiders" })],
+                [SpecialAbilityConstants.FireOutsiderbane] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Fire Outsiders" })],
+                [SpecialAbilityConstants.FireOutsiderbane + "x2"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Fire Outsiders" })],
+                [SpecialAbilityConstants.FireOutsiderbane + "x3"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Fire Outsiders" })],
+                [SpecialAbilityConstants.FireOutsiderbane + "x4"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Fire Outsiders" })],
+                [SpecialAbilityConstants.FireResistance] = [],
+                [SpecialAbilityConstants.FireResistance + "x2"] = [],
+                [SpecialAbilityConstants.FireResistance + "x3"] = [],
+                [SpecialAbilityConstants.FireResistance + "x4"] = [],
+                [SpecialAbilityConstants.Flaming] = [DataHelper.Parse(new DamageDataSelection { Roll = "1d6", Type = "Fire" })],
+                [SpecialAbilityConstants.Flaming + "x2"] = [DataHelper.Parse(new DamageDataSelection { Roll = "1d6", Type = "Fire" })],
+                [SpecialAbilityConstants.Flaming + "x3"] = [DataHelper.Parse(new DamageDataSelection { Roll = "1d6", Type = "Fire" })],
+                [SpecialAbilityConstants.Flaming + "x4"] = [DataHelper.Parse(new DamageDataSelection { Roll = "1d6", Type = "Fire" })],
+                [SpecialAbilityConstants.FlamingBurst] = [
+                    DataHelper.Parse(new DamageDataSelection { Roll = "1d6", Type = "Fire" })],
+                [SpecialAbilityConstants.FlamingBurst + "x2"] = [
+                    DataHelper.Parse(new DamageDataSelection { Roll = "1d6", Type = "Fire" }),
+                    DataHelper.Parse(new DamageDataSelection { Roll = "1d10", Type = "Fire" })],
+                [SpecialAbilityConstants.FlamingBurst + "x3"] = [
+                    DataHelper.Parse(new DamageDataSelection { Roll = "1d6", Type = "Fire" }),
+                    DataHelper.Parse(new DamageDataSelection { Roll = "2d10", Type = "Fire" })],
+                [SpecialAbilityConstants.FlamingBurst + "x4"] = [
+                    DataHelper.Parse(new DamageDataSelection { Roll = "1d6", Type = "Fire" }),
+                    DataHelper.Parse(new DamageDataSelection { Roll = "3d10", Type = "Fire" })],
+                [SpecialAbilityConstants.Fortification] = [],
+                [SpecialAbilityConstants.Fortification + "x2"] = [],
+                [SpecialAbilityConstants.Fortification + "x3"] = [],
+                [SpecialAbilityConstants.Fortification + "x4"] = [],
+                [SpecialAbilityConstants.GhostTouch] = [],
+                [SpecialAbilityConstants.GhostTouch + "x2"] = [],
+                [SpecialAbilityConstants.GhostTouch + "x3"] = [],
+                [SpecialAbilityConstants.GhostTouch + "x4"] = [],
+                [SpecialAbilityConstants.GhostTouchArmor] = [],
+                [SpecialAbilityConstants.GhostTouchArmor + "x2"] = [],
+                [SpecialAbilityConstants.GhostTouchArmor + "x3"] = [],
+                [SpecialAbilityConstants.GhostTouchArmor + "x4"] = [],
+                [SpecialAbilityConstants.GhostTouchWeapon] = [],
+                [SpecialAbilityConstants.GhostTouchWeapon + "x2"] = [],
+                [SpecialAbilityConstants.GhostTouchWeapon + "x3"] = [],
+                [SpecialAbilityConstants.GhostTouchWeapon + "x4"] = [],
+                [SpecialAbilityConstants.Giantbane] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Giants" })],
+                [SpecialAbilityConstants.Giantbane + "x2"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Giants" })],
+                [SpecialAbilityConstants.Giantbane + "x3"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Giants" })],
+                [SpecialAbilityConstants.Giantbane + "x4"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Giants" })],
+                [SpecialAbilityConstants.Glamered] = [],
+                [SpecialAbilityConstants.Glamered + "x2"] = [],
+                [SpecialAbilityConstants.Glamered + "x3"] = [],
+                [SpecialAbilityConstants.Glamered + "x4"] = [],
+                [SpecialAbilityConstants.Gnollbane] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Gnolls" })],
+                [SpecialAbilityConstants.Gnollbane + "x2"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Gnolls" })],
+                [SpecialAbilityConstants.Gnollbane + "x3"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Gnolls" })],
+                [SpecialAbilityConstants.Gnollbane + "x4"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Gnolls" })],
+                [SpecialAbilityConstants.Gnomebane] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Gnomes" })],
+                [SpecialAbilityConstants.Gnomebane + "x2"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Gnomes" })],
+                [SpecialAbilityConstants.Gnomebane + "x3"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Gnomes" })],
+                [SpecialAbilityConstants.Gnomebane + "x4"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Gnomes" })],
+                [SpecialAbilityConstants.Goblinoidbane] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Goblinoids" })],
+                [SpecialAbilityConstants.Goblinoidbane + "x2"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Goblinoids" })],
+                [SpecialAbilityConstants.Goblinoidbane + "x3"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Goblinoids" })],
+                [SpecialAbilityConstants.Goblinoidbane + "x4"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Goblinoids" })],
+                [SpecialAbilityConstants.ChaoticOutsiderbane] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Chaotic Outsiders" })],
+                [SpecialAbilityConstants.ChaoticOutsiderbane + "x2"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Chaotic Outsiders" })],
+                [SpecialAbilityConstants.ChaoticOutsiderbane + "x3"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Chaotic Outsiders" })],
+                [SpecialAbilityConstants.ChaoticOutsiderbane + "x4"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Chaotic Outsiders" })],
+                [SpecialAbilityConstants.EvilOutsiderbane] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Evil Outsiders" })],
+                [SpecialAbilityConstants.EvilOutsiderbane + "x2"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Evil Outsiders" })],
+                [SpecialAbilityConstants.EvilOutsiderbane + "x3"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Evil Outsiders" })],
+                [SpecialAbilityConstants.EvilOutsiderbane + "x4"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Evil Outsiders" })],
+                [SpecialAbilityConstants.GoodOutsiderbane] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Good Outsiders" })],
+                [SpecialAbilityConstants.GoodOutsiderbane + "x2"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Good Outsiders" })],
+                [SpecialAbilityConstants.GoodOutsiderbane + "x3"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Good Outsiders" })],
+                [SpecialAbilityConstants.GoodOutsiderbane + "x4"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Good Outsiders" })],
+                [SpecialAbilityConstants.GreaterAcidResistance] = [],
+                [SpecialAbilityConstants.GreaterAcidResistance + "x2"] = [],
+                [SpecialAbilityConstants.GreaterAcidResistance + "x3"] = [],
+                [SpecialAbilityConstants.GreaterAcidResistance + "x4"] = [],
+                [SpecialAbilityConstants.GreaterColdResistance] = [],
+                [SpecialAbilityConstants.GreaterColdResistance + "x2"] = [],
+                [SpecialAbilityConstants.GreaterColdResistance + "x3"] = [],
+                [SpecialAbilityConstants.GreaterColdResistance + "x4"] = [],
+                [SpecialAbilityConstants.GreaterElectricityResistance] = [],
+                [SpecialAbilityConstants.GreaterElectricityResistance + "x2"] = [],
+                [SpecialAbilityConstants.GreaterElectricityResistance + "x3"] = [],
+                [SpecialAbilityConstants.GreaterElectricityResistance + "x4"] = [],
+                [SpecialAbilityConstants.GreaterFireResistance] = [],
+                [SpecialAbilityConstants.GreaterFireResistance + "x2"] = [],
+                [SpecialAbilityConstants.GreaterFireResistance + "x3"] = [],
+                [SpecialAbilityConstants.GreaterFireResistance + "x4"] = [],
+                [SpecialAbilityConstants.GreaterShadow] = [],
+                [SpecialAbilityConstants.GreaterShadow + "x2"] = [],
+                [SpecialAbilityConstants.GreaterShadow + "x3"] = [],
+                [SpecialAbilityConstants.GreaterShadow + "x4"] = [],
+                [SpecialAbilityConstants.GreaterSilentMoves] = [],
+                [SpecialAbilityConstants.GreaterSilentMoves + "x2"] = [],
+                [SpecialAbilityConstants.GreaterSilentMoves + "x3"] = [],
+                [SpecialAbilityConstants.GreaterSilentMoves + "x4"] = [],
+                [SpecialAbilityConstants.GreaterSlick] = [],
+                [SpecialAbilityConstants.GreaterSlick + "x2"] = [],
+                [SpecialAbilityConstants.GreaterSlick + "x3"] = [],
+                [SpecialAbilityConstants.GreaterSlick + "x4"] = [],
+                [SpecialAbilityConstants.GreaterSonicResistance] = [],
+                [SpecialAbilityConstants.GreaterSonicResistance + "x2"] = [],
+                [SpecialAbilityConstants.GreaterSonicResistance + "x3"] = [],
+                [SpecialAbilityConstants.GreaterSonicResistance + "x4"] = [],
+                [SpecialAbilityConstants.Halflingbane] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Halflings" })],
+                [SpecialAbilityConstants.Halflingbane + "x2"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Halflings" })],
+                [SpecialAbilityConstants.Halflingbane + "x3"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Halflings" })],
+                [SpecialAbilityConstants.Halflingbane + "x4"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Halflings" })],
+                [SpecialAbilityConstants.HeavyFortification] = [],
+                [SpecialAbilityConstants.HeavyFortification + "x2"] = [],
+                [SpecialAbilityConstants.HeavyFortification + "x3"] = [],
+                [SpecialAbilityConstants.HeavyFortification + "x4"] = [],
+                [SpecialAbilityConstants.Holy] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Evil alignment" })],
+                [SpecialAbilityConstants.Holy + "x2"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Evil alignment" })],
+                [SpecialAbilityConstants.Holy + "x3"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Evil alignment" })],
+                [SpecialAbilityConstants.Holy + "x4"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Evil alignment" })],
+                [SpecialAbilityConstants.Humanbane] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Humans" })],
+                [SpecialAbilityConstants.Humanbane + "x2"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Humans" })],
+                [SpecialAbilityConstants.Humanbane + "x3"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Humans" })],
+                [SpecialAbilityConstants.Humanbane + "x4"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Humans" })],
+                [SpecialAbilityConstants.Frost] = [DataHelper.Parse(new DamageDataSelection { Roll = "1d6", Type = "Cold" })],
+                [SpecialAbilityConstants.Frost + "x2"] = [DataHelper.Parse(new DamageDataSelection { Roll = "1d6", Type = "Cold" })],
+                [SpecialAbilityConstants.Frost + "x3"] = [DataHelper.Parse(new DamageDataSelection { Roll = "1d6", Type = "Cold" })],
+                [SpecialAbilityConstants.Frost + "x4"] = [DataHelper.Parse(new DamageDataSelection { Roll = "1d6", Type = "Cold" })],
+                [SpecialAbilityConstants.IcyBurst] = [
+                    DataHelper.Parse(new DamageDataSelection { Roll = "1d6", Type = "Cold" })],
+                [SpecialAbilityConstants.IcyBurst + "x2"] = [
+                    DataHelper.Parse(new DamageDataSelection { Roll = "1d6", Type = "Cold" }),
+                    DataHelper.Parse(new DamageDataSelection { Roll = "1d10", Type = "Cold" })],
+                [SpecialAbilityConstants.IcyBurst + "x3"] = [
+                    DataHelper.Parse(new DamageDataSelection { Roll = "1d6", Type = "Cold" }),
+                    DataHelper.Parse(new DamageDataSelection { Roll = "2d10", Type = "Cold" })],
+                [SpecialAbilityConstants.IcyBurst + "x4"] = [
+                    DataHelper.Parse(new DamageDataSelection { Roll = "1d6", Type = "Cold" }),
+                    DataHelper.Parse(new DamageDataSelection { Roll = "3d10", Type = "Cold" })],
+                [SpecialAbilityConstants.ImprovedAcidResistance] = [],
+                [SpecialAbilityConstants.ImprovedAcidResistance + "x2"] = [],
+                [SpecialAbilityConstants.ImprovedAcidResistance + "x3"] = [],
+                [SpecialAbilityConstants.ImprovedAcidResistance + "x4"] = [],
+                [SpecialAbilityConstants.ImprovedColdResistance] = [],
+                [SpecialAbilityConstants.ImprovedColdResistance + "x2"] = [],
+                [SpecialAbilityConstants.ImprovedColdResistance + "x3"] = [],
+                [SpecialAbilityConstants.ImprovedColdResistance + "x4"] = [],
+                [SpecialAbilityConstants.ImprovedElectricityResistance] = [],
+                [SpecialAbilityConstants.ImprovedElectricityResistance + "x2"] = [],
+                [SpecialAbilityConstants.ImprovedElectricityResistance + "x3"] = [],
+                [SpecialAbilityConstants.ImprovedElectricityResistance + "x4"] = [],
+                [SpecialAbilityConstants.ImprovedFireResistance] = [],
+                [SpecialAbilityConstants.ImprovedFireResistance + "x2"] = [],
+                [SpecialAbilityConstants.ImprovedFireResistance + "x3"] = [],
+                [SpecialAbilityConstants.ImprovedFireResistance + "x4"] = [],
+                [SpecialAbilityConstants.ImprovedShadow] = [],
+                [SpecialAbilityConstants.ImprovedShadow + "x2"] = [],
+                [SpecialAbilityConstants.ImprovedShadow + "x3"] = [],
+                [SpecialAbilityConstants.ImprovedShadow + "x4"] = [],
+                [SpecialAbilityConstants.ImprovedSilentMoves] = [],
+                [SpecialAbilityConstants.ImprovedSilentMoves + "x2"] = [],
+                [SpecialAbilityConstants.ImprovedSilentMoves + "x3"] = [],
+                [SpecialAbilityConstants.ImprovedSilentMoves + "x4"] = [],
+                [SpecialAbilityConstants.ImprovedSlick] = [],
+                [SpecialAbilityConstants.ImprovedSlick + "x2"] = [],
+                [SpecialAbilityConstants.ImprovedSlick + "x3"] = [],
+                [SpecialAbilityConstants.ImprovedSlick + "x4"] = [],
+                [SpecialAbilityConstants.ImprovedSonicResistance] = [],
+                [SpecialAbilityConstants.ImprovedSonicResistance + "x2"] = [],
+                [SpecialAbilityConstants.ImprovedSonicResistance + "x3"] = [],
+                [SpecialAbilityConstants.ImprovedSonicResistance + "x4"] = [],
+                [SpecialAbilityConstants.Invulnerability] = [],
+                [SpecialAbilityConstants.Invulnerability + "x2"] = [],
+                [SpecialAbilityConstants.Invulnerability + "x3"] = [],
+                [SpecialAbilityConstants.Invulnerability + "x4"] = [],
+                [SpecialAbilityConstants.Keen] = [],
+                [SpecialAbilityConstants.Keen + "x2"] = [],
+                [SpecialAbilityConstants.Keen + "x3"] = [],
+                [SpecialAbilityConstants.Keen + "x4"] = [],
+                [SpecialAbilityConstants.KiFocus] = [],
+                [SpecialAbilityConstants.KiFocus + "x2"] = [],
+                [SpecialAbilityConstants.KiFocus + "x3"] = [],
+                [SpecialAbilityConstants.KiFocus + "x4"] = [],
+                [SpecialAbilityConstants.LawfulOutsiderbane] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Lawful Outsiders" })],
+                [SpecialAbilityConstants.LawfulOutsiderbane + "x2"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Lawful Outsiders" })],
+                [SpecialAbilityConstants.LawfulOutsiderbane + "x3"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Lawful Outsiders" })],
+                [SpecialAbilityConstants.LawfulOutsiderbane + "x4"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Lawful Outsiders" })],
+                [SpecialAbilityConstants.LightFortification] = [],
+                [SpecialAbilityConstants.LightFortification + "x2"] = [],
+                [SpecialAbilityConstants.LightFortification + "x3"] = [],
+                [SpecialAbilityConstants.LightFortification + "x4"] = [],
+                [SpecialAbilityConstants.MagicalBeastbane] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Magical Beasts" })],
+                [SpecialAbilityConstants.MagicalBeastbane + "x2"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Magical Beasts" })],
+                [SpecialAbilityConstants.MagicalBeastbane + "x3"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Magical Beasts" })],
+                [SpecialAbilityConstants.MagicalBeastbane + "x4"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Magical Beasts" })],
+                [SpecialAbilityConstants.Merciful] = [DataHelper.Parse(new DamageDataSelection { Roll = "1d6" })],
+                [SpecialAbilityConstants.Merciful + "x2"] = [DataHelper.Parse(new DamageDataSelection { Roll = "1d6" })],
+                [SpecialAbilityConstants.Merciful + "x3"] = [DataHelper.Parse(new DamageDataSelection { Roll = "1d6" })],
+                [SpecialAbilityConstants.Merciful + "x4"] = [DataHelper.Parse(new DamageDataSelection { Roll = "1d6" })],
+                [SpecialAbilityConstants.MightyCleaving] = [],
+                [SpecialAbilityConstants.MightyCleaving + "x2"] = [],
+                [SpecialAbilityConstants.MightyCleaving + "x3"] = [],
+                [SpecialAbilityConstants.MightyCleaving + "x4"] = [],
+                [SpecialAbilityConstants.ModerateFortification] = [],
+                [SpecialAbilityConstants.ModerateFortification + "x2"] = [],
+                [SpecialAbilityConstants.ModerateFortification + "x3"] = [],
+                [SpecialAbilityConstants.ModerateFortification + "x4"] = [],
+                [SpecialAbilityConstants.MonstrousHumanoidbane] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Monstrous Humanoids" })],
+                [SpecialAbilityConstants.MonstrousHumanoidbane + "x2"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Monstrous Humanoids" })],
+                [SpecialAbilityConstants.MonstrousHumanoidbane + "x3"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Monstrous Humanoids" })],
+                [SpecialAbilityConstants.MonstrousHumanoidbane + "x4"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Monstrous Humanoids" })],
+                [SpecialAbilityConstants.Oozebane] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Oozes" })],
+                [SpecialAbilityConstants.Oozebane + "x2"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Oozes" })],
+                [SpecialAbilityConstants.Oozebane + "x3"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Oozes" })],
+                [SpecialAbilityConstants.Oozebane + "x4"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Oozes" })],
+                [SpecialAbilityConstants.Orcbane] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Orcs" })],
+                [SpecialAbilityConstants.Orcbane + "x2"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Orcs" })],
+                [SpecialAbilityConstants.Orcbane + "x3"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Orcs" })],
+                [SpecialAbilityConstants.Orcbane + "x4"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Orcs" })],
+                [SpecialAbilityConstants.Plantbane] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Plants" })],
+                [SpecialAbilityConstants.Plantbane + "x2"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Plants" })],
+                [SpecialAbilityConstants.Plantbane + "x3"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Plants" })],
+                [SpecialAbilityConstants.Plantbane + "x4"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Plants" })],
+                [SpecialAbilityConstants.Reflecting] = [],
+                [SpecialAbilityConstants.Reflecting + "x2"] = [],
+                [SpecialAbilityConstants.Reflecting + "x3"] = [],
+                [SpecialAbilityConstants.Reflecting + "x4"] = [],
+                [SpecialAbilityConstants.ReptilianHumanoidbane] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Reptilian Humanoids" })],
+                [SpecialAbilityConstants.ReptilianHumanoidbane + "x2"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Reptilian Humanoids" })],
+                [SpecialAbilityConstants.ReptilianHumanoidbane + "x3"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Reptilian Humanoids" })],
+                [SpecialAbilityConstants.ReptilianHumanoidbane + "x4"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Reptilian Humanoids" })],
+                [SpecialAbilityConstants.Returning] = [],
+                [SpecialAbilityConstants.Returning + "x2"] = [],
+                [SpecialAbilityConstants.Returning + "x3"] = [],
+                [SpecialAbilityConstants.Returning + "x4"] = [],
+                [SpecialAbilityConstants.Seeking] = [],
+                [SpecialAbilityConstants.Seeking + "x2"] = [],
+                [SpecialAbilityConstants.Seeking + "x3"] = [],
+                [SpecialAbilityConstants.Seeking + "x4"] = [],
+                [SpecialAbilityConstants.Shadow] = [],
+                [SpecialAbilityConstants.Shadow + "x2"] = [],
+                [SpecialAbilityConstants.Shadow + "x3"] = [],
+                [SpecialAbilityConstants.Shadow + "x4"] = [],
+                [SpecialAbilityConstants.Shapeshifterbane] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Shapeshifters" })],
+                [SpecialAbilityConstants.Shapeshifterbane + "x2"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Shapeshifters" })],
+                [SpecialAbilityConstants.Shapeshifterbane + "x3"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Shapeshifters" })],
+                [SpecialAbilityConstants.Shapeshifterbane + "x4"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Shapeshifters" })],
+                [SpecialAbilityConstants.Shock] = [DataHelper.Parse(new DamageDataSelection { Roll = "1d6", Type = "Electricity" })],
+                [SpecialAbilityConstants.Shock + "x2"] = [DataHelper.Parse(new DamageDataSelection { Roll = "1d6", Type = "Electricity" })],
+                [SpecialAbilityConstants.Shock + "x3"] = [DataHelper.Parse(new DamageDataSelection { Roll = "1d6", Type = "Electricity" })],
+                [SpecialAbilityConstants.Shock + "x4"] = [DataHelper.Parse(new DamageDataSelection { Roll = "1d6", Type = "Electricity" })],
+                [SpecialAbilityConstants.ShockingBurst] = [
+                    DataHelper.Parse(new DamageDataSelection { Roll = "1d6", Type = "Electricity" })],
+                [SpecialAbilityConstants.ShockingBurst + "x2"] = [
+                    DataHelper.Parse(new DamageDataSelection { Roll = "1d6", Type = "Electricity" }),
+                    DataHelper.Parse(new DamageDataSelection { Roll = "1d10", Type = "Electricity" })],
+                [SpecialAbilityConstants.ShockingBurst + "x3"] = [
+                    DataHelper.Parse(new DamageDataSelection { Roll = "1d6", Type = "Electricity" }),
+                    DataHelper.Parse(new DamageDataSelection { Roll = "2d10", Type = "Electricity" })],
+                [SpecialAbilityConstants.ShockingBurst + "x4"] = [
+                    DataHelper.Parse(new DamageDataSelection { Roll = "1d6", Type = "Electricity" }),
+                    DataHelper.Parse(new DamageDataSelection { Roll = "3d10", Type = "Electricity" })],
+                [SpecialAbilityConstants.SilentMoves] = [],
+                [SpecialAbilityConstants.SilentMoves + "x2"] = [],
+                [SpecialAbilityConstants.SilentMoves + "x3"] = [],
+                [SpecialAbilityConstants.SilentMoves + "x4"] = [],
+                [SpecialAbilityConstants.Slick] = [],
+                [SpecialAbilityConstants.Slick + "x2"] = [],
+                [SpecialAbilityConstants.Slick + "x3"] = [],
+                [SpecialAbilityConstants.Slick + "x4"] = [],
+                [SpecialAbilityConstants.SonicResistance] = [],
+                [SpecialAbilityConstants.SonicResistance + "x2"] = [],
+                [SpecialAbilityConstants.SonicResistance + "x3"] = [],
+                [SpecialAbilityConstants.SonicResistance + "x4"] = [],
+                [SpecialAbilityConstants.Speed] = [],
+                [SpecialAbilityConstants.Speed + "x2"] = [],
+                [SpecialAbilityConstants.Speed + "x3"] = [],
+                [SpecialAbilityConstants.Speed + "x4"] = [],
+                [SpecialAbilityConstants.SpellResistance] = [],
+                [SpecialAbilityConstants.SpellResistance + "x2"] = [],
+                [SpecialAbilityConstants.SpellResistance + "x3"] = [],
+                [SpecialAbilityConstants.SpellResistance + "x4"] = [],
+                [SpecialAbilityConstants.SpellResistance13] = [],
+                [SpecialAbilityConstants.SpellResistance13 + "x2"] = [],
+                [SpecialAbilityConstants.SpellResistance13 + "x3"] = [],
+                [SpecialAbilityConstants.SpellResistance13 + "x4"] = [],
+                [SpecialAbilityConstants.SpellResistance15] = [],
+                [SpecialAbilityConstants.SpellResistance15 + "x2"] = [],
+                [SpecialAbilityConstants.SpellResistance15 + "x3"] = [],
+                [SpecialAbilityConstants.SpellResistance15 + "x4"] = [],
+                [SpecialAbilityConstants.SpellResistance17] = [],
+                [SpecialAbilityConstants.SpellResistance17 + "x2"] = [],
+                [SpecialAbilityConstants.SpellResistance17 + "x3"] = [],
+                [SpecialAbilityConstants.SpellResistance17 + "x4"] = [],
+                [SpecialAbilityConstants.SpellResistance19] = [],
+                [SpecialAbilityConstants.SpellResistance19 + "x2"] = [],
+                [SpecialAbilityConstants.SpellResistance19 + "x3"] = [],
+                [SpecialAbilityConstants.SpellResistance19 + "x4"] = [],
+                [SpecialAbilityConstants.SpellStoring] = [],
+                [SpecialAbilityConstants.SpellStoring + "x2"] = [],
+                [SpecialAbilityConstants.SpellStoring + "x3"] = [],
+                [SpecialAbilityConstants.SpellStoring + "x4"] = [],
+                [SpecialAbilityConstants.Throwing] = [],
+                [SpecialAbilityConstants.Throwing + "x2"] = [],
+                [SpecialAbilityConstants.Throwing + "x3"] = [],
+                [SpecialAbilityConstants.Throwing + "x4"] = [],
+                [SpecialAbilityConstants.Thundering] = [],
+                [SpecialAbilityConstants.Thundering + "x2"] = [DataHelper.Parse(new DamageDataSelection { Roll = "1d8", Type = "Sonic" })],
+                [SpecialAbilityConstants.Thundering + "x3"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d8", Type = "Sonic" })],
+                [SpecialAbilityConstants.Thundering + "x4"] = [DataHelper.Parse(new DamageDataSelection { Roll = "3d8", Type = "Sonic" })],
+                [SpecialAbilityConstants.Undeadbane] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Undead" })],
+                [SpecialAbilityConstants.Undeadbane + "x2"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Undead" })],
+                [SpecialAbilityConstants.Undeadbane + "x3"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Undead" })],
+                [SpecialAbilityConstants.Undeadbane + "x4"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Undead" })],
+                [SpecialAbilityConstants.UndeadControlling] = [],
+                [SpecialAbilityConstants.UndeadControlling + "x2"] = [],
+                [SpecialAbilityConstants.UndeadControlling + "x3"] = [],
+                [SpecialAbilityConstants.UndeadControlling + "x4"] = [],
+                [SpecialAbilityConstants.Unholy] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Good alignment" })],
+                [SpecialAbilityConstants.Unholy + "x2"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Good alignment" })],
+                [SpecialAbilityConstants.Unholy + "x3"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Good alignment" })],
+                [SpecialAbilityConstants.Unholy + "x4"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Good alignment" })],
+                [SpecialAbilityConstants.Verminbane] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Vermin" })],
+                [SpecialAbilityConstants.Verminbane + "x2"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Vermin" })],
+                [SpecialAbilityConstants.Verminbane + "x3"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Vermin" })],
+                [SpecialAbilityConstants.Verminbane + "x4"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Vermin" })],
+                [SpecialAbilityConstants.Vicious] = [
+                    DataHelper.Parse(new DamageDataSelection { Roll = "2d6" }),
+                    DataHelper.Parse(new DamageDataSelection { Roll = "1d6", Condition = "To the wielder" })],
+                [SpecialAbilityConstants.Vicious + "x2"] = [
+                    DataHelper.Parse(new DamageDataSelection { Roll = "2d6" }),
+                    DataHelper.Parse(new DamageDataSelection { Roll = "1d6", Condition = "To the wielder" })],
+                [SpecialAbilityConstants.Vicious + "x3"] = [
+                    DataHelper.Parse(new DamageDataSelection { Roll = "2d6" }),
+                    DataHelper.Parse(new DamageDataSelection { Roll = "1d6", Condition = "To the wielder" })],
+                [SpecialAbilityConstants.Vicious + "x4"] = [
+                    DataHelper.Parse(new DamageDataSelection { Roll = "2d6" }),
+                    DataHelper.Parse(new DamageDataSelection { Roll = "1d6", Condition = "To the wielder" })],
+                [SpecialAbilityConstants.Vorpal] = [],
+                [SpecialAbilityConstants.Vorpal + "x2"] = [],
+                [SpecialAbilityConstants.Vorpal + "x3"] = [],
+                [SpecialAbilityConstants.Vorpal + "x4"] = [],
+                [SpecialAbilityConstants.WaterOutsiderbane] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Water Outsiders" })],
+                [SpecialAbilityConstants.WaterOutsiderbane + "x2"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Water Outsiders" })],
+                [SpecialAbilityConstants.WaterOutsiderbane + "x3"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Water Outsiders" })],
+                [SpecialAbilityConstants.WaterOutsiderbane + "x4"] = [DataHelper.Parse(new DamageDataSelection { Roll = "2d6", Condition = "Against Water Outsiders" })],
                 [SpecialAbilityConstants.Wild] = [],
                 [SpecialAbilityConstants.Wild + "x2"] = [],
                 [SpecialAbilityConstants.Wild + "x3"] = [],

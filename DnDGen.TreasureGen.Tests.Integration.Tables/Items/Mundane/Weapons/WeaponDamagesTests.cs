@@ -18,8 +18,8 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Mundane.Weapons
 
         private Dictionary<string, List<string>> weaponDamages;
 
-        [SetUp]
-        public void Setup()
+        [OneTimeSetUp]
+        public void OneTimeSetup()
         {
             weaponDamages = GetWeaponDamages();
         }

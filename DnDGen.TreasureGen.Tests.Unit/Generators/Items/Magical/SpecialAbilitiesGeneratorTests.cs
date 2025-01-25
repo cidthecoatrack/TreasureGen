@@ -600,12 +600,12 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             tableName = string.Format(TableNameConstants.Percentiles.Formattable.POWERATTRIBUTESpecialAbilities, power, AttributeConstants.Ranged);
             mockPercentileSelector.Setup(p => p.SelectAllFrom(Config.Name, tableName)).Returns(new[] { "ranged ability" });
 
-            var meleeResult = new SpecialAbilitySelection();
+            var meleeResult = new SpecialAbilityDataSelection();
             meleeResult.BaseName = "melee ability";
             mockSpecialAbilityDataSelector.Setup(s => s.SelectFrom(meleeResult.BaseName)).Returns(meleeResult);
             mockCollectionsSelector.Setup(p => p.SelectFrom(Config.Name, TableNameConstants.Collections.Set.SpecialAbilityAttributeRequirements, meleeResult.BaseName)).Returns(itemAttributes);
 
-            var rangedResult = new SpecialAbilitySelection();
+            var rangedResult = new SpecialAbilityDataSelection();
             rangedResult.BaseName = "ranged ability";
             mockSpecialAbilityDataSelector.Setup(s => s.SelectFrom(rangedResult.BaseName)).Returns(rangedResult);
             mockCollectionsSelector.Setup(p => p.SelectFrom(Config.Name, TableNameConstants.Collections.Set.SpecialAbilityAttributeRequirements, rangedResult.BaseName)).Returns(itemAttributes);
@@ -983,7 +983,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
 
         private void CreateSpecialAbility(string name, string baseName = "", int bonus = 0, int power = 0)
         {
-            var result = new SpecialAbilitySelection();
+            var result = new SpecialAbilityDataSelection();
 
             if (string.IsNullOrEmpty(baseName))
                 result.BaseName = name;
