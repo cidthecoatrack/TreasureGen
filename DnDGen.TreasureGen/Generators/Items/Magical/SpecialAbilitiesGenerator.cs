@@ -15,13 +15,13 @@ namespace DnDGen.TreasureGen.Generators.Items.Magical
 
         private readonly ICollectionSelector collectionsSelector;
         private readonly ICollectionDataSelector<DamageDataSelection> damageDataSelector;
-        private readonly ISpecialAbilityDataSelector specialAbilityDataSelector;
+        private readonly ICollectionDataSelector<SpecialAbilityDataSelection> specialAbilityDataSelector;
         private readonly ITreasurePercentileSelector percentileSelector;
 
         public SpecialAbilitiesGenerator(
             ICollectionSelector collectionsSelector,
             ITreasurePercentileSelector percentileSelector,
-            ISpecialAbilityDataSelector specialAbilityDataSelector,
+            ICollectionDataSelector<SpecialAbilityDataSelection> specialAbilityDataSelector,
             ICollectionDataSelector<DamageDataSelection> damageDataSelector)
         {
             this.collectionsSelector = collectionsSelector;
