@@ -23,7 +23,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Selectors.Collections
         public void ReturnSpecialAbilityAttributesResult()
         {
             var attributes = new[] { "42", "base name", "9266" };
-            mockInnerSelector.Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.Set.SpecialAbilityAttributes, "name")).Returns(attributes);
+            mockInnerSelector.Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.Set.SpecialAbilityData, "name")).Returns(attributes);
 
             var result = selector.SelectFrom("name");
             Assert.That(result.BaseName, Is.EqualTo("base name"));
@@ -42,7 +42,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Selectors.Collections
         [Test]
         public void IsSpecialAbility()
         {
-            mockInnerSelector.Setup(s => s.IsCollection(Config.Name, TableNameConstants.Collections.Set.SpecialAbilityAttributes, "name")).Returns(true);
+            mockInnerSelector.Setup(s => s.IsCollection(Config.Name, TableNameConstants.Collections.Set.SpecialAbilityData, "name")).Returns(true);
             var isSpecialAbility = selector.IsSpecialAbility("name");
             Assert.That(isSpecialAbility, Is.True);
         }
@@ -50,7 +50,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Selectors.Collections
         [Test]
         public void IsNotSpecialAbility()
         {
-            mockInnerSelector.Setup(s => s.IsCollection(Config.Name, TableNameConstants.Collections.Set.SpecialAbilityAttributes, "name")).Returns(false);
+            mockInnerSelector.Setup(s => s.IsCollection(Config.Name, TableNameConstants.Collections.Set.SpecialAbilityData, "name")).Returns(false);
             var isSpecialAbility = selector.IsSpecialAbility("name");
             Assert.That(isSpecialAbility, Is.False);
         }

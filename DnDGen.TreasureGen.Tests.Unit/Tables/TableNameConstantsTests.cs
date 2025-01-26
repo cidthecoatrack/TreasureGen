@@ -22,7 +22,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Tables
         [TestCase(TableNameConstants.Collections.Set.PowerGroups, "PowerGroups")]
         [TestCase(TableNameConstants.Collections.Set.ReplacementStrings, "ReplacementStrings")]
         [TestCase(TableNameConstants.Collections.Set.SpecialAbilityAttributeRequirements, "SpecialAbilityAttributeRequirements")]
-        [TestCase(TableNameConstants.Collections.Set.SpecialAbilityAttributes, "SpecialAbilityAttributes")]
+        [TestCase(TableNameConstants.Collections.Set.SpecialAbilityData, "SpecialAbilityData")]
         [TestCase(TableNameConstants.Collections.Set.SpecialMaterials, "SpecialMaterials")]
         [TestCase(TableNameConstants.Collections.Set.SpecificCursedItemItemTypes, "SpecificCursedItemItemTypes")]
         [TestCase(TableNameConstants.Collections.Set.SpecificCursedItemAttributes, "SpecificCursedItemAttributes")]

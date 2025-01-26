@@ -138,7 +138,7 @@ namespace DnDGen.TreasureGen.Generators.Items.Magical
         private SpecialAbility GetSpecialAbility(string abilityName, string criticalMultiplier)
         {
             var ability = new SpecialAbility();
-            var abilitySelection = specialAbilityDataSelector.SelectFrom(abilityName);
+            var abilitySelection = specialAbilityDataSelector.SelectFrom(Config.Name, TableNameConstants.Collections.Set.SpecialAbilityData, abilityName).Single();
 
             ability.Name = abilityName;
             ability.BaseName = abilitySelection.BaseName;
@@ -169,8 +169,7 @@ namespace DnDGen.TreasureGen.Generators.Items.Magical
 
             foreach (var ability in availableAbilities)
             {
-                //INFO: This means it is a custom special ability
-                if (!specialAbilityDataSelector.IsSpecialAbility(ability.Name))
+                if (IsCustomSpecialAbility(ability.Name))
                 {
                     strongestAbilities.Add(ability);
                     continue;
@@ -187,6 +186,11 @@ namespace DnDGen.TreasureGen.Generators.Items.Magical
             }
 
             return strongestAbilities;
+        }
+
+        private bool IsCustomSpecialAbility(string abilityName)
+        {
+            return !collectionsSelector.IsCollection(Config.Name, TableNameConstants.Collections.Set.SpecialAbilityData, abilityName);
         }
 
         private SpecialAbility GenerateAbilityFrom(IEnumerable<SpecialAbility> availableAbilities, IEnumerable<string> tableNames)
@@ -212,15 +216,14 @@ namespace DnDGen.TreasureGen.Generators.Items.Magical
 
             foreach (var abilityPrototype in abilityPrototypes)
             {
-                if (specialAbilityDataSelector.IsSpecialAbility(abilityPrototype.Name))
-                {
-                    var ability = GetSpecialAbility(abilityPrototype.Name, criticalMultiplier);
-                    abilities.Add(ability);
-                }
-                else
+                if (IsCustomSpecialAbility(abilityPrototype.Name))
                 {
                     abilities.Add(abilityPrototype);
+                    continue;
                 }
+
+                var ability = GetSpecialAbility(abilityPrototype.Name, criticalMultiplier);
+                abilities.Add(ability);
             }
 
             var strongestAbilities = GetStrongestAvailableAbilities(abilities);

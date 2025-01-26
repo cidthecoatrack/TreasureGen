@@ -425,7 +425,6 @@
     <None Remove="Tables\Items\Magical\Scrolls\ScrollTraits.xml" />
     <None Remove="Tables\Items\Magical\Scrolls\SpellTypes.xml" />
     <None Remove="Tables\Items\Magical\SpecialAbilityAttributeRequirements.xml" />
-    <None Remove="Tables\Items\Magical\SpecialAbilityAttributes.xml" />
     <None Remove="Tables\Items\Magical\Staffs\MajorStaffs.xml" />
     <None Remove="Tables\Items\Magical\Staffs\MediumStaffs.xml" />
     <None Remove="Tables\Items\Magical\Staffs\StaffTraits.xml" />
@@ -906,7 +905,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Tables\Items\Magical\Scrolls\SpellTypes.xml" />
     <EmbeddedResource Include="Tables\Items\Magical\SpecialAbilityAttributeRequirements.xml" />
-    <EmbeddedResource Include="Tables\Items\Magical\SpecialAbilityAttributes.xml" />
+    <EmbeddedResource Include="Tables\Items\Magical\SpecialAbilityData.xml" />
     <EmbeddedResource Include="Tables\Items\Magical\Staffs\MajorStaffs.xml" />
     <EmbeddedResource Include="Tables\Items\Magical\Staffs\MediumStaffs.xml" />
     <EmbeddedResource Include="Tables\Items\Magical\Staffs\StaffTraits.xml" />

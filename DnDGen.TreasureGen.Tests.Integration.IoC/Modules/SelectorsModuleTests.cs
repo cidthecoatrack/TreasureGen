@@ -29,9 +29,9 @@ namespace DnDGen.TreasureGen.Tests.Integration.IoC.Modules
         }
 
         [Test]
-        public void SpecialAbilityDataSelectorNotConstructedAsSingleton()
+        public void CollectionData_SpecialAbilityDataSelectorNotConstructedAsSingleton()
         {
-            AssertNotSingleton<ISpecialAbilityDataSelector>();
+            AssertNotSingleton<ICollectionDataSelector<SpecialAbilityDataSelection>>();
         }
 
         [Test]

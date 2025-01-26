@@ -37,10 +37,10 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Mundane.Weapons
         }
 
         [TestCaseSource(nameof(Abilities))]
-        public void SpecialAbilityDamages(string specialAbility, params string[] damagesData)
+        public void SpecialAbilityDamages(string specialAbility)
         {
             Assert.That(abilityDamages, Contains.Key(specialAbility));
-            base.AssertCollection(specialAbility, [.. abilityDamages[specialAbility]]);
+            AssertCollection(specialAbility, [.. abilityDamages[specialAbility]]);
 
             var criticalMultipliers = new[] { "x2", "x3", "x4" };
 
@@ -48,7 +48,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Mundane.Weapons
             {
                 var key = specialAbility + criticalMultiplier;
                 Assert.That(abilityDamages, Contains.Key(key));
-                base.AssertCollection(key, [.. abilityDamages[key]]);
+                AssertCollection(key, [.. abilityDamages[key]]);
             }
         }
 

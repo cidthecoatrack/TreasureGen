@@ -1,14 +1,22 @@
-﻿using DnDGen.TreasureGen.Items.Magical;
+﻿using DnDGen.Infrastructure.Helpers;
+using DnDGen.TreasureGen.Items.Magical;
+using DnDGen.TreasureGen.Selectors.Selections;
 using DnDGen.TreasureGen.Tables;
 using NUnit.Framework;
-using System;
 
 namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical
 {
     [TestFixture]
-    public class SpecialAbilityAttributesTests : CollectionsTests
+    public class SpecialAbilityDataTests : CollectionsTests
     {
-        protected override string tableName => TableNameConstants.Collections.Set.SpecialAbilityAttributes;
+        protected override string tableName => TableNameConstants.Collections.Set.SpecialAbilityData;
+
+        [Test]
+        public void AllAbilitiesPresentInTable()
+        {
+            var abilities = SpecialAbilityConstants.GetAllAbilities(false);
+            AssertCollection(table.Keys, abilities);
+        }
 
         [TestCase(SpecialAbilityConstants.Glamered, 0, SpecialAbilityConstants.Glamered, 0)]
         [TestCase(SpecialAbilityConstants.AcidResistance, 0, SpecialAbilityConstants.AcidResistance, 1)]
@@ -114,23 +122,16 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical
         [TestCase(SpecialAbilityConstants.Undeadbane, 1, SpecialAbilityConstants.Bane, 0)]
         [TestCase(SpecialAbilityConstants.Verminbane, 1, SpecialAbilityConstants.Bane, 0)]
         [TestCase(SpecialAbilityConstants.Shapeshifterbane, 1, SpecialAbilityConstants.Bane, 0)]
-        public void OrderedAttributes(string name, int bonusEquivalent, string baseName, int strength)
+        public void SpecialAbilityData(string name, int bonusEquivalent, string baseName, int power)
         {
-            var attributes = new[]
+            var data = DataHelper.Parse(new SpecialAbilityDataSelection
             {
-                Convert.ToString(bonusEquivalent),
-                baseName,
-                Convert.ToString(strength)
-            };
+                BonusEquivalent = bonusEquivalent,
+                BaseName = baseName,
+                Power = power,
+            });
 
-            base.AssertOrderedCollections(name, attributes);
-        }
-
-        [Test]
-        public void AllAbilitiesPresentInTable()
-        {
-            var abilities = SpecialAbilityConstants.GetAllAbilities(false);
-            AssertCollection(table.Keys, abilities);
+            AssertCollection(name, data);
         }
     }
 }
