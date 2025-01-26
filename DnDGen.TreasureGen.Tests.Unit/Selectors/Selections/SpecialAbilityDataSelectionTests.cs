@@ -25,52 +25,52 @@ namespace DnDGen.TreasureGen.Tests.Unit.Selectors.Selections
         public void Map_FromString_ReturnsSelection()
         {
             var data = new string[selection.SectionCount];
-            data[DataIndexConstants.Armor.ArmorCheckPenalty] = "-90210";
-            data[DataIndexConstants.Armor.ArmorBonus] = "9266";
-            data[DataIndexConstants.Armor.MaxDexterityBonus] = "42";
+            data[DataIndexConstants.SpecialAbility.BaseName] = "my special ability";
+            data[DataIndexConstants.SpecialAbility.BonusEquivalent] = "9266";
+            data[DataIndexConstants.SpecialAbility.Power] = "42";
 
             var newSelection = SpecialAbilityDataSelection.Map(data);
             Assert.That(newSelection, Is.Not.Null);
-            Assert.That(newSelection.ArmorBonus, Is.EqualTo(9266));
-            Assert.That(newSelection.ArmorCheckPenalty, Is.EqualTo(-90210));
-            Assert.That(newSelection.MaxDexterityBonus, Is.EqualTo(42));
+            Assert.That(newSelection.BaseName, Is.EqualTo("my special ability"));
+            Assert.That(newSelection.BonusEquivalent, Is.EqualTo(9266));
+            Assert.That(newSelection.Power, Is.EqualTo(42));
         }
 
         [Test]
         public void Map_FromSelection_ReturnsString()
         {
-            var selection = new SpecialAbilityDataSelection { ArmorBonus = 9266, ArmorCheckPenalty = -90210, MaxDexterityBonus = 42 };
+            var selection = new SpecialAbilityDataSelection { BaseName = "my special ability", BonusEquivalent = 9266, Power = 42 };
             var rawData = SpecialAbilityDataSelection.Map(selection);
             Assert.That(rawData.Length, Is.EqualTo(selection.SectionCount));
-            Assert.That(rawData[DataIndexConstants.Armor.ArmorBonus], Is.EqualTo("9266"));
-            Assert.That(rawData[DataIndexConstants.Armor.ArmorCheckPenalty], Is.EqualTo("-90210"));
-            Assert.That(rawData[DataIndexConstants.Armor.MaxDexterityBonus], Is.EqualTo("42"));
+            Assert.That(rawData[DataIndexConstants.SpecialAbility.BaseName], Is.EqualTo("my special ability"));
+            Assert.That(rawData[DataIndexConstants.SpecialAbility.BonusEquivalent], Is.EqualTo("9266"));
+            Assert.That(rawData[DataIndexConstants.SpecialAbility.Power], Is.EqualTo("42"));
         }
 
         [Test]
         public void MapTo_ReturnsSelection()
         {
             var data = new string[selection.SectionCount];
-            data[DataIndexConstants.Armor.ArmorCheckPenalty] = "-90210";
-            data[DataIndexConstants.Armor.ArmorBonus] = "9266";
-            data[DataIndexConstants.Armor.MaxDexterityBonus] = "42";
+            data[DataIndexConstants.SpecialAbility.BaseName] = "my special ability";
+            data[DataIndexConstants.SpecialAbility.BonusEquivalent] = "9266";
+            data[DataIndexConstants.SpecialAbility.Power] = "42";
 
             var newSelection = selection.MapTo(data);
             Assert.That(newSelection, Is.Not.Null);
-            Assert.That(newSelection.ArmorBonus, Is.EqualTo(9266));
-            Assert.That(newSelection.ArmorCheckPenalty, Is.EqualTo(-90210));
-            Assert.That(newSelection.MaxDexterityBonus, Is.EqualTo(42));
+            Assert.That(newSelection.BaseName, Is.EqualTo("my special ability"));
+            Assert.That(newSelection.BonusEquivalent, Is.EqualTo(9266));
+            Assert.That(newSelection.Power, Is.EqualTo(42));
         }
 
         [Test]
         public void MapFrom_ReturnsString()
         {
-            var selection = new SpecialAbilityDataSelection { ArmorBonus = 9266, ArmorCheckPenalty = -90210, MaxDexterityBonus = 42 };
+            var selection = new SpecialAbilityDataSelection { BaseName = "my special ability", BonusEquivalent = 9266, Power = 42 };
             var rawData = selection.MapFrom(selection);
             Assert.That(rawData.Length, Is.EqualTo(selection.SectionCount));
-            Assert.That(rawData[DataIndexConstants.Armor.ArmorBonus], Is.EqualTo("9266"));
-            Assert.That(rawData[DataIndexConstants.Armor.ArmorCheckPenalty], Is.EqualTo("-90210"));
-            Assert.That(rawData[DataIndexConstants.Armor.MaxDexterityBonus], Is.EqualTo("42"));
+            Assert.That(rawData[DataIndexConstants.SpecialAbility.BaseName], Is.EqualTo("my special ability"));
+            Assert.That(rawData[DataIndexConstants.SpecialAbility.BonusEquivalent], Is.EqualTo("9266"));
+            Assert.That(rawData[DataIndexConstants.SpecialAbility.Power], Is.EqualTo("42"));
         }
     }
 }
