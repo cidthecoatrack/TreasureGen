@@ -45,16 +45,16 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Scrolls.Divi
         [TestCase("Sunbeam", 86, 90)]
         [TestCase("Transmute Metal to Wood", 93, 97)]
         [TestCase("Word of Chaos", 98, 100)]
-        public override void Percentile(string content, int lower, int upper)
+        public override void AssertPercentile(string content, int lower, int upper)
         {
-            base.Percentile(content, lower, upper);
+            base.AssertPercentile(content, lower, upper);
         }
 
         [TestCase("Symbol of Stunning", 91)]
         [TestCase("Symbol of Weakness", 92)]
-        public override void Percentile(string content, int roll)
+        public override void AssertPercentile(string content, int roll)
         {
-            base.Percentile(content, roll);
+            base.AssertPercentile(content, roll);
         }
     }
 }

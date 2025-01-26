@@ -47,9 +47,9 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Curses
         [TestCase(WondrousItemConstants.PeriaptOfFoulRotting, 86, 88)]
         [TestCase(WeaponConstants.BerserkingSword, 89, 92)]
         [TestCase(WondrousItemConstants.BootsOfDancing, 93, 96)]
-        public override void Percentile(string content, int lower, int upper)
+        public override void AssertPercentile(string content, int lower, int upper)
         {
-            base.Percentile(content, lower, upper);
+            base.AssertPercentile(content, lower, upper);
         }
 
         [TestCase(WondrousItemConstants.HelmOfOppositeAlignment, 55)]
@@ -59,9 +59,9 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Curses
         [TestCase(WondrousItemConstants.NecklaceOfStrangulation, 98)]
         [TestCase(WondrousItemConstants.CloakOfPoisonousness, 99)]
         [TestCase(WondrousItemConstants.ScarabOfDeath, 100)]
-        public override void Percentile(string content, int roll)
+        public override void AssertPercentile(string content, int roll)
         {
-            base.Percentile(content, roll);
+            base.AssertPercentile(content, roll);
         }
     }
 }

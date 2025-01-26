@@ -2,8 +2,8 @@
 using DnDGen.RollGen;
 using DnDGen.TreasureGen.Items;
 using DnDGen.TreasureGen.Items.Magical;
-using DnDGen.TreasureGen.Selectors.Collections;
 using DnDGen.TreasureGen.Selectors.Percentiles;
+using DnDGen.TreasureGen.Selectors.Selections;
 using DnDGen.TreasureGen.Tables;
 using System;
 using System.Collections.Generic;
@@ -16,16 +16,23 @@ namespace DnDGen.TreasureGen.Generators.Items.Magical
         private readonly Dice dice;
         private readonly ITreasurePercentileSelector percentileSelector;
         private readonly ICollectionSelector collectionsSelector;
-        private readonly IIntelligenceDataSelector intelligenceDataSelector;
+        private readonly ICollectionDataSelector<IntelligenceDataSelection> intelligenceDataSelector;
+        private readonly ICollectionTypeAndAmountSelector typeAndAmountSelector;
 
         private const int MaxGreaterPowers = 3;
 
-        public IntelligenceGenerator(Dice dice, ITreasurePercentileSelector percentileSelector, ICollectionSelector collectionsSelector, IIntelligenceDataSelector intelligenceDataSelector)
+        public IntelligenceGenerator(
+            Dice dice,
+            ITreasurePercentileSelector percentileSelector,
+            ICollectionSelector collectionsSelector,
+            ICollectionDataSelector<IntelligenceDataSelection> intelligenceDataSelector,
+            ICollectionTypeAndAmountSelector typeAndAmountSelector)
         {
             this.dice = dice;
             this.percentileSelector = percentileSelector;
             this.collectionsSelector = collectionsSelector;
             this.intelligenceDataSelector = intelligenceDataSelector;
+            this.typeAndAmountSelector = typeAndAmountSelector;
         }
 
         public bool CanBeIntelligent(IEnumerable<string> attributes, bool isMagical)
@@ -45,8 +52,8 @@ namespace DnDGen.TreasureGen.Generators.Items.Magical
             else if (attributes.Contains(AttributeConstants.Ranged))
                 itemType = AttributeConstants.Ranged;
 
-            var tableName = string.Format(TableNameConstants.Percentiles.Formattable.IsITEMTYPEIntelligent, itemType);
-            return percentileSelector.SelectFrom<bool>(Config.Name, tableName);
+            var threshold = typeAndAmountSelector.SelectFrom(Config.Name, TableNameConstants.Collections.Set.IsIntelligent, itemType).Single();
+            return percentileSelector.SelectFrom(threshold.Amount);
         }
 
         public Intelligence GenerateFor(Item item)
@@ -81,14 +88,14 @@ namespace DnDGen.TreasureGen.Generators.Items.Magical
             intelligence.Ego += BoostEgoByCommunication(intelligence.Communication, "Read magic");
             intelligence.Ego += BoostEgoByCommunication(intelligence.Communication, "Telepathy");
 
-            var intelligenceAttributesResult = intelligenceDataSelector.SelectFrom(highStatResult);
+            var intelligenceAttributesResult = intelligenceDataSelector.SelectFrom(Config.Name, TableNameConstants.Collections.Set.IntelligenceData, highStatResult).Single();
             intelligence.Senses = intelligenceAttributesResult.Senses;
 
-            var lesserPowers = GeneratePowers("Lesser", intelligenceAttributesResult.LesserPowersCount);
+            var lesserPowers = GeneratePowers(TableNameConstants.Percentiles.Set.IntelligenceLesserPowers, intelligenceAttributesResult.LesserPowersCount);
             intelligence.Ego += lesserPowers.Count;
             intelligence.Powers.AddRange(lesserPowers);
 
-            var greaterPowers = GeneratePowers("Greater", intelligenceAttributesResult.GreaterPowersCount);
+            var greaterPowers = GeneratePowers(TableNameConstants.Percentiles.Set.IntelligenceGreaterPowers, intelligenceAttributesResult.GreaterPowersCount);
             var threshold = MaxGreaterPowers + 2 - intelligenceAttributesResult.GreaterPowersCount;
             var hasSpecialPurpose = dice.Roll().d(MaxGreaterPowers + 1).AsTrueOrFalse(threshold);
 
@@ -123,11 +130,7 @@ namespace DnDGen.TreasureGen.Generators.Items.Magical
             return languages;
         }
 
-        private List<string> GeneratePowers(string strength, int count)
-        {
-            var tableName = string.Format(TableNameConstants.Percentiles.Formattable.IntelligencePOWERPowers, strength);
-            return GetNonDuplicateList(tableName, count);
-        }
+        private List<string> GeneratePowers(string tableName, int count) => GetNonDuplicateList(tableName, count);
 
         private List<string> GetNonDuplicateList(string tableName, int quantity)
         {

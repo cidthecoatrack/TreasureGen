@@ -125,9 +125,9 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.WondrousItem
         [TestCase(WondrousItemConstants.IronFlask, 0, 98)]
         [TestCase(WondrousItemConstants.MirrorOfMentalProwess, 0, 99)]
         [TestCase(WondrousItemConstants.MirrorOfLifeTrapping, 0, 100)]
-        public override void TypeAndAmountPercentile(string type, int amount, int roll)
+        public override void AssertTypeAndAmountPercentile(string type, int amount, int roll)
         {
-            base.TypeAndAmountPercentile(type, amount, roll);
+            base.AssertTypeAndAmountPercentile(type, amount, roll);
         }
     }
 }

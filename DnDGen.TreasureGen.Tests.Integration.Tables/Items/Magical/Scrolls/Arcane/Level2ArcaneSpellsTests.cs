@@ -51,9 +51,9 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Scrolls.Arca
         [TestCase("Tasha's Hideous Laughter", 96)]
         [TestCase("Touch of Idiocy", 97)]
         [TestCase("Whispering Wind", 100)]
-        public override void Percentile(string content, int roll)
+        public override void AssertPercentile(string content, int roll)
         {
-            base.Percentile(content, roll);
+            base.AssertPercentile(content, roll);
         }
 
         [TestCase("Bear's Endurance", 4, 6)]
@@ -86,9 +86,9 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Scrolls.Arca
         [TestCase("Summon Monster II", 92, 93)]
         [TestCase("Summon Swarm", 94, 95)]
         [TestCase("Web", 98, 99)]
-        public override void Percentile(string content, int lower, int upper)
+        public override void AssertPercentile(string content, int lower, int upper)
         {
-            base.Percentile(content, lower, upper);
+            base.AssertPercentile(content, lower, upper);
         }
     }
 }

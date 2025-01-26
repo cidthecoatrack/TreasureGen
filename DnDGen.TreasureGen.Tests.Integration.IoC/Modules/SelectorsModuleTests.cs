@@ -10,12 +10,6 @@ namespace DnDGen.TreasureGen.Tests.Integration.IoC.Modules
     public class SelectorsModuleTests : IoCTests
     {
         [Test]
-        public void TypeAndAmountPercentileSelectorNotConstructedAsSingleton()
-        {
-            AssertNotSingleton<ITypeAndAmountPercentileSelector>();
-        }
-
-        [Test]
         public void TreasurePercentileSelectorNotConstructedAsSingleton()
         {
             AssertNotSingleton<ITreasurePercentileSelector>();
@@ -35,9 +29,9 @@ namespace DnDGen.TreasureGen.Tests.Integration.IoC.Modules
         }
 
         [Test]
-        public void IntelligenceDataSelectorNotConstructedAsSingleton()
+        public void CollectionData_IntelligenceDataSelectorNotConstructedAsSingleton()
         {
-            AssertNotSingleton<IIntelligenceDataSelector>();
+            AssertNotSingleton<ICollectionDataSelector<IntelligenceDataSelection>>();
         }
 
         [Test]

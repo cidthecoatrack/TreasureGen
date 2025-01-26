@@ -56,9 +56,9 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Potions
         [TestCase(PotionConstants.RemoveParalysis, 0, 92, 93)]
         [TestCase(PotionConstants.ResistENERGY_10, 0, 94, 96)]
         [TestCase(PotionConstants.SpiderClimb, 0, 98, 99)]
-        public override void TypeAndAmountPercentile(string name, int amount, int lower, int upper)
+        public override void AssertTypeAndAmountPercentile(string name, int amount, int lower, int upper)
         {
-            base.TypeAndAmountPercentile(name, amount, lower, upper);
+            base.AssertTypeAndAmountPercentile(name, amount, lower, upper);
         }
 
         [TestCase(PotionConstants.MagicStone, 0, 26)]
@@ -73,9 +73,9 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Potions
         [TestCase(PotionConstants.Misdirection, 0, 87)]
         [TestCase(PotionConstants.ShieldOfFaith, 3, 97)]
         [TestCase(PotionConstants.UndetectableAlignment, 0, 100)]
-        public override void TypeAndAmountPercentile(string name, int amount, int roll)
+        public override void AssertTypeAndAmountPercentile(string name, int amount, int roll)
         {
-            base.TypeAndAmountPercentile(name, amount, roll);
+            base.AssertTypeAndAmountPercentile(name, amount, roll);
         }
     }
 }

@@ -45,15 +45,15 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Weapons.Majo
         [TestCase(WeaponConstants.MaceOfSmiting, 3, 92, 95)]
         [TestCase(WeaponConstants.LuckBlade2, 2, 96, 97)]
         [TestCase(WeaponConstants.HolyAvenger, 2, 98, 99)]
-        public override void TypeAndAmountPercentile(string type, int amount, int lower, int upper)
+        public override void AssertTypeAndAmountPercentile(string type, int amount, int lower, int upper)
         {
-            base.TypeAndAmountPercentile(type, amount, lower, upper);
+            base.AssertTypeAndAmountPercentile(type, amount, lower, upper);
         }
 
         [TestCase(WeaponConstants.LuckBlade3, 2, 100)]
-        public override void TypeAndAmountPercentile(string type, int amount, int roll)
+        public override void AssertTypeAndAmountPercentile(string type, int amount, int roll)
         {
-            base.TypeAndAmountPercentile(type, amount, roll);
+            base.AssertTypeAndAmountPercentile(type, amount, roll);
         }
     }
 }

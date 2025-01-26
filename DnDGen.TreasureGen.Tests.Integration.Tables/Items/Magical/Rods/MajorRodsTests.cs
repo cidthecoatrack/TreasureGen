@@ -52,16 +52,16 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Rods
         [TestCase(RodConstants.Metamagic_Empower_Greater, 0, 93, 94)]
         [TestCase(RodConstants.Metamagic_Quicken, 0, 95, 96)]
         [TestCase(RodConstants.Alertness, 1, 97, 98)]
-        public override void TypeAndAmountPercentile(string type, int amount, int lower, int upper)
+        public override void AssertTypeAndAmountPercentile(string type, int amount, int lower, int upper)
         {
-            base.TypeAndAmountPercentile(type, amount, lower, upper);
+            base.AssertTypeAndAmountPercentile(type, amount, lower, upper);
         }
 
         [TestCase(RodConstants.Metamagic_Maximize_Greater, 0, 99)]
         [TestCase(RodConstants.Metamagic_Quicken_Greater, 0, 100)]
-        public override void TypeAndAmountPercentile(string type, int amount, int roll)
+        public override void AssertTypeAndAmountPercentile(string type, int amount, int roll)
         {
-            base.TypeAndAmountPercentile(type, amount, roll);
+            base.AssertTypeAndAmountPercentile(type, amount, roll);
         }
     }
 }

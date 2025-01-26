@@ -36,9 +36,9 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Goods.Art
         [TestCase("1d6*1000", AmountConstants.Range1d6x1000, 91, 95)]
         [TestCase("2d4*1000", AmountConstants.Range2d4x1000, 96, 99)]
         [TestCase("2d6*1000", AmountConstants.Range2d6x1000, 100, 100)]
-        public override void TypeAndAmountPercentile(string type, string value, int lower, int upper)
+        public override void AssertTypeAndAmountPercentile(string type, string value, int lower, int upper)
         {
-            base.TypeAndAmountPercentile(type, value, lower, upper);
+            base.AssertTypeAndAmountPercentile(type, value, lower, upper);
         }
     }
 }

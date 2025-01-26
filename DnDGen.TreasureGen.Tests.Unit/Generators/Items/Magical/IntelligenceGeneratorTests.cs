@@ -22,7 +22,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
         private Mock<ICollectionSelector> mockCollectionsSelector;
         private Mock<IIntelligenceDataSelector> mockIntelligenceDataSelector;
         private List<string> attributes;
-        private IntelligenceSelection intelligenceSelection;
+        private IntelligenceDataSelection intelligenceSelection;
         private Item item;
         private string itemType;
 
@@ -33,7 +33,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             mockPercentileSelector = new Mock<ITreasurePercentileSelector>();
             mockCollectionsSelector = new Mock<ICollectionSelector>();
             mockIntelligenceDataSelector = new Mock<IIntelligenceDataSelector>();
-            intelligenceSelection = new IntelligenceSelection();
+            intelligenceSelection = new IntelligenceDataSelection();
             attributes = new List<string>();
             item = new Item();
             itemType = "item type";

@@ -39,15 +39,15 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Weapons.Mino
         [TestCase(SpecialAbilityConstants.Throwing, 88, 91)]
         [TestCase(SpecialAbilityConstants.Thundering, 92, 95)]
         [TestCase(SpecialAbilityConstants.Vicious, 96, 99)]
-        public override void Percentile(string content, int lower, int upper)
+        public override void AssertPercentile(string content, int lower, int upper)
         {
-            base.Percentile(content, lower, upper);
+            base.AssertPercentile(content, lower, upper);
         }
 
         [TestCase("BonusSpecialAbility", 100)]
-        public override void Percentile(string content, int roll)
+        public override void AssertPercentile(string content, int roll)
         {
-            base.Percentile(content, roll);
+            base.AssertPercentile(content, roll);
         }
     }
 }

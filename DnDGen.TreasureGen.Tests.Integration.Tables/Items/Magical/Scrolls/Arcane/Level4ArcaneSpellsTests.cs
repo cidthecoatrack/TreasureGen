@@ -61,9 +61,9 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Scrolls.Arca
         [TestCase("Summon Monster IV", 92, 93)]
         [TestCase("Wall of Fire", 94, 96)]
         [TestCase("Wall of Ice", 97, 99)]
-        public override void Percentile(string content, int lower, int upper)
+        public override void AssertPercentile(string content, int lower, int upper)
         {
-            base.Percentile(content, lower, upper);
+            base.AssertPercentile(content, lower, upper);
         }
 
         [TestCase("Cure Critical Wounds", 18)]
@@ -76,9 +76,9 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Scrolls.Arca
         [TestCase("Repel Vermin", 77)]
         [TestCase("Speak with Plants", 86)]
         [TestCase("Zone of Silence", 100)]
-        public override void Percentile(string content, int roll)
+        public override void AssertPercentile(string content, int roll)
         {
-            base.Percentile(content, roll);
+            base.AssertPercentile(content, roll);
         }
     }
 }

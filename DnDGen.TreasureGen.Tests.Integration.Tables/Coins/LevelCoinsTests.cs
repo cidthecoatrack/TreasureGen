@@ -24,8 +24,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Coins
         {
             for (var level = LevelLimits.Minimum; level <= LevelLimits.Maximum; level++)
             {
-                var levelTableName = string.Format(TableNameConstants.Percentiles.Formattable.LevelXCoins, level);
-                var table = percentileMapper.Map(Name, levelTableName);
+                var table = percentileMapper.Map(Name, TableNameConstants.Percentiles.LevelXCoins(level));
                 Assert.That(table, Is.Not.Null);
                 Assert.That(table.Keys, Is.EqualTo(Enumerable.Range(1, 100)));
             }

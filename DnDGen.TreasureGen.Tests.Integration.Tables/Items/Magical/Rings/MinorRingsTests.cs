@@ -40,9 +40,9 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Rings
         [TestCase(RingConstants.ENERGYResistance_Minor, 0, 94, 96)]
         [TestCase(RingConstants.ChameleonPower, 0, 97, 98)]
         [TestCase(RingConstants.WaterWalking, 0, 99, 100)]
-        public override void TypeAndAmountPercentile(string type, int amount, int lower, int upper)
+        public override void AssertTypeAndAmountPercentile(string type, int amount, int lower, int upper)
         {
-            base.TypeAndAmountPercentile(type, amount, lower, upper);
+            base.AssertTypeAndAmountPercentile(type, amount, lower, upper);
         }
     }
 }

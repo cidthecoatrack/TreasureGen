@@ -34,15 +34,15 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Intelligence
         [TestCase("Defeat/slay all (other than the item and the wielder)", 91, 95)]
         [TestCase("Defend arcane spellcasters", 96, 97)]
         [TestCase("Defend divine spellcasters", 98, 99)]
-        public override void Percentile(string content, int lower, int upper)
+        public override void AssertPercentile(string content, int lower, int upper)
         {
-            base.Percentile(content, lower, upper);
+            base.AssertPercentile(content, lower, upper);
         }
 
         [TestCase("Defend nonspellcasters", 100)]
-        public override void Percentile(string content, int roll)
+        public override void AssertPercentile(string content, int roll)
         {
-            base.Percentile(content, roll);
+            base.AssertPercentile(content, roll);
         }
     }
 }

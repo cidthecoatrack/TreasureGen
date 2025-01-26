@@ -43,9 +43,9 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Armor.Major
         [TestCase(SpecialAbilityConstants.SpellResistance17, 84, 88)]
         [TestCase(SpecialAbilityConstants.HeavyFortification, 91, 92)]
         [TestCase(SpecialAbilityConstants.SpellResistance19, 93, 94)]
-        public override void Percentile(string content, int lower, int upper)
+        public override void AssertPercentile(string content, int lower, int upper)
         {
-            base.Percentile(content, lower, upper);
+            base.AssertPercentile(content, lower, upper);
         }
 
         [TestCase(SpecialAbilityConstants.LightFortification, 4)]
@@ -58,9 +58,9 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Armor.Major
         [TestCase(SpecialAbilityConstants.GreaterFireResistance, 98)]
         [TestCase(SpecialAbilityConstants.GreaterSonicResistance, 99)]
         [TestCase("BonusSpecialAbility", 100)]
-        public override void Percentile(string content, int roll)
+        public override void AssertPercentile(string content, int roll)
         {
-            base.Percentile(content, roll);
+            base.AssertPercentile(content, roll);
         }
 
         [Test]

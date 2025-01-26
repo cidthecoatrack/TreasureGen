@@ -43,9 +43,9 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Weapons.Majo
         [TestCase(SpecialAbilityConstants.Speed, 80, 84)]
         [TestCase(SpecialAbilityConstants.BrilliantEnergy, 85, 90)]
         [TestCase("BonusSpecialAbility", 91, 100)]
-        public override void Percentile(string content, int lower, int upper)
+        public override void AssertPercentile(string content, int lower, int upper)
         {
-            base.Percentile(content, lower, upper);
+            base.AssertPercentile(content, lower, upper);
         }
     }
 }

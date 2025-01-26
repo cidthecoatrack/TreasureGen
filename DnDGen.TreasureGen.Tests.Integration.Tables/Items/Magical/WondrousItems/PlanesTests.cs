@@ -50,9 +50,9 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.WondrousItem
         [TestCase("Carceri", 93, 95)]
         [TestCase("Abyss", 96, 98)]
         [TestCase("The Outlands", 99, 100)]
-        public override void Percentile(string content, int lower, int upper)
+        public override void AssertPercentile(string content, int lower, int upper)
         {
-            base.Percentile(content, lower, upper);
+            base.AssertPercentile(content, lower, upper);
         }
     }
 }

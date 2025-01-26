@@ -31,9 +31,9 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical
         [TestCase(ItemTypeConstants.Scroll, 47, 81)]
         [TestCase(ItemTypeConstants.Wand, 82, 91)]
         [TestCase(ItemTypeConstants.WondrousItem, 92, 100)]
-        public override void Percentile(string content, int lower, int upper)
+        public override void AssertPercentile(string content, int lower, int upper)
         {
-            base.Percentile(content, lower, upper);
+            base.AssertPercentile(content, lower, upper);
         }
     }
 }

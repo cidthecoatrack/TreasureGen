@@ -27,9 +27,9 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Armor.Minor
         [TestCase(ArmorConstants.ChainShirt, 0, 1, 50)]
         [TestCase(ArmorConstants.FullPlate, 0, 51, 80)]
         [TestCase(ArmorConstants.ElvenChain, 0, 81, 100)]
-        public override void TypeAndAmountPercentile(string type, int amount, int lower, int upper)
+        public override void AssertTypeAndAmountPercentile(string type, int amount, int lower, int upper)
         {
-            base.TypeAndAmountPercentile(type, amount, lower, upper);
+            base.AssertTypeAndAmountPercentile(type, amount, lower, upper);
         }
     }
 }

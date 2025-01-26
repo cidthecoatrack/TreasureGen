@@ -31,9 +31,9 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Mundane.Alchemical
         [TestCase("Everburning torch", "1", 63, 74)]
         [TestCase("Tanglefoot bag", "1d4", 75, 88)]
         [TestCase("Thunderstone", "1d4", 89, 100)]
-        public override void TypeAndAmountPercentile(string type, string amount, int lower, int upper)
+        public override void AssertTypeAndAmountPercentile(string type, string amount, int lower, int upper)
         {
-            base.TypeAndAmountPercentile(type, amount, lower, upper);
+            base.AssertTypeAndAmountPercentile(type, amount, lower, upper);
         }
     }
 }

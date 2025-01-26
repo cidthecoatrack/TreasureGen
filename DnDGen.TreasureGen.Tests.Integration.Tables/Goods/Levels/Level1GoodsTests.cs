@@ -19,16 +19,16 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Goods.Levels
         }
 
         [TestCase(EmptyContent, 1, 90)]
-        public override void Percentile(string content, int lower, int upper)
+        public override void AssertPercentile(string content, int lower, int upper)
         {
-            base.Percentile(content, lower, upper);
+            base.AssertPercentile(content, lower, upper);
         }
 
         [TestCase(GoodsConstants.Gem, AmountConstants.Range1, 91, 95)]
         [TestCase(GoodsConstants.Art, AmountConstants.Range1, 96, 100)]
-        public override void TypeAndAmountPercentile(string type, string amount, int lower, int upper)
+        public override void AssertTypeAndAmountPercentile(string type, string amount, int lower, int upper)
         {
-            base.TypeAndAmountPercentile(type, amount, lower, upper);
+            base.AssertTypeAndAmountPercentile(type, amount, lower, upper);
         }
 
         [Test]

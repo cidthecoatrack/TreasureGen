@@ -45,9 +45,9 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Intelligence
         [TestCase("Item can use Daze Monster 3/day", 87, 89)]
         [TestCase("Item can use Locate Object 3/day", 90, 95)]
         [TestCase("Item can use Cure Moderate Wounds (2d8+3) on wielder 3/day", 96, 100)]
-        public override void Percentile(string content, int lower, int upper)
+        public override void AssertPercentile(string content, int lower, int upper)
         {
-            base.Percentile(content, lower, upper);
+            base.AssertPercentile(content, lower, upper);
         }
     }
 }

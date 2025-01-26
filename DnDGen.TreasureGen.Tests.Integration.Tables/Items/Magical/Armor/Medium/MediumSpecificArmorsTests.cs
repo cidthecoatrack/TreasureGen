@@ -31,9 +31,9 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Armor.Medium
         [TestCase(ArmorConstants.Breastplate, 0, 68, 82)]
         [TestCase(ArmorConstants.DwarvenPlate, 0, 83, 97)]
         [TestCase(ArmorConstants.BandedMailOfLuck, 3, 98, 100)]
-        public override void TypeAndAmountPercentile(string type, int amount, int lower, int upper)
+        public override void AssertTypeAndAmountPercentile(string type, int amount, int lower, int upper)
         {
-            base.TypeAndAmountPercentile(type, amount, lower, upper);
+            base.AssertTypeAndAmountPercentile(type, amount, lower, upper);
         }
     }
 }

@@ -34,9 +34,9 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Mundane.Weapons
         [TestCase(WeaponConstants.BastardSword, 75, 84)]
         [TestCase(WeaponConstants.ShortSword, 85, 89)]
         [TestCase(WeaponConstants.DwarvenWaraxe, 90, 100)]
-        public override void Percentile(string content, int lower, int upper)
+        public override void AssertPercentile(string content, int lower, int upper)
         {
-            base.Percentile(content, lower, upper);
+            base.AssertPercentile(content, lower, upper);
         }
 
         [Test]

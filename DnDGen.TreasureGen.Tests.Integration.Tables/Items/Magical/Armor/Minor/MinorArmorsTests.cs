@@ -28,9 +28,9 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Armor.Minor
         [TestCase("2", 81, 87)]
         [TestCase(ItemTypeConstants.Armor, 88, 91)]
         [TestCase("SpecialAbility", 92, 100)]
-        public override void Percentile(string value, int lower, int upper)
+        public override void AssertPercentile(string value, int lower, int upper)
         {
-            base.Percentile(value, lower, upper);
+            base.AssertPercentile(value, lower, upper);
         }
     }
 }

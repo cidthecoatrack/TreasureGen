@@ -47,9 +47,9 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Curses
         [TestCase(CurseConstants.Drawbacks.StatDamage_Constitution, 81, 85)]
         [TestCase(CurseConstants.Drawbacks.StatDamage_Strength, 86, 90)]
         [TestCase(CurseConstants.Drawbacks.StatDamage_Dexterity, 91, 95)]
-        public override void Percentile(string content, int lower, int upper)
+        public override void AssertPercentile(string content, int lower, int upper)
         {
-            base.Percentile(content, lower, upper);
+            base.AssertPercentile(content, lower, upper);
         }
 
         [TestCase(CurseConstants.Drawbacks.Disease, 35)]
@@ -60,9 +60,9 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Curses
         [TestCase(CurseConstants.Drawbacks.NoSpells_Divine, 98)]
         [TestCase(CurseConstants.Drawbacks.NoSpells_Any, 99)]
         [TestCase(CurseConstants.Drawbacks.Harm, 100)]
-        public override void Percentile(string content, int roll)
+        public override void AssertPercentile(string content, int roll)
         {
-            base.Percentile(content, roll);
+            base.AssertPercentile(content, roll);
         }
     }
 }

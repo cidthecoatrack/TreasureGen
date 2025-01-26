@@ -7,6 +7,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Tables
     [TestFixture]
     public class AmountConstantsTests
     {
+        [TestCase(AmountConstants.Range0, 0, 0)]
         [TestCase(AmountConstants.Range1, 1, 1)]
         [TestCase(AmountConstants.Range1d3, 1, 3)]
         [TestCase(AmountConstants.Range1d3Plus1, 1, 3, 1, 1)]

@@ -45,9 +45,9 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Intelligence
         [TestCase("Item can Locate Creature 3/day", 86, 91)]
         [TestCase("Item can use Fear against foes 3/day", 92, 97)]
         [TestCase("Item can use Detect Thoughts at will", 98, 100)]
-        public override void Percentile(string content, int lower, int upper)
+        public override void AssertPercentile(string content, int lower, int upper)
         {
-            base.Percentile(content, lower, upper);
+            base.AssertPercentile(content, lower, upper);
         }
     }
 }

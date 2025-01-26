@@ -44,15 +44,15 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Armor.Medium
         [TestCase(SpecialAbilityConstants.ModerateFortification, 85, 89)]
         [TestCase(SpecialAbilityConstants.SpellResistance15, 90, 94)]
         [TestCase(SpecialAbilityConstants.Wild, 95, 99)]
-        public override void Percentile(string content, int lower, int upper)
+        public override void AssertPercentile(string content, int lower, int upper)
         {
-            base.Percentile(content, lower, upper);
+            base.AssertPercentile(content, lower, upper);
         }
 
         [TestCase("BonusSpecialAbility", 100)]
-        public override void Percentile(string content, int roll)
+        public override void AssertPercentile(string content, int roll)
         {
-            base.Percentile(content, roll);
+            base.AssertPercentile(content, roll);
         }
     }
 }

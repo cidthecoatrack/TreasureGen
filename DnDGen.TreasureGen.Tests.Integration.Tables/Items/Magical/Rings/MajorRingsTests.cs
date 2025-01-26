@@ -47,9 +47,9 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Rings
         [TestCase(RingConstants.Regeneration, 0, 87, 88)]
         [TestCase(RingConstants.SpellTurning, 0, 90, 92)]
         [TestCase(RingConstants.Wizardry_IV, 0, 93, 94)]
-        public override void TypeAndAmountPercentile(string type, int amount, int lower, int upper)
+        public override void AssertTypeAndAmountPercentile(string type, int amount, int lower, int upper)
         {
-            base.TypeAndAmountPercentile(type, amount, lower, upper);
+            base.AssertTypeAndAmountPercentile(type, amount, lower, upper);
         }
 
         [TestCase(RingConstants.ThreeWishes, 0, 89)]
@@ -59,9 +59,9 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Rings
         [TestCase(RingConstants.ElementalCommand_Fire, 0, 98)]
         [TestCase(RingConstants.ElementalCommand_Water, 0, 99)]
         [TestCase(RingConstants.SpellStoring_Major, 0, 100)]
-        public override void TypeAndAmountPercentile(string type, int amount, int roll)
+        public override void AssertTypeAndAmountPercentile(string type, int amount, int roll)
         {
-            base.TypeAndAmountPercentile(type, amount, roll);
+            base.AssertTypeAndAmountPercentile(type, amount, roll);
         }
     }
 }

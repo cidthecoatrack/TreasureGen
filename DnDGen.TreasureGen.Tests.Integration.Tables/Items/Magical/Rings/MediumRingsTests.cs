@@ -45,9 +45,9 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Rings
         [TestCase(RingConstants.XRayVision, 0, 91, 93)]
         [TestCase(RingConstants.Blinking, 0, 94, 97)]
         [TestCase(RingConstants.ENERGYResistance_Major, 0, 98, 100)]
-        public override void TypeAndAmountPercentile(string type, int amount, int lower, int upper)
+        public override void AssertTypeAndAmountPercentile(string type, int amount, int lower, int upper)
         {
-            base.TypeAndAmountPercentile(type, amount, lower, upper);
+            base.AssertTypeAndAmountPercentile(type, amount, lower, upper);
         }
     }
 }

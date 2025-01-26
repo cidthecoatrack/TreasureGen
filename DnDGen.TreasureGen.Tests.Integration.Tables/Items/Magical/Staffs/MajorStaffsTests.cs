@@ -48,7 +48,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Staves
         [TestCase(98, 100, StaffConstants.Power, 2)]
         public void TypeAndAmountPercentile(int lower, int upper, string type, int amount)
         {
-            base.TypeAndAmountPercentile(type, amount, lower, upper);
+            base.AssertTypeAndAmountPercentile(type, amount, lower, upper);
         }
     }
 }

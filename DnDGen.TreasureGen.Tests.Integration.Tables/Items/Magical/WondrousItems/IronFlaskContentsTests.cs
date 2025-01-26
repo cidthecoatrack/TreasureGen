@@ -34,9 +34,9 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.WondrousItem
         [TestCase("Adult tojanida", 79, 82)]
         [TestCase("Chaos beast", 83, 84)]
         [TestCase("Formian taskmaster", 85, 86)]
-        public override void Percentile(string content, int lower, int upper)
+        public override void AssertPercentile(string content, int lower, int upper)
         {
-            base.Percentile(content, lower, upper);
+            base.AssertPercentile(content, lower, upper);
         }
 
         [TestCase("Vrock", 87)]
@@ -53,9 +53,9 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.WondrousItem
         [TestCase("Elder arrowhawk", 98)]
         [TestCase("Rakshasa", 99)]
         [TestCase("BalorOrPitFiend", 100)]
-        public override void Percentile(string content, int roll)
+        public override void AssertPercentile(string content, int roll)
         {
-            base.Percentile(content, roll);
+            base.AssertPercentile(content, roll);
         }
     }
 }

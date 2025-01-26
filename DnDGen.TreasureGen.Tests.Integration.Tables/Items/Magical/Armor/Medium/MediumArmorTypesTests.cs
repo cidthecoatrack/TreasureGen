@@ -34,9 +34,9 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Armor.Medium
         [TestCase(ItemTypeConstants.Armor, 56, 60)]
         [TestCase(AttributeConstants.Shield, 61, 81)]
         [TestCase(ItemTypeConstants.Armor, 82, 100)]
-        public override void Percentile(string type, int lower, int upper)
+        public override void AssertPercentile(string type, int lower, int upper)
         {
-            base.Percentile(type, lower, upper);
+            base.AssertPercentile(type, lower, upper);
         }
     }
 }

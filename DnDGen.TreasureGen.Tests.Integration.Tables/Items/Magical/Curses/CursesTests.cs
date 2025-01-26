@@ -31,9 +31,9 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Curses
         [TestCase(CurseConstants.Drawback, 61, 75)]
         [TestCase(CurseConstants.DifferentEffect, 76, 90)]
         [TestCase(TableNameConstants.Percentiles.Set.SpecificCursedItems, 91, 100)]
-        public override void Percentile(string content, int lower, int upper)
+        public override void AssertPercentile(string content, int lower, int upper)
         {
-            base.Percentile(content, lower, upper);
+            base.AssertPercentile(content, lower, upper);
         }
     }
 }

@@ -40,9 +40,9 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Intelligence
         [TestCase("Item can cast 15d6 Greater Shout 3/day", 88, 92)]
         [TestCase("Item can use Waves of Exhaustion", 93, 98)]
         [TestCase("Item can use True Resurrection on wielder 1/month", 99, 100)]
-        public override void Percentile(string content, int lower, int upper)
+        public override void AssertPercentile(string content, int lower, int upper)
         {
-            base.Percentile(content, lower, upper);
+            base.AssertPercentile(content, lower, upper);
         }
     }
 }

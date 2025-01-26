@@ -21,9 +21,9 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Levels
         [TestCase(PowerConstants.Medium, AmountConstants.Range2d6, 1, 23)] //2-12
         [TestCase(PowerConstants.Major, AmountConstants.Range1d6, 24, 76)] //1-6
         [TestCase(PowerConstants.Major, AmountConstants.Range1d3Plus4, 77, 100)] //5-7
-        public override void TypeAndAmountPercentile(string type, string amount, int lower, int upper)
+        public override void AssertTypeAndAmountPercentile(string type, string amount, int lower, int upper)
         {
-            base.TypeAndAmountPercentile(type, amount, lower, upper);
+            base.AssertTypeAndAmountPercentile(type, amount, lower, upper);
         }
 
         [Test]

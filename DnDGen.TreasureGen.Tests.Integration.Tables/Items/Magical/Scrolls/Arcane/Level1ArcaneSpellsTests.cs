@@ -62,18 +62,18 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Scrolls.Arca
         [TestCase("True Strike", 94, 95)]
         [TestCase("Unseen Servant", 97, 98)]
         [TestCase("Ventriloquism", 99, 100)]
-        public override void Percentile(string content, int lower, int upper)
+        public override void AssertPercentile(string content, int lower, int upper)
         {
-            base.Percentile(content, lower, upper);
+            base.AssertPercentile(content, lower, upper);
         }
 
         [TestCase("Lesser Confusion", 20)]
         [TestCase("Cure Light Wounds", 21)]
         [TestCase("Feather Fall", 41)]
         [TestCase("Undetectable Alignment", 96)]
-        public override void Percentile(string content, int roll)
+        public override void AssertPercentile(string content, int roll)
         {
-            base.Percentile(content, roll);
+            base.AssertPercentile(content, roll);
         }
     }
 }

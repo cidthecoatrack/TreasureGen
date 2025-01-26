@@ -37,9 +37,9 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Mundane.Weapons
         [TestCase(WeaponConstants.CompositeLongbow_StrengthPlus2, 86, 90)]
         [TestCase(WeaponConstants.CompositeLongbow_StrengthPlus3, 91, 95)]
         [TestCase(WeaponConstants.CompositeLongbow_StrengthPlus4, 96, 100)]
-        public override void Percentile(string content, int lower, int upper)
+        public override void AssertPercentile(string content, int lower, int upper)
         {
-            base.Percentile(content, lower, upper);
+            base.AssertPercentile(content, lower, upper);
         }
 
         [Test]

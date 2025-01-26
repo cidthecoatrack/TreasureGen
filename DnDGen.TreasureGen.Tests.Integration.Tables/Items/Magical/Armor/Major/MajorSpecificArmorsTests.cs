@@ -32,9 +32,9 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Armor.Major
         [TestCase(ArmorConstants.BreastplateOfCommand, 2, 61, 75)]
         [TestCase(ArmorConstants.FullPlateOfSpeed, 1, 76, 90)]
         [TestCase(ArmorConstants.DemonArmor, 4, 91, 100)]
-        public override void TypeAndAmountPercentile(string type, int amount, int lower, int upper)
+        public override void AssertTypeAndAmountPercentile(string type, int amount, int lower, int upper)
         {
-            base.TypeAndAmountPercentile(type, amount, lower, upper);
+            base.AssertTypeAndAmountPercentile(type, amount, lower, upper);
         }
     }
 }

@@ -30,9 +30,9 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Goods.Gems
         [TestCase("2d4*100", AmountConstants.Range2d4x100, 71, 90)]
         [TestCase("4d4*100", AmountConstants.Range4d4x100, 91, 99)]
         [TestCase("2d4*1000", AmountConstants.Range2d4x1000, 100, 100)]
-        public override void TypeAndAmountPercentile(string type, string value, int lower, int upper)
+        public override void AssertTypeAndAmountPercentile(string type, string value, int lower, int upper)
         {
-            base.TypeAndAmountPercentile(type, value, lower, upper);
+            base.AssertTypeAndAmountPercentile(type, value, lower, upper);
         }
     }
 }

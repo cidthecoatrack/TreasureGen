@@ -25,9 +25,9 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Mundane
         [TestCase(TraitConstants.Sizes.Huge, 98, 98)]
         [TestCase(TraitConstants.Sizes.Gargantuan, 99, 99)]
         [TestCase(TraitConstants.Sizes.Colossal, 100, 100)]
-        public override void Percentile(string content, int lower, int upper)
+        public override void AssertPercentile(string content, int lower, int upper)
         {
-            base.Percentile(content, lower, upper);
+            base.AssertPercentile(content, lower, upper);
         }
 
         [Test]

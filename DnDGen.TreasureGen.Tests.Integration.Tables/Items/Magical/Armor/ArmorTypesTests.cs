@@ -25,9 +25,9 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Armor
         [TestCase(ArmorConstants.SplintMail, 58)]
         [TestCase(ArmorConstants.BandedMail, 59)]
         [TestCase(ArmorConstants.HalfPlate, 60)]
-        public override void Percentile(string content, int roll)
+        public override void AssertPercentile(string content, int roll)
         {
-            base.Percentile(content, roll);
+            base.AssertPercentile(content, roll);
         }
 
         [TestCase(ArmorConstants.StuddedLeatherArmor, 3, 17)]
@@ -35,9 +35,9 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Armor
         [TestCase(ArmorConstants.HideArmor, 33, 42)]
         [TestCase(ArmorConstants.Breastplate, 45, 57)]
         [TestCase(ArmorConstants.FullPlate, 61, 100)]
-        public override void Percentile(string content, int lower, int upper)
+        public override void AssertPercentile(string content, int lower, int upper)
         {
-            base.Percentile(content, lower, upper);
+            base.AssertPercentile(content, lower, upper);
         }
 
         [Test]
