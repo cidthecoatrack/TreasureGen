@@ -23,13 +23,8 @@ namespace DnDGen.TreasureGen.Generators.Goods
 
         public IEnumerable<Good> GenerateAtLevel(int level)
         {
-            if (level < LevelLimits.Minimum)
-                throw new ArgumentException($"Level {level} is not a valid level for treasure generation");
-
-            if (level > LevelLimits.Maximum)
-                level = LevelLimits.Maximum;
-
-            var typeAndAmountSelection = typeAndAmountPercentileSelector.SelectFrom(Config.Name, TableNameConstants.Percentiles.LevelXGoods(level));
+            var validLevel = GetValidLevel(level);
+            var typeAndAmountSelection = typeAndAmountPercentileSelector.SelectFrom(Config.Name, TableNameConstants.Percentiles.LevelXGoods(validLevel));
             var goods = new List<Good>();
 
             while (goods.Count < typeAndAmountSelection.Amount)
@@ -39,6 +34,17 @@ namespace DnDGen.TreasureGen.Generators.Goods
             }
 
             return goods;
+        }
+
+        private int GetValidLevel(int level)
+        {
+            if (level < LevelLimits.Minimum)
+                throw new ArgumentException($"Level {level} is not a valid level for treasure generation");
+
+            if (level > LevelLimits.Maximum_Standard)
+                return LevelLimits.Maximum_Standard;
+
+            return level;
         }
 
         private Good GenerateGood(TypeAndAmountDataSelection quantity)
@@ -56,13 +62,8 @@ namespace DnDGen.TreasureGen.Generators.Goods
 
         public async Task<IEnumerable<Good>> GenerateAtLevelAsync(int level)
         {
-            if (level < LevelLimits.Minimum)
-                throw new ArgumentException($"Level {level} is not a valid level for treasure generation");
-
-            if (level > LevelLimits.Maximum)
-                level = LevelLimits.Maximum;
-
-            var typeAndAmountSelection = typeAndAmountPercentileSelector.SelectFrom(Config.Name, TableNameConstants.Percentiles.LevelXGoods(level));
+            var validLevel = GetValidLevel(level);
+            var typeAndAmountSelection = typeAndAmountPercentileSelector.SelectFrom(Config.Name, TableNameConstants.Percentiles.LevelXGoods(validLevel));
             var tasks = new List<Task<Good>>();
 
             while (tasks.Count < typeAndAmountSelection.Amount)

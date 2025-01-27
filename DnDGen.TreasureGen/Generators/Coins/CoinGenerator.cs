@@ -19,8 +19,8 @@ namespace DnDGen.TreasureGen.Generators.Coins
             if (level < LevelLimits.Minimum)
                 throw new ArgumentException($"Level {level} is not a valid level for treasure generation");
 
-            if (level > LevelLimits.Maximum)
-                level = LevelLimits.Maximum;
+            if (level > LevelLimits.Maximum_Standard)
+                level = LevelLimits.Maximum_Standard;
 
             var result = typeAndAmountPercentileSelector.SelectFrom(Config.Name, TableNameConstants.Percentiles.LevelXCoins(level));
             var coin = new Coin
