@@ -2,8 +2,6 @@
 using DnDGen.TreasureGen.Generators.Items.Magical;
 using DnDGen.TreasureGen.Items;
 using DnDGen.TreasureGen.Items.Magical;
-using DnDGen.TreasureGen.Selectors.Collections;
-using DnDGen.TreasureGen.Selectors.Helpers;
 using DnDGen.TreasureGen.Selectors.Percentiles;
 using DnDGen.TreasureGen.Selectors.Selections;
 using DnDGen.TreasureGen.Tables;
@@ -1607,6 +1605,12 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             Assert.That(abilityArray[2].CriticalDamages["x4"][0].Roll, Is.EqualTo("my third roll"));
             Assert.That(abilityArray[2].CriticalDamages["x4"][0].Type, Is.EqualTo("my third damage type"));
             Assert.That(abilityArray.Length, Is.EqualTo(3));
+        }
+
+        [Test]
+        public void ApplyAbilitiesToWeapon_TODO()
+        {
+            Assert.Fail("not yet written");
         }
     }
 }

@@ -119,59 +119,9 @@ namespace DnDGen.TreasureGen.Generators.Items.Magical
                 weapon.SecondaryMagicBonus = staff.Magic.Bonus;
             }
 
-            weapon = ApplySpecialAbilities(weapon);
+            weapon = specialAbilitiesGenerator.ApplyAbilitiesToWeapon(weapon);
 
             return weapon;
-        }
-
-        private Weapon ApplySpecialAbilities(Weapon weapon)
-        {
-            foreach (var specialAbility in weapon.Magic.SpecialAbilities)
-            {
-                var weaponDamages = GetWeaponDamages(specialAbility.Damages, weapon.Damages[0].Type);
-                weapon.Damages.AddRange(weaponDamages);
-
-                var weaponCritDamages = GetWeaponDamages(specialAbility.CriticalDamages, weapon.CriticalDamages[0].Type);
-                weapon.CriticalDamages.AddRange(weaponCritDamages);
-
-                if (specialAbility.Name == SpecialAbilityConstants.Keen)
-                {
-                    weapon.ThreatRange *= 2;
-                }
-            }
-
-            if (weapon.IsDoubleWeapon && weapon.SecondaryHasAbilities)
-            {
-                var secondaryAbilities = specialAbilitiesGenerator.GenerateFor(weapon.Magic.SpecialAbilities, weapon.SecondaryCriticalMultiplier);
-
-                foreach (var specialAbility in secondaryAbilities)
-                {
-                    var weaponDamages = GetWeaponDamages(specialAbility.Damages, weapon.SecondaryDamages[0].Type);
-                    weapon.SecondaryDamages.AddRange(weaponDamages);
-
-                    var weaponCritDamages = GetWeaponDamages(specialAbility.CriticalDamages, weapon.SecondaryCriticalDamages[0].Type);
-                    weapon.SecondaryCriticalDamages.AddRange(weaponCritDamages);
-                }
-            }
-
-            return weapon;
-        }
-
-        private IEnumerable<Damage> GetWeaponDamages(IEnumerable<Damage> abilityDamages, string weaponDamageType)
-        {
-            if (!abilityDamages.Any())
-                return [];
-
-            var damages = abilityDamages.Select(d => d.Clone()).ToArray();
-            foreach (var damage in damages)
-            {
-                if (string.IsNullOrEmpty(damage.Type))
-                {
-                    damage.Type = weaponDamageType;
-                }
-            }
-
-            return damages;
         }
 
         public Item Generate(Item template, bool allowRandomDecoration = false)
@@ -179,7 +129,18 @@ namespace DnDGen.TreasureGen.Generators.Items.Magical
             var staff = template.Clone();
 
             staff.Magic.Intelligence = template.Magic.Intelligence.Clone();
-            staff.Magic.SpecialAbilities = specialAbilitiesGenerator.GenerateFor(template.Magic.SpecialAbilities);
+
+            var baseNames = collectionsSelector.SelectFrom(Config.Name, TableNameConstants.Collections.ItemGroups, staff.Name);
+            var weapons = WeaponConstants.GetAllMelee(false, false);
+            var weaponBaseNames = weapons.Intersect(baseNames);
+            if (weaponBaseNames.Any())
+            {
+                var weaponName = weaponBaseNames.First();
+                var mundaneWeaponGenerator = justInTimeFactory.Build<MundaneItemGenerator>(ItemTypeConstants.Weapon);
+                var mundaneWeapon = mundaneWeaponGenerator.Generate(weaponName, [.. staff.Traits]) as Weapon;
+
+                staff.Magic.SpecialAbilities = specialAbilitiesGenerator.GenerateFor(staff.Magic.SpecialAbilities, mundaneWeapon.CriticalMultiplier);
+            }
 
             staff = BuildStaff(staff);
 

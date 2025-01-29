@@ -18,9 +18,9 @@ namespace DnDGen.TreasureGen.Selectors.Collections
 
         public WeaponDataSelection Select(string name, string size)
         {
-            var weaponData = weaponDataSelector.SelectFrom(Config.Name, TableNameConstants.Collections.Set.WeaponData, name).Single();
-            var damagesData = damageDataSelector.SelectFrom(Config.Name, TableNameConstants.Collections.Set.WeaponDamages, name + size).ToArray();
-            var critDamagesData = damageDataSelector.SelectFrom(Config.Name, TableNameConstants.Collections.Set.WeaponCriticalDamages, name + size).ToArray();
+            var weaponData = weaponDataSelector.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponData, name).Single();
+            var damagesData = damageDataSelector.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponDamages, name + size).ToArray();
+            var critDamagesData = damageDataSelector.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponCriticalDamages, name + size).ToArray();
 
             weaponData.Damages.AddRange(damagesData);
             weaponData.CriticalDamages.AddRange(critDamagesData);

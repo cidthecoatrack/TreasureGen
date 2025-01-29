@@ -46,13 +46,13 @@ namespace DnDGen.TreasureGen.Generators.Items.Mundane
             armor.ItemType = ItemTypeConstants.Armor;
             armor.Quantity = 1;
 
-            var tableName = string.Format(TableNameConstants.Collections.Formattable.ITEMTYPEAttributes, armor.ItemType);
+            var tableName = TableNameConstants.Collections.ITEMTYPEAttributes(armor.ItemType);
             armor.Attributes = collectionsSelector.SelectFrom(Config.Name, tableName, armor.Name);
 
             armor.Size = GetSize(armor);
             armor.Traits.Remove(armor.Size);
 
-            var armorSelection = armorDataSelector.SelectFrom(Config.Name, TableNameConstants.Collections.Set.ArmorData, armor.Name).Single();
+            var armorSelection = armorDataSelector.SelectFrom(Config.Name, TableNameConstants.Collections.ArmorData, armor.Name).Single();
             armor.ArmorBonus = armorSelection.ArmorBonus;
             armor.ArmorCheckPenalty = armorSelection.ArmorCheckPenalty;
             armor.MaxDexterityBonus = armorSelection.MaxDexterityBonus;
@@ -62,7 +62,7 @@ namespace DnDGen.TreasureGen.Generators.Items.Mundane
 
         public Item Generate(Item template, bool allowRandomDecoration = false)
         {
-            template.BaseNames = collectionsSelector.SelectFrom(Config.Name, TableNameConstants.Collections.Set.ItemGroups, template.Name);
+            template.BaseNames = collectionsSelector.SelectFrom(Config.Name, TableNameConstants.Collections.ItemGroups, template.Name);
 
             var armor = new Armor();
 
@@ -84,7 +84,7 @@ namespace DnDGen.TreasureGen.Generators.Items.Mundane
             if (!template.Traits.Any())
                 return GetRandomSize();
 
-            var allSizes = percentileSelector.SelectAllFrom(Config.Name, TableNameConstants.Percentiles.Set.MundaneGearSizes);
+            var allSizes = percentileSelector.SelectAllFrom(Config.Name, TableNameConstants.Percentiles.MundaneGearSizes);
             var sizeTraits = template.Traits.Intersect(allSizes);
 
             if (sizeTraits.Any())
@@ -95,7 +95,7 @@ namespace DnDGen.TreasureGen.Generators.Items.Mundane
 
         private string GetRandomSize()
         {
-            return percentileSelector.SelectFrom(Config.Name, TableNameConstants.Percentiles.Set.MundaneGearSizes);
+            return percentileSelector.SelectFrom(Config.Name, TableNameConstants.Percentiles.MundaneGearSizes);
         }
 
         private Armor GenerateFromPrototype(Armor prototype, bool allowDecoration)
@@ -104,7 +104,7 @@ namespace DnDGen.TreasureGen.Generators.Items.Mundane
 
             if (allowDecoration)
             {
-                var isMasterwork = percentileSelector.SelectFrom<bool>(Config.Name, TableNameConstants.Percentiles.Set.IsMasterwork);
+                var isMasterwork = percentileSelector.SelectFrom<bool>(Config.Name, TableNameConstants.Percentiles.IsMasterwork);
                 if (isMasterwork)
                     armor.Traits.Add(TraitConstants.Masterwork);
             }
@@ -114,10 +114,10 @@ namespace DnDGen.TreasureGen.Generators.Items.Mundane
 
         private string GetRandomName()
         {
-            var name = percentileSelector.SelectFrom(Config.Name, TableNameConstants.Percentiles.Set.MundaneArmors);
+            var name = percentileSelector.SelectFrom(Config.Name, TableNameConstants.Percentiles.MundaneArmors);
 
             if (name == AttributeConstants.Shield)
-                name = percentileSelector.SelectFrom(Config.Name, TableNameConstants.Percentiles.Set.MundaneShields);
+                name = percentileSelector.SelectFrom(Config.Name, TableNameConstants.Percentiles.MundaneShields);
 
             return name;
         }
@@ -126,7 +126,7 @@ namespace DnDGen.TreasureGen.Generators.Items.Mundane
         {
             var armor = new Armor();
             armor.Name = itemName;
-            armor.BaseNames = collectionsSelector.SelectFrom(Config.Name, TableNameConstants.Collections.Set.ItemGroups, itemName);
+            armor.BaseNames = collectionsSelector.SelectFrom(Config.Name, TableNameConstants.Collections.ItemGroups, itemName);
 
             return armor;
         }

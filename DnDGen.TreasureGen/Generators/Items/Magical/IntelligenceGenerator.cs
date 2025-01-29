@@ -52,13 +52,13 @@ namespace DnDGen.TreasureGen.Generators.Items.Magical
             else if (attributes.Contains(AttributeConstants.Ranged))
                 itemType = AttributeConstants.Ranged;
 
-            var threshold = typeAndAmountSelector.SelectFrom(Config.Name, TableNameConstants.Collections.Set.IsIntelligent, itemType).Single();
+            var threshold = typeAndAmountSelector.SelectFrom(Config.Name, TableNameConstants.Collections.IsIntelligent, itemType).Single();
             return percentileSelector.SelectFrom(threshold.Amount);
         }
 
         public Intelligence GenerateFor(Item item)
         {
-            var highStatResult = percentileSelector.SelectFrom(Config.Name, TableNameConstants.Percentiles.Set.IntelligenceStrongStats);
+            var highStatResult = percentileSelector.SelectFrom(Config.Name, TableNameConstants.Percentiles.IntelligenceStrongStats);
             var highStat = Convert.ToInt32(highStatResult);
 
             var intelligence = new Intelligence();
@@ -79,7 +79,7 @@ namespace DnDGen.TreasureGen.Generators.Items.Magical
                 case 3: intelligence.WisdomStat = 10; break;
             }
 
-            intelligence.Communication = collectionsSelector.SelectFrom(Config.Name, TableNameConstants.Collections.Set.IntelligenceCommunication, highStatResult);
+            intelligence.Communication = collectionsSelector.SelectFrom(Config.Name, TableNameConstants.Collections.IntelligenceCommunication, highStatResult);
 
             if (intelligence.Communication.Contains("Speech"))
                 intelligence.Languages = GenerateLanguages(intelligence.IntelligenceStat);
@@ -88,29 +88,29 @@ namespace DnDGen.TreasureGen.Generators.Items.Magical
             intelligence.Ego += BoostEgoByCommunication(intelligence.Communication, "Read magic");
             intelligence.Ego += BoostEgoByCommunication(intelligence.Communication, "Telepathy");
 
-            var intelligenceAttributesResult = intelligenceDataSelector.SelectFrom(Config.Name, TableNameConstants.Collections.Set.IntelligenceData, highStatResult).Single();
+            var intelligenceAttributesResult = intelligenceDataSelector.SelectFrom(Config.Name, TableNameConstants.Collections.IntelligenceData, highStatResult).Single();
             intelligence.Senses = intelligenceAttributesResult.Senses;
 
-            var lesserPowers = GeneratePowers(TableNameConstants.Percentiles.Set.IntelligenceLesserPowers, intelligenceAttributesResult.LesserPowersCount);
+            var lesserPowers = GeneratePowers(TableNameConstants.Percentiles.IntelligenceLesserPowers, intelligenceAttributesResult.LesserPowersCount);
             intelligence.Ego += lesserPowers.Count;
             intelligence.Powers.AddRange(lesserPowers);
 
-            var greaterPowers = GeneratePowers(TableNameConstants.Percentiles.Set.IntelligenceGreaterPowers, intelligenceAttributesResult.GreaterPowersCount);
+            var greaterPowers = GeneratePowers(TableNameConstants.Percentiles.IntelligenceGreaterPowers, intelligenceAttributesResult.GreaterPowersCount);
             var threshold = MaxGreaterPowers + 2 - intelligenceAttributesResult.GreaterPowersCount;
             var hasSpecialPurpose = dice.Roll().d(MaxGreaterPowers + 1).AsTrueOrFalse(threshold);
 
             if (greaterPowers.Any() && hasSpecialPurpose)
             {
                 greaterPowers.RemoveAt(greaterPowers.Count - 1);
-                intelligence.SpecialPurpose = percentileSelector.SelectFrom(Config.Name, TableNameConstants.Percentiles.Set.IntelligenceSpecialPurposes);
-                intelligence.DedicatedPower = percentileSelector.SelectFrom(Config.Name, TableNameConstants.Percentiles.Set.IntelligenceDedicatedPowers);
+                intelligence.SpecialPurpose = percentileSelector.SelectFrom(Config.Name, TableNameConstants.Percentiles.IntelligenceSpecialPurposes);
+                intelligence.DedicatedPower = percentileSelector.SelectFrom(Config.Name, TableNameConstants.Percentiles.IntelligenceDedicatedPowers);
                 intelligence.Ego += 4;
             }
 
             intelligence.Ego += greaterPowers.Count * 2;
             intelligence.Powers.AddRange(greaterPowers);
             intelligence.Alignment = GetAlignment(item);
-            intelligence.Personality = percentileSelector.SelectFrom(Config.Name, TableNameConstants.Percentiles.Set.PersonalityTraits);
+            intelligence.Personality = percentileSelector.SelectFrom(Config.Name, TableNameConstants.Percentiles.PersonalityTraits);
 
             return intelligence;
         }
@@ -124,7 +124,7 @@ namespace DnDGen.TreasureGen.Generators.Items.Magical
         private List<string> GenerateLanguages(int intelligenceStat)
         {
             var modifier = (intelligenceStat - 10) / 2;
-            var languages = GetNonDuplicateList(TableNameConstants.Percentiles.Set.Languages, modifier);
+            var languages = GetNonDuplicateList(TableNameConstants.Percentiles.Languages, modifier);
             languages.Add("Common");
 
             return languages;
@@ -158,7 +158,7 @@ namespace DnDGen.TreasureGen.Generators.Items.Magical
             var abilityNames = item.Magic.SpecialAbilities.Select(a => a.Name);
             var specificAlignmentRequirement = GetSpecificAlignmentRequirement(item);
 
-            do alignment = percentileSelector.SelectFrom(Config.Name, TableNameConstants.Percentiles.Set.IntelligenceAlignments);
+            do alignment = percentileSelector.SelectFrom(Config.Name, TableNameConstants.Percentiles.IntelligenceAlignments);
             while (!AlignmentIsAllowed(alignment, abilityNames, specificAlignmentRequirement));
 
             return alignment;
@@ -166,10 +166,10 @@ namespace DnDGen.TreasureGen.Generators.Items.Magical
 
         private string GetSpecificAlignmentRequirement(Item item)
         {
-            var itemsWithSpecificAlignments = collectionsSelector.SelectFrom(Config.Name, TableNameConstants.Collections.Set.ItemAlignmentRequirements, "Items");
+            var itemsWithSpecificAlignments = collectionsSelector.SelectFrom(Config.Name, TableNameConstants.Collections.ItemAlignmentRequirements, "Items");
 
             if (itemsWithSpecificAlignments.Contains(item.Name))
-                return collectionsSelector.SelectFrom(Config.Name, TableNameConstants.Collections.Set.ItemAlignmentRequirements, item.Name).Single();
+                return collectionsSelector.SelectFrom(Config.Name, TableNameConstants.Collections.ItemAlignmentRequirements, item.Name).Single();
 
             var alignments = AlignmentConstants.GetAllAlignments();
             var requirements = alignments.Where(a => item.Traits.Any(t => t.Contains(a)));

@@ -39,7 +39,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Stress
 
         protected int GetNewLevel()
         {
-            return Random.Next(LevelLimits.Minimum, LevelLimits.Maximum + 1);
+            return Random.Next(LevelLimits.Minimum, LevelLimits.Maximum_Epic + 1);
         }
 
         protected string GetNewPower(bool allowMinor = true)

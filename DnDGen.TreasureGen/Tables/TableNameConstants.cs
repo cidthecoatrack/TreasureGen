@@ -4,18 +4,14 @@ namespace DnDGen.TreasureGen.Tables
 {
     internal static class TableNameConstants
     {
+        public static object Percentileset { get; internal set; }
+
         public static class Percentiles
         {
             [Obsolete("Don't do formattable table names, find a different way")]
             public static class Formattable
             {
-                public const string ARMORTYPETypes = "{0}Types";
                 public const string IsITEMTYPEIntelligent = "Is{0}Intelligent";
-                public const string LevelXSPELLTYPESpells = "Level{0}{1}Spells";
-                public const string POWERArmorTypes = "{0}ArmorTypes";
-                public const string POWERATTRIBUTESpecialAbilities = "{0}{1}SpecialAbilities";
-                public const string POWERSpecificITEMTYPEs = "{0}Specific{1}s";
-                public const string POWERSpellLevels = "{0}SpellLevels";
             }
 
             public const string AlchemicalItems = "AlchemicalItems";
@@ -65,20 +61,15 @@ namespace DnDGen.TreasureGen.Tables
             public static string POWERITEMTYPEs(string power, string itemType) => $"{power}{itemType}s";
             public static string ITEMTYPETraits(string itemType) => $"{itemType}Traits";
             public static string WEAPONTYPEWeapons(string weaponType) => $"{weaponType}Weapons";
+            public static string POWERATTRIBUTESpecialAbilities(string power, string attribute) => $"{power}{attribute}SpecialAbilities";
+            public static string POWERSpecificITEMTYPEs(string power, string itemType) => $"{power}Specific{itemType}s";
+            public static string ARMORTYPETypes(string armorType) => $"{armorType}Types";
+            public static string LevelXSPELLTYPESpells(int level, string spellType) => $"Level{level}{spellType}Spells";
+            public static string POWERSpellLevels(string power) => $"{power}SpellLevels";
         }
 
         public static class Collections
         {
-            [Obsolete("Don't do formattable table names, find a different way")]
-            public static class Formattable
-            {
-                public const string ITEMTYPESpecialAbilities = "{0}SpecialAbilities";
-                public const string POWERITEMTYPE = "{0}{1}";
-                public const string SpecificITEMTYPEAttributes = "Specific{0}Attributes";
-                public const string SpecificITEMTYPESpecialAbilities = "Specific{0}SpecialAbilities";
-                public const string SpecificITEMTYPETraits = "Specific{0}Traits";
-            }
-
             public const string ArmorData = "ArmorData";
             public const string ChargeLimits = "ChargeLimits";
             public const string ExtraItems = "ExtraItems";
@@ -102,6 +93,9 @@ namespace DnDGen.TreasureGen.Tables
 
             public static string GOODTYPEDescriptions(string goodType) => $"{goodType}Descriptions";
             public static string ITEMTYPEAttributes(string itemType) => $"{itemType}Attributes";
+            public static string SpecificITEMTYPEAttributes(string itemType) => $"Specific{itemType}Attributes";
+            public static string SpecificITEMTYPESpecialAbilities(string itemType) => $"Specific{itemType}SpecialAbilities";
+            public static string SpecificITEMTYPETraits(string itemType) => $"Specific{itemType}Traits";
         }
     }
 }

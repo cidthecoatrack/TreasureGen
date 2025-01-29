@@ -8,5 +8,6 @@ namespace DnDGen.TreasureGen.Generators.Items.Magical
     {
         IEnumerable<SpecialAbility> GenerateFor(Item targetItem, string power, int quantity);
         IEnumerable<SpecialAbility> GenerateFor(IEnumerable<SpecialAbility> abilityNames, string criticalMultiplier);
+        Weapon ApplyAbilitiesToWeapon(Weapon weapon);
     }
 }

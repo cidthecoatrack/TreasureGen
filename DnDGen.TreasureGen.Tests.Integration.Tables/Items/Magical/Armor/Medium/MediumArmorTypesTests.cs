@@ -7,10 +7,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Armor.Medium
     [TestFixture]
     public class MediumArmorTypesTests : PercentileTests
     {
-        protected override string tableName
-        {
-            get { return string.Format(TableNameConstants.Percentiles.Formattable.POWERArmorTypes, PowerConstants.Medium); }
-        }
+        protected override string tableName => TableNameConstants.Percentiles.POWERArmorTypes(PowerConstants.Medium);
 
         [Test]
         public override void ReplacementStringsAreValid()
@@ -34,7 +31,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Armor.Medium
         [TestCase(ItemTypeConstants.Armor, 56, 60)]
         [TestCase(AttributeConstants.Shield, 61, 81)]
         [TestCase(ItemTypeConstants.Armor, 82, 100)]
-        public override void AssertPercentile(string type, int lower, int upper)
+        public void MediumArmorTypesPercentile(string type, int lower, int upper)
         {
             base.AssertPercentile(type, lower, upper);
         }

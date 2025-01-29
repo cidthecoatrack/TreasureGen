@@ -35,12 +35,6 @@ namespace DnDGen.TreasureGen.Tests.Integration.IoC.Modules
         }
 
         [Test]
-        public void RangeDataSelectorNotConstructedAsSingleton()
-        {
-            AssertNotSingleton<IRangeDataSelector>();
-        }
-
-        [Test]
         public void CollectionData_ArmorDataSelectorIsNotConstructedAsSingleton()
         {
             AssertNotSingleton<ICollectionDataSelector<ArmorDataSelection>>();
@@ -59,7 +53,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.IoC.Modules
         }
 
         [Test]
-        public void DamageDataSelectorIsNotConstructedAsSingleton()
+        public void CollectionData_DamageDataSelectorIsNotConstructedAsSingleton()
         {
             AssertNotSingleton<ICollectionDataSelector<DamageDataSelection>>();
         }
@@ -68,6 +62,18 @@ namespace DnDGen.TreasureGen.Tests.Integration.IoC.Modules
         public void ReplacementSelectorIsNotConstructedAsSingleton()
         {
             AssertNotSingleton<IReplacementSelector>();
+        }
+
+        [Test]
+        public void CollectionData_SpecialAbilityDataSelectorIsNotConstructedAsSingleton()
+        {
+            AssertNotSingleton<ICollectionDataSelector<SpecialAbilityDataSelection>>();
+        }
+
+        [Test]
+        public void CollectionData_IntelligenceDataSelectorIsNotConstructedAsSingleton()
+        {
+            AssertNotSingleton<ICollectionDataSelector<IntelligenceDataSelection>>();
         }
     }
 }

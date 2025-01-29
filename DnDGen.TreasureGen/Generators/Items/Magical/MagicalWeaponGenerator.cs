@@ -173,73 +173,9 @@ namespace DnDGen.TreasureGen.Generators.Items.Magical
         private Weapon GenerateRandomSpecialAbilities(Weapon weapon, string power)
         {
             weapon.Magic.SpecialAbilities = specialAbilitiesGenerator.GenerateFor(weapon, power, weapon.Magic.SpecialAbilities.Count());
-            weapon = ApplySpecialAbilities(weapon);
+            weapon = specialAbilitiesGenerator.ApplyAbilitiesToWeapon(weapon);
 
             return weapon;
-        }
-
-        private Weapon ApplySpecialAbilities(Weapon weapon)
-        {
-            if (weapon.Magic.SpecialAbilities.Any(a => a.Name == SpecialAbilityConstants.SpellStoring))
-            {
-                var shouldStoreSpell = percentileSelector.SelectFrom<bool>(Config.Name, TableNameConstants.Percentiles.SpellStoringContainsSpell);
-
-                if (shouldStoreSpell)
-                {
-                    var spellType = spellGenerator.GenerateType();
-                    var level = spellGenerator.GenerateLevel(PowerConstants.Minor);
-                    var spell = spellGenerator.Generate(spellType, level);
-
-                    weapon.Contents.Add(spell);
-                }
-            }
-
-            foreach (var specialAbility in weapon.Magic.SpecialAbilities)
-            {
-                var weaponDamages = GetWeaponDamages(specialAbility.Damages, weapon.Damages[0].Type);
-                weapon.Damages.AddRange(weaponDamages);
-
-                var weaponCritDamages = GetWeaponDamages(specialAbility.CriticalDamages, weapon.CriticalDamages[0].Type);
-                weapon.CriticalDamages.AddRange(weaponCritDamages);
-
-                if (specialAbility.Name == SpecialAbilityConstants.Keen)
-                {
-                    weapon.ThreatRange *= 2;
-                }
-            }
-
-            if (weapon.IsDoubleWeapon && weapon.SecondaryHasAbilities)
-            {
-                var secondaryAbilities = specialAbilitiesGenerator.GenerateFor(weapon.Magic.SpecialAbilities, weapon.SecondaryCriticalMultiplier);
-
-                foreach (var specialAbility in secondaryAbilities)
-                {
-                    var weaponDamages = GetWeaponDamages(specialAbility.Damages, weapon.SecondaryDamages[0].Type);
-                    weapon.SecondaryDamages.AddRange(weaponDamages);
-
-                    var weaponCritDamages = GetWeaponDamages(specialAbility.CriticalDamages, weapon.SecondaryCriticalDamages[0].Type);
-                    weapon.SecondaryCriticalDamages.AddRange(weaponCritDamages);
-                }
-            }
-
-            return weapon;
-        }
-
-        private IEnumerable<Damage> GetWeaponDamages(IEnumerable<Damage> abilityDamages, string weaponDamageType)
-        {
-            if (!abilityDamages.Any())
-                return [];
-
-            var damages = abilityDamages.Select(d => d.Clone()).ToArray();
-            foreach (var damage in damages)
-            {
-                if (string.IsNullOrEmpty(damage.Type))
-                {
-                    damage.Type = weaponDamageType;
-                }
-            }
-
-            return damages;
         }
 
         public Item Generate(Item template, bool allowRandomDecoration = false)
@@ -268,7 +204,7 @@ namespace DnDGen.TreasureGen.Generators.Items.Magical
             }
 
             weapon.Magic.SpecialAbilities = specialAbilitiesGenerator.GenerateFor(template.Magic.SpecialAbilities, weapon.CriticalMultiplier);
-            weapon = ApplySpecialAbilities(weapon);
+            weapon = specialAbilitiesGenerator.ApplyAbilitiesToWeapon(weapon);
 
             return weapon;
         }

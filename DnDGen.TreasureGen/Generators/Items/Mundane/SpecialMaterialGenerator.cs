@@ -26,7 +26,7 @@ namespace DnDGen.TreasureGen.Generators.Items.Mundane
                 return false;
 
             var attributesWithType = attributes.Union(new[] { itemType });
-            return percentileSelector.SelectFrom<bool>(Config.Name, TableNameConstants.Percentiles.Set.HasSpecialMaterial)
+            return percentileSelector.SelectFrom<bool>(Config.Name, TableNameConstants.Percentiles.HasSpecialMaterial)
                    && AttributesAllowForSpecialMaterials(attributesWithType)
                    && TraitsAllowForSpecialMaterials(attributesWithType, traits);
         }
@@ -63,7 +63,7 @@ namespace DnDGen.TreasureGen.Generators.Items.Mundane
 
             foreach (var material in allMaterials)
             {
-                var attributeRequirements = collectionsSelector.SelectFrom(Config.Name, TableNameConstants.Collections.Set.SpecialMaterials, material);
+                var attributeRequirements = collectionsSelector.SelectFrom(Config.Name, TableNameConstants.Collections.SpecialMaterials, material);
                 specialMaterialAttributeRequirements.Add(material, attributeRequirements);
             }
 
@@ -89,7 +89,7 @@ namespace DnDGen.TreasureGen.Generators.Items.Mundane
             if (itemType != ItemTypeConstants.Weapon && itemType != ItemTypeConstants.Armor)
                 throw new ArgumentException(itemType);
 
-            var attributesWithType = attributes.Union(new[] { itemType });
+            var attributesWithType = attributes.Union([itemType]);
             if (!AttributesAllowForSpecialMaterials(attributesWithType))
                 throw new ArgumentException(string.Join(",", attributesWithType));
 

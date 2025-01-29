@@ -6,19 +6,11 @@ namespace DnDGen.TreasureGen.Tests.Unit.Tables
     [TestFixture]
     public class TableNameConstantsTests
     {
-        [TestCase(TableNameConstants.Collections.Formattable.ITEMTYPEAttributes, "{0}Attributes")]
-        [TestCase(TableNameConstants.Collections.Formattable.ITEMTYPESpecialAbilities, "{0}SpecialAbilities")]
-        [TestCase(TableNameConstants.Collections.Formattable.POWERITEMTYPE, "{0}{1}")]
-        [TestCase(TableNameConstants.Collections.Formattable.SpecificITEMTYPEAttributes, "Specific{0}Attributes")]
-        [TestCase(TableNameConstants.Collections.Formattable.SpecificITEMTYPESpecialAbilities, "Specific{0}SpecialAbilities")]
-        [TestCase(TableNameConstants.Collections.Formattable.SpecificITEMTYPETraits, "Specific{0}Traits")]
         [TestCase(TableNameConstants.Collections.ArmorData, "ArmorData")]
         [TestCase(TableNameConstants.Collections.ChargeLimits, "ChargeLimits")]
         [TestCase(TableNameConstants.Collections.ExtraItems, "ExtraItems")]
         [TestCase(TableNameConstants.Collections.IntelligenceCommunication, "IntelligenceCommunication")]
         [TestCase(TableNameConstants.Collections.IntelligenceData, "IntelligenceData")]
-        [TestCase(TableNameConstants.Percentiles.IntelligenceLesserPowers, "IntelligenceLesserPowers")]
-        [TestCase(TableNameConstants.Percentiles.IntelligenceGreaterPowers, "IntelligenceGreaterPowers")]
         [TestCase(TableNameConstants.Collections.ItemAlignmentRequirements, "ItemAlignmentRequirements")]
         [TestCase(TableNameConstants.Collections.ItemGroups, "ItemGroups")]
         [TestCase(TableNameConstants.Collections.PowerGroups, "PowerGroups")]
@@ -31,14 +23,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Tables
         [TestCase(TableNameConstants.Collections.WeaponDamages, "WeaponDamages")]
         [TestCase(TableNameConstants.Collections.WeaponData, "WeaponData")]
         [TestCase(TableNameConstants.Collections.WondrousItemContents, "WondrousItemContents")]
-        [TestCase(TableNameConstants.Percentiles.Formattable.ARMORTYPETypes, "{0}Types")]
         [TestCase(TableNameConstants.Percentiles.Formattable.IsITEMTYPEIntelligent, "Is{0}Intelligent")]
-        [TestCase(TableNameConstants.Percentiles.Formattable.LevelXSPELLTYPESpells, "Level{0}{1}Spells")]
-        [TestCase(TableNameConstants.Percentiles.Formattable.POWERArmorTypes, "{0}ArmorTypes")]
-        [TestCase(TableNameConstants.Percentiles.Formattable.POWERATTRIBUTESpecialAbilities, "{0}{1}SpecialAbilities")]
-        [TestCase(TableNameConstants.Percentiles.Formattable.POWERSpecificITEMTYPEs, "{0}Specific{1}s")]
-        [TestCase(TableNameConstants.Percentiles.Formattable.POWERSpellLevels, "{0}SpellLevels")]
-        [TestCase(TableNameConstants.Percentiles.Formattable.WEAPONTYPEWeapons, "{0}Weapons")]
         [TestCase(TableNameConstants.Percentiles.AlchemicalItems, "AlchemicalItems")]
         [TestCase(TableNameConstants.Percentiles.MundaneGearSizes, "MundaneGearSizes")]
         [TestCase(TableNameConstants.Percentiles.BalorOrPitFiend, "BalorOrPitFiend")]
@@ -53,6 +38,8 @@ namespace DnDGen.TreasureGen.Tests.Unit.Tables
         [TestCase(TableNameConstants.Percentiles.HornOfValhallaTypes, "HornOfValhallaTypes")]
         [TestCase(TableNameConstants.Percentiles.IntelligenceAlignments, "IntelligenceAlignments")]
         [TestCase(TableNameConstants.Percentiles.IntelligenceDedicatedPowers, "IntelligenceDedicatedPowers")]
+        [TestCase(TableNameConstants.Percentiles.IntelligenceGreaterPowers, "IntelligenceGreaterPowers")]
+        [TestCase(TableNameConstants.Percentiles.IntelligenceLesserPowers, "IntelligenceLesserPowers")]
         [TestCase(TableNameConstants.Percentiles.IntelligenceSpecialPurposes, "IntelligenceSpecialPurposes")]
         [TestCase(TableNameConstants.Percentiles.IntelligenceStrongStats, "IntelligenceStrongStats")]
         [TestCase(TableNameConstants.Percentiles.IronFlaskContents, "IronFlaskContents")]
@@ -133,6 +120,66 @@ namespace DnDGen.TreasureGen.Tests.Unit.Tables
         public void ItemTypeTraits()
         {
             Assert.That(TableNameConstants.Percentiles.ITEMTYPETraits("myItemType"), Is.EqualTo("myItemTypeTraits"));
+        }
+
+        [Test]
+        public void ItemTypeAttributes()
+        {
+            Assert.That(TableNameConstants.Collections.ITEMTYPEAttributes("myItemType"), Is.EqualTo("myItemTypeAttributes"));
+        }
+
+        [Test]
+        public void WeaponTypeWeapons()
+        {
+            Assert.That(TableNameConstants.Percentiles.WEAPONTYPEWeapons("myWeaponType"), Is.EqualTo("myWeaponTypeWeapons"));
+        }
+
+        [Test]
+        public void PowerAttributeSpecialAbilities()
+        {
+            Assert.That(TableNameConstants.Percentiles.POWERATTRIBUTESpecialAbilities("myPower", "myAttribute"), Is.EqualTo("myPowermyAttributeSpecialAbilities"));
+        }
+
+        [Test]
+        public void SpecificItemTypeAttributes()
+        {
+            Assert.That(TableNameConstants.Collections.SpecificITEMTYPEAttributes("myItemType"), Is.EqualTo("SpecificmyItemTypeAttributes"));
+        }
+
+        [Test]
+        public void SpecificItemTypeSpecialAbilities()
+        {
+            Assert.That(TableNameConstants.Collections.SpecificITEMTYPESpecialAbilities("myItemType"), Is.EqualTo("SpecificmyItemTypeSpecialAbilities"));
+        }
+
+        [Test]
+        public void SpecificItemTypeTraits()
+        {
+            Assert.That(TableNameConstants.Collections.SpecificITEMTYPETraits("myItemType"), Is.EqualTo("SpecificmyItemTypeTraits"));
+        }
+
+        [Test]
+        public void PowerSpecificItemTypes()
+        {
+            Assert.That(TableNameConstants.Percentiles.POWERSpecificITEMTYPEs("myPower", "myItemType"), Is.EqualTo("myPowerSpecificmyItemTypes"));
+        }
+
+        [Test]
+        public void ArmorTypeTypes()
+        {
+            Assert.That(TableNameConstants.Percentiles.ARMORTYPETypes("myArmorType"), Is.EqualTo("myArmorTypeTypes"));
+        }
+
+        [Test]
+        public void LevelXSpellTypeSpells()
+        {
+            Assert.That(TableNameConstants.Percentiles.LevelXSPELLTYPESpells(9266, "mySpellType"), Is.EqualTo("Level9266mySpellTypeSpells"));
+        }
+
+        [Test]
+        public void PowerSpellLevels()
+        {
+            Assert.That(TableNameConstants.Percentiles.POWERSpellLevels("myPower"), Is.EqualTo("myPowerSpellLevels"));
         }
     }
 }

@@ -17,17 +17,20 @@ namespace DnDGen.TreasureGen.Generators.Items.Magical
         private readonly ICollectionDataSelector<DamageDataSelection> damageDataSelector;
         private readonly ICollectionDataSelector<SpecialAbilityDataSelection> specialAbilityDataSelector;
         private readonly ITreasurePercentileSelector percentileSelector;
+        private readonly ISpellGenerator spellGenerator;
 
         public SpecialAbilitiesGenerator(
             ICollectionSelector collectionsSelector,
             ITreasurePercentileSelector percentileSelector,
             ICollectionDataSelector<SpecialAbilityDataSelection> specialAbilityDataSelector,
-            ICollectionDataSelector<DamageDataSelection> damageDataSelector)
+            ICollectionDataSelector<DamageDataSelection> damageDataSelector,
+            ISpellGenerator spellGenerator)
         {
             this.collectionsSelector = collectionsSelector;
             this.percentileSelector = percentileSelector;
             this.specialAbilityDataSelector = specialAbilityDataSelector;
             this.damageDataSelector = damageDataSelector;
+            this.spellGenerator = spellGenerator;
         }
 
         public IEnumerable<SpecialAbility> GenerateFor(Item targetItem, string power, int quantity)
@@ -88,24 +91,24 @@ namespace DnDGen.TreasureGen.Generators.Items.Magical
 
             if (targetItem.Attributes.Contains(AttributeConstants.Melee))
             {
-                var tableName = string.Format(TableNameConstants.Percentiles.Formattable.POWERATTRIBUTESpecialAbilities, power, AttributeConstants.Melee);
+                var tableName = TableNameConstants.Percentiles.POWERATTRIBUTESpecialAbilities(power, AttributeConstants.Melee);
                 tableNames.Add(tableName);
             }
 
             if (targetItem.Attributes.Contains(AttributeConstants.Ranged))
             {
-                var tableName = string.Format(TableNameConstants.Percentiles.Formattable.POWERATTRIBUTESpecialAbilities, power, AttributeConstants.Ranged);
+                var tableName = TableNameConstants.Percentiles.POWERATTRIBUTESpecialAbilities(power, AttributeConstants.Ranged);
                 tableNames.Add(tableName);
             }
 
             if (targetItem.Attributes.Contains(AttributeConstants.Shield))
             {
-                var tableName = string.Format(TableNameConstants.Percentiles.Formattable.POWERATTRIBUTESpecialAbilities, power, AttributeConstants.Shield);
+                var tableName = TableNameConstants.Percentiles.POWERATTRIBUTESpecialAbilities(power, AttributeConstants.Shield);
                 tableNames.Add(tableName);
             }
             else if (targetItem.ItemType == ItemTypeConstants.Armor)
             {
-                var tableName = string.Format(TableNameConstants.Percentiles.Formattable.POWERATTRIBUTESpecialAbilities, power, ItemTypeConstants.Armor);
+                var tableName = TableNameConstants.Percentiles.POWERATTRIBUTESpecialAbilities(power, ItemTypeConstants.Armor);
                 tableNames.Add(tableName);
             }
 
@@ -228,6 +231,70 @@ namespace DnDGen.TreasureGen.Generators.Items.Magical
 
             var strongestAbilities = GetStrongestAvailableAbilities(abilities);
             return strongestAbilities;
+        }
+
+        public Weapon ApplyAbilitiesToWeapon(Weapon weapon)
+        {
+            if (weapon.Magic.SpecialAbilities.Any(a => a.Name == SpecialAbilityConstants.SpellStoring))
+            {
+                var shouldStoreSpell = percentileSelector.SelectFrom<bool>(Config.Name, TableNameConstants.Percentiles.SpellStoringContainsSpell);
+
+                if (shouldStoreSpell)
+                {
+                    var spellType = spellGenerator.GenerateType();
+                    var level = spellGenerator.GenerateLevel(PowerConstants.Minor);
+                    var spell = spellGenerator.Generate(spellType, level);
+
+                    weapon.Contents.Add(spell);
+                }
+            }
+
+            foreach (var specialAbility in weapon.Magic.SpecialAbilities)
+            {
+                var weaponDamages = GetWeaponDamages(specialAbility.Damages, weapon.Damages[0].Type);
+                weapon.Damages.AddRange(weaponDamages);
+
+                var weaponCritDamages = GetWeaponDamages(specialAbility.CriticalDamages, weapon.CriticalDamages[0].Type);
+                weapon.CriticalDamages.AddRange(weaponCritDamages);
+
+                if (specialAbility.Name == SpecialAbilityConstants.Keen)
+                {
+                    weapon.ThreatRange *= 2;
+                }
+            }
+
+            if (weapon.IsDoubleWeapon && weapon.SecondaryHasAbilities)
+            {
+                var secondaryAbilities = GenerateFor(weapon.Magic.SpecialAbilities, weapon.SecondaryCriticalMultiplier);
+
+                foreach (var specialAbility in secondaryAbilities)
+                {
+                    var weaponDamages = GetWeaponDamages(specialAbility.Damages, weapon.SecondaryDamages[0].Type);
+                    weapon.SecondaryDamages.AddRange(weaponDamages);
+
+                    var weaponCritDamages = GetWeaponDamages(specialAbility.CriticalDamages, weapon.SecondaryCriticalDamages[0].Type);
+                    weapon.SecondaryCriticalDamages.AddRange(weaponCritDamages);
+                }
+            }
+
+            return weapon;
+        }
+
+        private IEnumerable<Damage> GetWeaponDamages(IEnumerable<Damage> abilityDamages, string weaponDamageType)
+        {
+            if (!abilityDamages.Any())
+                return [];
+
+            var damages = abilityDamages.Select(d => d.Clone()).ToArray();
+            foreach (var damage in damages)
+            {
+                if (string.IsNullOrEmpty(damage.Type))
+                {
+                    damage.Type = weaponDamageType;
+                }
+            }
+
+            return damages;
         }
     }
 }

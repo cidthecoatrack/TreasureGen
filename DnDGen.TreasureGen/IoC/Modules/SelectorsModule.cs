@@ -9,7 +9,6 @@ namespace DnDGen.TreasureGen.IoC.Modules
     {
         public override void Load()
         {
-            Bind<IRangeDataSelector>().To<RangeDataSelector>();
             Bind<ITreasurePercentileSelector>().To<PercentileSelectorStringReplacementDecorator>();
             Bind<IReplacementSelector>().To<ReplacementSelector>();
 
