@@ -27,7 +27,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Armor
         [TestCase(ArmorConstants.BandedMail, 59, 59)]
         [TestCase(ArmorConstants.HalfPlate, 60, 60)]
         [TestCase(ArmorConstants.FullPlate, 61, 100)]
-        public void ArmorypesPercentile(string content, int lower, int upper)
+        public void ArmorTypesPercentile(string content, int lower, int upper)
         {
             AssertPercentile(content, lower, upper);
         }

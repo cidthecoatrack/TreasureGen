@@ -21,8 +21,8 @@ namespace DnDGen.TreasureGen.Generators.Items.Magical
         private readonly ISpecificGearGenerator specificGearGenerator;
         private readonly JustInTimeFactory justInTimeFactory;
 
-        private const string SpecialAbility = "SpecialAbility";
-        private const int SpecificBonus = -1;
+        public const string SpecialAbility = "SpecialAbility";
+        public const int SpecificBonus = -1;
 
         public MagicalArmorGenerator(
             ITreasurePercentileSelector percentileSelector,

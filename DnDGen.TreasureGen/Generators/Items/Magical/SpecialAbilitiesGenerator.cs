@@ -19,6 +19,8 @@ namespace DnDGen.TreasureGen.Generators.Items.Magical
         private readonly ITreasurePercentileSelector percentileSelector;
         private readonly ISpellGenerator spellGenerator;
 
+        public const string BonusSpecialAbility = "BonusSpecialAbility";
+
         public SpecialAbilitiesGenerator(
             ICollectionSelector collectionsSelector,
             ITreasurePercentileSelector percentileSelector,
