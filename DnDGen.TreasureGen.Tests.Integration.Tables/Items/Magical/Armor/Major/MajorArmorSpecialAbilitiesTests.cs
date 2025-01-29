@@ -1,4 +1,5 @@
-﻿using DnDGen.TreasureGen.Items;
+﻿using DnDGen.TreasureGen.Generators.Items.Magical;
+using DnDGen.TreasureGen.Items;
 using DnDGen.TreasureGen.Items.Magical;
 using DnDGen.TreasureGen.Tables;
 using NUnit.Framework;
@@ -49,7 +50,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Armor.Major
         [TestCase(SpecialAbilityConstants.GreaterElectricityResistance, 97, 97)]
         [TestCase(SpecialAbilityConstants.GreaterFireResistance, 98, 98)]
         [TestCase(SpecialAbilityConstants.GreaterSonicResistance, 99, 99)]
-        [TestCase("BonusSpecialAbility", 100, 100)]
+        [TestCase(SpecialAbilitiesGenerator.BonusSpecialAbility, 100, 100)]
         public void MajorArmorSpecialAbilitiesPercentile(string content, int lower, int upper)
         {
             AssertPercentile(content, lower, upper);
