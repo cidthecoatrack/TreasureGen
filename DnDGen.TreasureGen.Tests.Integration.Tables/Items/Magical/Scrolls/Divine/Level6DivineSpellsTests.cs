@@ -8,7 +8,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Scrolls.Divi
     {
         protected override string tableName
         {
-            get { return string.Format(TableNameConstants.Percentiles.Formattable.LevelXSPELLTYPESpells, 6, "Divine"); }
+            get { return TableNameConstants.Percentiles.LevelXSPELLTYPESpells(6, "Divine"); }
         }
 
         [Test]
