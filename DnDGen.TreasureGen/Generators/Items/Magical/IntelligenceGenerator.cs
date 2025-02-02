@@ -52,7 +52,7 @@ namespace DnDGen.TreasureGen.Generators.Items.Magical
             else if (attributes.Contains(AttributeConstants.Ranged))
                 itemType = AttributeConstants.Ranged;
 
-            var threshold = typeAndAmountSelector.SelectFrom(Config.Name, TableNameConstants.Collections.IsIntelligent, itemType).Single();
+            var threshold = typeAndAmountSelector.SelectOneFrom(Config.Name, TableNameConstants.Collections.IsIntelligent, itemType);
             return percentileSelector.SelectFrom(threshold.Amount);
         }
 
@@ -88,7 +88,7 @@ namespace DnDGen.TreasureGen.Generators.Items.Magical
             intelligence.Ego += BoostEgoByCommunication(intelligence.Communication, "Read magic");
             intelligence.Ego += BoostEgoByCommunication(intelligence.Communication, "Telepathy");
 
-            var intelligenceAttributesResult = intelligenceDataSelector.SelectFrom(Config.Name, TableNameConstants.Collections.IntelligenceData, highStatResult).Single();
+            var intelligenceAttributesResult = intelligenceDataSelector.SelectOneFrom(Config.Name, TableNameConstants.Collections.IntelligenceData, highStatResult);
             intelligence.Senses = intelligenceAttributesResult.Senses;
 
             var lesserPowers = GeneratePowers(TableNameConstants.Percentiles.IntelligenceLesserPowers, intelligenceAttributesResult.LesserPowersCount);

@@ -153,12 +153,6 @@
     <None Remove="Tables\Items\Magical\Intelligence\IntelligenceLesserPowers.xml" />
     <None Remove="Tables\Items\Magical\Intelligence\IntelligenceSpecialPurposes.xml" />
     <None Remove="Tables\Items\Magical\Intelligence\IntelligenceStrongStats.xml" />
-    <None Remove="Tables\Items\Magical\Intelligence\IsArmorIntelligent.xml" />
-    <None Remove="Tables\Items\Magical\Intelligence\IsMeleeIntelligent.xml" />
-    <None Remove="Tables\Items\Magical\Intelligence\IsRangedIntelligent.xml" />
-    <None Remove="Tables\Items\Magical\Intelligence\IsRingIntelligent.xml" />
-    <None Remove="Tables\Items\Magical\Intelligence\IsRodIntelligent.xml" />
-    <None Remove="Tables\Items\Magical\Intelligence\IsWondrous ItemIntelligent.xml" />
     <None Remove="Tables\Items\Magical\Intelligence\ItemAlignmentRequirements.xml" />
     <None Remove="Tables\Items\Magical\Intelligence\Languages.xml" />
     <None Remove="Tables\Items\Magical\Intelligence\PersonalityTraits.xml" />
@@ -385,12 +379,7 @@
     <EmbeddedResource Include="Tables\Items\Magical\Intelligence\IntelligenceLesserPowers.xml" />
     <EmbeddedResource Include="Tables\Items\Magical\Intelligence\IntelligenceSpecialPurposes.xml" />
     <EmbeddedResource Include="Tables\Items\Magical\Intelligence\IntelligenceStrongStats.xml" />
-    <EmbeddedResource Include="Tables\Items\Magical\Intelligence\IsArmorIntelligent.xml" />
-    <EmbeddedResource Include="Tables\Items\Magical\Intelligence\IsMeleeIntelligent.xml" />
-    <EmbeddedResource Include="Tables\Items\Magical\Intelligence\IsRangedIntelligent.xml" />
-    <EmbeddedResource Include="Tables\Items\Magical\Intelligence\IsRingIntelligent.xml" />
-    <EmbeddedResource Include="Tables\Items\Magical\Intelligence\IsRodIntelligent.xml" />
-    <EmbeddedResource Include="Tables\Items\Magical\Intelligence\IsWondrous ItemIntelligent.xml" />
+    <EmbeddedResource Include="Tables\Items\Magical\Intelligence\IsIntelligent.xml" />
     <EmbeddedResource Include="Tables\Items\Magical\Intelligence\ItemAlignmentRequirements.xml" />
     <EmbeddedResource Include="Tables\Items\Magical\Intelligence\Languages.xml" />
     <EmbeddedResource Include="Tables\Items\Magical\Intelligence\PersonalityTraits.xml" />

@@ -49,7 +49,7 @@ namespace DnDGen.TreasureGen.Generators.Items
                 items.Add(item);
             }
 
-            var extraItemsResult = typeAndAmountCollectionSelector.SelectFrom(Config.Name, TableNameConstants.Collections.ExtraItems, extraItemsLevel.ToString()).Single();
+            var extraItemsResult = typeAndAmountCollectionSelector.SelectOneFrom(Config.Name, TableNameConstants.Collections.ExtraItems, extraItemsLevel.ToString());
 
             while (items.Count < percentileResult.Amount + extraItemsResult.Amount)
             {
@@ -96,7 +96,7 @@ namespace DnDGen.TreasureGen.Generators.Items
                 tasks.Add(task);
             }
 
-            var extraItemsResult = typeAndAmountCollectionSelector.SelectFrom(Config.Name, TableNameConstants.Collections.ExtraItems, extraItemsLevel.ToString()).Single();
+            var extraItemsResult = typeAndAmountCollectionSelector.SelectOneFrom(Config.Name, TableNameConstants.Collections.ExtraItems, extraItemsLevel.ToString());
 
             while (tasks.Count < percentileResult.Amount + extraItemsResult.Amount)
             {

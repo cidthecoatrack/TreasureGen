@@ -5,7 +5,6 @@ using DnDGen.TreasureGen.Items.Magical;
 using DnDGen.TreasureGen.Selectors.Percentiles;
 using DnDGen.TreasureGen.Tables;
 using System;
-using System.Linq;
 
 namespace DnDGen.TreasureGen.Generators.Items.Magical
 {
@@ -35,7 +34,7 @@ namespace DnDGen.TreasureGen.Generators.Items.Magical
                     name = WondrousItemConstants.DeckOfIllusions_Full;
             }
 
-            var result = typeAndAmountSelector.SelectFrom(Config.Name, TableNameConstants.Collections.ChargeLimits, name).Single();
+            var result = typeAndAmountSelector.SelectOneFrom(Config.Name, TableNameConstants.Collections.ChargeLimits, name);
             return result.Amount;
         }
 

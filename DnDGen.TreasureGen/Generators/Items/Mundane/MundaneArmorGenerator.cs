@@ -52,7 +52,7 @@ namespace DnDGen.TreasureGen.Generators.Items.Mundane
             armor.Size = GetSize(armor);
             armor.Traits.Remove(armor.Size);
 
-            var armorSelection = armorDataSelector.SelectFrom(Config.Name, TableNameConstants.Collections.ArmorData, armor.Name).Single();
+            var armorSelection = armorDataSelector.SelectOneFrom(Config.Name, TableNameConstants.Collections.ArmorData, armor.Name);
             armor.ArmorBonus = armorSelection.ArmorBonus;
             armor.ArmorCheckPenalty = armorSelection.ArmorCheckPenalty;
             armor.MaxDexterityBonus = armorSelection.MaxDexterityBonus;

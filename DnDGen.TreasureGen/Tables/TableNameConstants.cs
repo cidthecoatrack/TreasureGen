@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace DnDGen.TreasureGen.Tables
+﻿namespace DnDGen.TreasureGen.Tables
 {
     internal static class TableNameConstants
     {
@@ -8,12 +6,6 @@ namespace DnDGen.TreasureGen.Tables
 
         public static class Percentiles
         {
-            [Obsolete("Don't do formattable table names, find a different way")]
-            public static class Formattable
-            {
-                public const string IsITEMTYPEIntelligent = "Is{0}Intelligent";
-            }
-
             public const string AlchemicalItems = "AlchemicalItems";
             public const string BalorOrPitFiend = "BalorOrPitFiend";
             public const string CastersShieldContainsSpell = "CastersShieldContainsSpell";

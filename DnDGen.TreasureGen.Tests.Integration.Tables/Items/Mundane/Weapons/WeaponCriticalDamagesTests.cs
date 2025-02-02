@@ -51,7 +51,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Mundane.Weapons
         public void WeaponCriticalDamages(string weapon)
         {
             var sizes = TraitConstants.Sizes.GetAll();
-            var weaponData = weaponDataSelector.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponData, weapon).Single();
+            var weaponData = weaponDataSelector.SelectOneFrom(Config.Name, TableNameConstants.Collections.WeaponData, weapon);
 
             foreach (var size in sizes)
             {

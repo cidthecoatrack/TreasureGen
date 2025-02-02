@@ -143,7 +143,7 @@ namespace DnDGen.TreasureGen.Generators.Items.Magical
         private SpecialAbility GetSpecialAbility(string abilityName, string criticalMultiplier)
         {
             var ability = new SpecialAbility();
-            var abilitySelection = specialAbilityDataSelector.SelectFrom(Config.Name, TableNameConstants.Collections.SpecialAbilityData, abilityName).Single();
+            var abilitySelection = specialAbilityDataSelector.SelectOneFrom(Config.Name, TableNameConstants.Collections.SpecialAbilityData, abilityName);
 
             ability.Name = abilityName;
             ability.BaseName = abilitySelection.BaseName;

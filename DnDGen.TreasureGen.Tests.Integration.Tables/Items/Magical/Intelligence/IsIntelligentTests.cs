@@ -1,29 +1,26 @@
-﻿using DnDGen.TreasureGen.Tables;
+﻿using DnDGen.Infrastructure.Helpers;
+using DnDGen.Infrastructure.Models;
+using DnDGen.TreasureGen.Items;
+using DnDGen.TreasureGen.Tables;
 using NUnit.Framework;
-using System;
 
 namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Intelligence
 {
     [TestFixture]
     public class IsIntelligentTests : CollectionsTests
     {
-        protected override string tableName
-        {
-            get { return TableNameConstants.Collections.IsIntelligent; }
-        }
+        protected override string tableName => TableNameConstants.Collections.IsIntelligent;
 
-        //TODO: Convert to TypeAndAmount, where amount is the int threshold to be intelligent. High should make intelligent
-
-        [TestCase(false, 2, 100)]
-        public override void BooleanPercentile(Boolean isTrue, int lower, int upper)
+        [TestCase(ItemTypeConstants.Armor, 100)]
+        [TestCase(ItemTypeConstants.Ring, 100)]
+        [TestCase(ItemTypeConstants.Rod, 100)]
+        [TestCase(ItemTypeConstants.WondrousItem, 100)]
+        [TestCase(AttributeConstants.Melee, 86)]
+        [TestCase(AttributeConstants.Ranged, 96)]
+        public void IsIntelligentThreshold(string itemType, int threshold)
         {
-            base.BooleanPercentile(isTrue, lower, upper);
-        }
-
-        [TestCase(true, 1)]
-        public override void BooleanPercentile(Boolean isTrue, int roll)
-        {
-            base.BooleanPercentile(isTrue, roll);
+            var data = DataHelper.Parse(new TypeAndAmountDataSelection { Type = itemType, Roll = threshold.ToString() });
+            AssertCollection(itemType, data);
         }
     }
 }
