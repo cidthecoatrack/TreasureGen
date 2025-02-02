@@ -53,7 +53,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Coins
         [TestCase(LevelLimits.Maximum)]
         public void ReturnCoinFromSelector(int level)
         {
-            var tableName = string.Format(TableNameConstants.Percentiles.Formattable.LevelXCoins, level);
+            var tableName = TableNameConstants.Percentiles.LevelXCoins, level);
             generator.GenerateAtLevel(level);
             mockTypeAndAmountPercentileSelector.Verify(p => p.SelectFrom(tableName), Times.Once);
         }

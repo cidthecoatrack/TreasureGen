@@ -9,7 +9,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Mundane.Weapons
     {
         protected override string tableName
         {
-            get { return string.Format(TableNameConstants.Percentiles.Formattable.WEAPONTYPEWeapons, "CommonMelee"); }
+            get { return TableNameConstants.Percentiles.WEAPONTYPEWeapons, "CommonMelee"); }
         }
 
         [Test]
@@ -34,7 +34,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Mundane.Weapons
         [TestCase(WeaponConstants.BastardSword, 75, 84)]
         [TestCase(WeaponConstants.ShortSword, 85, 89)]
         [TestCase(WeaponConstants.DwarvenWaraxe, 90, 100)]
-        public override void AssertPercentile(string content, int lower, int upper)
+        public void Percentile(string content, int lower, int upper)
         {
             base.AssertPercentile(content, lower, upper);
         }

@@ -10,7 +10,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Weapons.Medi
     {
         protected override string tableName
         {
-            get { return string.Format(TableNameConstants.Percentiles.Formattable.POWERATTRIBUTESpecialAbilities, PowerConstants.Medium, AttributeConstants.Melee); }
+            get { return TableNameConstants.Percentiles.POWERATTRIBUTESpecialAbilities, PowerConstants.Medium, AttributeConstants.Melee); }
         }
 
         [Test]
@@ -49,7 +49,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Weapons.Medi
         [TestCase(SpecialAbilityConstants.Unholy, 91, 93)]
         [TestCase(SpecialAbilityConstants.Wounding, 94, 95)]
         [TestCase("BonusSpecialAbility", 96, 100)]
-        public override void AssertPercentile(string content, int lower, int upper)
+        public void Percentile(string content, int lower, int upper)
         {
             base.AssertPercentile(content, lower, upper);
         }

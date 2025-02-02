@@ -13,7 +13,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Mundane.Weapons
     [TestFixture]
     public class AbilityDamagesTests : CollectionsTests
     {
-        protected override string tableName => TableNameConstants.Collections.Set.AbilityDamages;
+        protected override string tableName => TableNameConstants.Collections.AbilityDamages;
 
         private Dictionary<string, List<string>> abilityDamages;
 

@@ -9,7 +9,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Wands
     {
         protected override string tableName
         {
-            get { return string.Format(TableNameConstants.Percentiles.Formattable.POWERITEMTYPEs, PowerConstants.Medium, ItemTypeConstants.Wand); }
+            get { return TableNameConstants.Percentiles.POWERITEMTYPEs, PowerConstants.Medium, ItemTypeConstants.Wand); }
         }
 
         [Test]
@@ -55,7 +55,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Wands
         [TestCase("Slow", 90, 91)]
         [TestCase("Suggestion", 92, 94)]
         [TestCase("Summon Monster III", 95, 97)]
-        public override void AssertPercentile(string content, int lower, int upper)
+        public void Percentile(string content, int lower, int upper)
         {
             base.AssertPercentile(content, lower, upper);
         }
@@ -69,7 +69,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Wands
         [TestCase("Fireball (6th)", 98)]
         [TestCase("Lightning Bolt (6th)", 99)]
         [TestCase("Searing Light (6th)", 100)]
-        public override void AssertPercentile(string content, int roll)
+        public void Percentile(string content, int roll)
         {
             base.AssertPercentile(content, roll);
         }

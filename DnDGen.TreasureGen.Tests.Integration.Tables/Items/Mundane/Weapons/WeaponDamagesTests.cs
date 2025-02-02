@@ -14,7 +14,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Mundane.Weapons
     [TestFixture]
     public class WeaponDamagesTests : CollectionsTests
     {
-        protected override string tableName => TableNameConstants.Collections.Set.WeaponDamages;
+        protected override string tableName => TableNameConstants.Collections.WeaponDamages;
 
         private Dictionary<string, List<string>> weaponDamages;
 

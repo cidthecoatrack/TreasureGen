@@ -89,7 +89,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
         public void GenerateRandomAtLevel_GetItemTypeFromSelector()
         {
             itemsGenerator.GenerateRandomAtLevel(42);
-            var expectedTableName = string.Format(TableNameConstants.Percentiles.Formattable.LevelXItems, 42);
+            var expectedTableName = TableNameConstants.Percentiles.LevelXItems, 42);
             mockTypeAndAmountPercentileSelector.Verify(p => p.SelectFrom(expectedTableName), Times.Once);
         }
 
@@ -134,7 +134,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
             selection.Amount = 1;
 
             var mundaneItem = new Item();
-            var expectedTableName = string.Format(TableNameConstants.Percentiles.Formattable.POWERItems, selection.Type);
+            var expectedTableName = TableNameConstants.Percentiles.POWERItems, selection.Type);
             mockPercentileSelector.Setup(p => p.SelectFrom(Config.Name, expectedTableName)).Returns("mundane item type");
             mockJustInTimeFactory.Setup(f => f.Build<MundaneItemGenerator>("mundane item type")).Returns(mockMundaneItemGenerator.Object);
             mockMundaneItemGenerator.Setup(g => g.GenerateRandom()).Returns(mundaneItem);
@@ -150,7 +150,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
             selection.Amount = 1;
 
             var magicalItem = new Item();
-            var expectedTableName = string.Format(TableNameConstants.Percentiles.Formattable.POWERItems, selection.Type);
+            var expectedTableName = TableNameConstants.Percentiles.POWERItems, selection.Type);
             mockPercentileSelector.Setup(p => p.SelectFrom(Config.Name, expectedTableName)).Returns("magic item type");
             mockJustInTimeFactory.Setup(f => f.Build<MagicalItemGenerator>("magic item type")).Returns(mockMagicalItemGenerator.Object);
             mockMagicalItemGenerator.Setup(g => g.GenerateRandom(selection.Type)).Returns(magicalItem);
@@ -170,7 +170,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
         public async Task GenerateRandomAtLevelAsync_GetItemTypeFromSelector()
         {
             await itemsGenerator.GenerateRandomAtLevelAsync(96);
-            var expectedTableName = string.Format(TableNameConstants.Percentiles.Formattable.LevelXItems, 96);
+            var expectedTableName = TableNameConstants.Percentiles.LevelXItems, 96);
             mockTypeAndAmountPercentileSelector.Verify(p => p.SelectFrom(expectedTableName), Times.Once);
         }
 
@@ -218,7 +218,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
             selection.Amount = 1;
 
             var mundaneItem = new Item();
-            var expectedTableName = string.Format(TableNameConstants.Percentiles.Formattable.POWERItems, selection.Type);
+            var expectedTableName = TableNameConstants.Percentiles.POWERItems, selection.Type);
             mockPercentileSelector.Setup(p => p.SelectFrom(Config.Name, expectedTableName)).Returns("mundane item type");
             mockJustInTimeFactory.Setup(f => f.Build<MundaneItemGenerator>("mundane item type")).Returns(mockMundaneItemGenerator.Object);
             mockMundaneItemGenerator.Setup(g => g.GenerateRandom()).Returns(mundaneItem);
@@ -234,7 +234,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
             selection.Amount = 1;
 
             var magicalItem = new Item();
-            var expectedTableName = string.Format(TableNameConstants.Percentiles.Formattable.POWERItems, selection.Type);
+            var expectedTableName = TableNameConstants.Percentiles.POWERItems, selection.Type);
             mockPercentileSelector.Setup(p => p.SelectFrom(Config.Name, expectedTableName)).Returns("magic item type");
             mockJustInTimeFactory.Setup(f => f.Build<MagicalItemGenerator>("magic item type")).Returns(mockMagicalItemGenerator.Object);
             mockMagicalItemGenerator.Setup(g => g.GenerateRandom(selection.Type)).Returns(magicalItem);
@@ -249,7 +249,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
             selection.Type = PowerConstants.Mundane;
 
             mockCollectionSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.Set.PowerGroups, "item name"))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, "item name"))
                 .Returns(new[] { PowerConstants.Mundane, "power", "more power", "wrong power" });
 
             var firstItem = new Item();
@@ -266,7 +266,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
             selection.Type = string.Empty;
 
             mockCollectionSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.Set.PowerGroups, "item name"))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, "item name"))
                 .Returns(new[] { PowerConstants.Mundane, "power", "more power", "wrong power" });
 
             var firstItem = new Item();
@@ -283,7 +283,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
             selection.Type = PowerConstants.Mundane;
 
             mockCollectionSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.Set.PowerGroups, "specific item"))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, "specific item"))
                 .Returns(new[] { "power", "more power", "wrong power" });
 
             var magicalItem = new Item();
@@ -300,7 +300,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
             selection.Type = string.Empty;
 
             mockCollectionSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.Set.PowerGroups, "specific item"))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, "specific item"))
                 .Returns(new[] { "power", "more power", "wrong power" });
 
             var magicalItem = new Item();
@@ -317,7 +317,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
             selection.Type = string.Empty;
 
             mockCollectionSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.Set.PowerGroups, "item name"))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, "item name"))
                 .Returns(new[] { "power", "more power", "wrong power" });
 
             var magicalItem = new Item();
@@ -334,7 +334,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
             selection.Type = "power";
 
             mockCollectionSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.Set.PowerGroups, "item name"))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, "item name"))
                 .Returns(new[] { PowerConstants.Mundane });
 
             var firstItem = new Item();
@@ -351,7 +351,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
             selection.Type = PowerConstants.Mundane;
 
             mockCollectionSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.Set.PowerGroups, "item name"))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, "item name"))
                 .Returns(new[] { "power", "more power", "wrong power" });
 
             var magicalItem = new Item();
@@ -368,7 +368,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
             selection.Type = "power";
 
             mockCollectionSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.Set.PowerGroups, "item name"))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, "item name"))
                 .Returns(new[] { "more power", "wrong power" });
 
             var magicalItem = new Item();
@@ -385,7 +385,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
             selection.Type = PowerConstants.Mundane;
 
             mockCollectionSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.Set.PowerGroups, "item name"))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, "item name"))
                 .Returns(new[] { PowerConstants.Mundane, "power", "more power", "wrong power" });
 
             var firstItem = new Item();
@@ -402,7 +402,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
             selection.Type = "power";
 
             mockCollectionSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.Set.PowerGroups, "item name"))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, "item name"))
                 .Returns(new[] { PowerConstants.Mundane, "power", "more power", "wrong power" });
 
             var magicalItem = new Item();
@@ -419,7 +419,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
             selection.Type = "power";
 
             mockCollectionSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.Set.PowerGroups, "item name"))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, "item name"))
                 .Returns(new[] { PowerConstants.Mundane, "power", "more power", "wrong power" });
 
             var magicalItem = new Item();
@@ -436,7 +436,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
             selection.Type = "power";
 
             mockCollectionSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.Set.PowerGroups, ItemTypeConstants.Scroll))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, ItemTypeConstants.Scroll))
                 .Returns(new[] { PowerConstants.Mundane, "power", "more power", "wrong power" });
 
             var magicalItem = new Item();
@@ -453,7 +453,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
             selection.Type = "power";
 
             mockCollectionSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.Set.PowerGroups, ItemTypeConstants.Wand))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, ItemTypeConstants.Wand))
                 .Returns(new[] { PowerConstants.Mundane, "power", "more power", "wrong power" });
 
             var magicalItem = new Item();
@@ -468,11 +468,11 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
         public void GenerateAtLevel_Named_GetPowerFromSelector()
         {
             mockCollectionSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.Set.PowerGroups, "item name"))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, "item name"))
                 .Returns(new[] { PowerConstants.Mundane, "power", "more power", "wrong power" });
 
             itemsGenerator.GenerateAtLevel(96, "item type", "item name");
-            var expectedTableName = string.Format(TableNameConstants.Percentiles.Formattable.LevelXItems, 96);
+            var expectedTableName = TableNameConstants.Percentiles.LevelXItems, 96);
             mockTypeAndAmountPercentileSelector.Verify(p => p.SelectFrom(expectedTableName), Times.Once);
         }
 
@@ -483,7 +483,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
             selection.Amount = 2;
 
             mockCollectionSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.Set.PowerGroups, "item name"))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, "item name"))
                 .Returns(new[] { PowerConstants.Mundane, "power", "more power", "wrong power" });
 
             var generatedItem = new Item();
@@ -502,11 +502,11 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
         public async Task GenerateAtLevelAsync_Named_GetPowerFromSelector()
         {
             mockCollectionSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.Set.PowerGroups, "item name"))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, "item name"))
                 .Returns(new[] { PowerConstants.Mundane, "power", "more power", "wrong power" });
 
             await itemsGenerator.GenerateAtLevelAsync(96, "item type", "item name");
-            var expectedTableName = string.Format(TableNameConstants.Percentiles.Formattable.LevelXItems, 96);
+            var expectedTableName = TableNameConstants.Percentiles.LevelXItems, 96);
             mockTypeAndAmountPercentileSelector.Verify(p => p.SelectFrom(expectedTableName), Times.Once);
         }
 
@@ -517,7 +517,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
             selection.Amount = 2;
 
             mockCollectionSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.Set.PowerGroups, "item name"))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, "item name"))
                 .Returns(new[] { PowerConstants.Mundane, "power", "more power", "wrong power" });
 
             var generatedItem = new Item();
@@ -539,7 +539,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
             selection.Amount = 1;
 
             mockCollectionSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.Set.PowerGroups, "item name"))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, "item name"))
                 .Returns(new[] { PowerConstants.Mundane, "power", "more power", "wrong power" });
 
             var mundaneItem = new Item();
@@ -557,7 +557,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
             selection.Amount = 1;
 
             mockCollectionSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.Set.PowerGroups, "item name"))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, "item name"))
                 .Returns(new[] { PowerConstants.Mundane, "power", "more power", "wrong power" });
 
             var mundaneItem = new Item();
@@ -575,7 +575,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
             selection.Amount = 1;
 
             mockCollectionSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.Set.PowerGroups, "item name"))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, "item name"))
                 .Returns(new[] { "power", "more power", "wrong power" });
 
             var magicalItem = new Item();
@@ -592,7 +592,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
             selection.Type = "power";
 
             mockCollectionSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.Set.PowerGroups, "item name"))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, "item name"))
                 .Returns(new[] { PowerConstants.Mundane });
 
             var firstItem = new Item();
@@ -609,7 +609,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
             selection.Type = PowerConstants.Mundane;
 
             mockCollectionSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.Set.PowerGroups, "item name"))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, "item name"))
                 .Returns(new[] { "power", "more power", "wrong power" });
 
             var magicalItem = new Item();
@@ -626,7 +626,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
             selection.Type = "power";
 
             mockCollectionSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.Set.PowerGroups, "item name"))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, "item name"))
                 .Returns(new[] { "more power", "wrong power" });
 
             var magicalItem = new Item();
@@ -644,7 +644,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
             selection.Amount = 1;
 
             mockCollectionSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.Set.PowerGroups, "item name"))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, "item name"))
                 .Returns(new[] { PowerConstants.Mundane, "power", "more power", "wrong power" });
 
             var magicalItem = new Item();

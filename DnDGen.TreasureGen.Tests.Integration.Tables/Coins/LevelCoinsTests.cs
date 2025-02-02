@@ -22,7 +22,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Coins
         [Test]
         public void LevelCoinsExistForAllLevels()
         {
-            for (var level = LevelLimits.Minimum; level <= LevelLimits.Maximum; level++)
+            for (var level = LevelLimits.Minimum; level <= LevelLimits.Maximum_Standard; level++)
             {
                 var table = percentileMapper.Map(Name, TableNameConstants.Percentiles.LevelXCoins(level));
                 Assert.That(table, Is.Not.Null);

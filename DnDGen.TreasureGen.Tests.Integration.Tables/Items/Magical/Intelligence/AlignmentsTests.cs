@@ -9,7 +9,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Intelligence
     {
         protected override string tableName
         {
-            get { return TableNameConstants.Percentiles.Set.IntelligenceAlignments; }
+            get { return TableNameConstants.Percentiles.IntelligenceAlignments; }
         }
 
         [Test]

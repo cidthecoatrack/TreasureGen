@@ -10,7 +10,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.WondrousItem
     {
         protected override string tableName
         {
-            get { return string.Format(TableNameConstants.Percentiles.Formattable.POWERITEMTYPEs, PowerConstants.Medium, ItemTypeConstants.WondrousItem); }
+            get { return TableNameConstants.Percentiles.POWERITEMTYPEs, PowerConstants.Medium, ItemTypeConstants.WondrousItem); }
         }
 
         [Test]
@@ -125,7 +125,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.WondrousItem
         [TestCase(WondrousItemConstants.TomeOfClearThought, 1, 98)]
         [TestCase(WondrousItemConstants.TomeOfLeadershipAndInfluence, 1, 99)]
         [TestCase(WondrousItemConstants.TomeOfUnderstanding, 1, 100)]
-        public override void AssertTypeAndAmountPercentile(string type, int amount, int roll)
+        public void TypeAndAmountPercentile(string type, int amount, int roll)
         {
             base.AssertTypeAndAmountPercentile(type, amount, roll);
         }

@@ -9,7 +9,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Intelligence
     {
         protected override string tableName
         {
-            get { return TableNameConstants.Collections.Set.IntelligenceCommunication; }
+            get { return TableNameConstants.Collections.IntelligenceCommunication; }
         }
 
         [TestCase(12,

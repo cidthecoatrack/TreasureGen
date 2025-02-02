@@ -9,7 +9,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Intelligence
     {
         protected override string tableName
         {
-            get { return TableNameConstants.Collections.Set.IntelligenceData; }
+            get { return TableNameConstants.Collections.IntelligenceData; }
         }
 
         [TestCase("12", "30 ft. vision and hearing", 1, 0)]

@@ -10,7 +10,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.WondrousItem
     {
         protected override string tableName
         {
-            get { return TableNameConstants.Collections.Set.WondrousItemContents; }
+            get { return TableNameConstants.Collections.WondrousItemContents; }
         }
 
         [TestCase(WondrousItemConstants.RobeOfUsefulItems,
@@ -46,7 +46,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.WondrousItem
         [TestCase(WondrousItemConstants.NecklaceOfFireballs_V, "3d6", "3d6", "5d6", "5d6", "7d6", "7d6", "9d6")]
         [TestCase(WondrousItemConstants.NecklaceOfFireballs_VI, "4d6", "4d6", "4d6", "4d6", "6d6", "6d6", "8d6", "8d6", "10d6")]
         [TestCase(WondrousItemConstants.NecklaceOfFireballs_VII, "3d6", "3d6", "5d6", "5d6", "7d6", "7d6", "9d6", "9d6", "10d6")]
-        public override void AssertCollection(string name, params string[] attributes)
+        public void Collection(string name, params string[] attributes)
         {
             base.AssertCollection(name, attributes);
         }

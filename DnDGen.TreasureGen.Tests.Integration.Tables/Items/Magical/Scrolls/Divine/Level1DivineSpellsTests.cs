@@ -23,16 +23,11 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Scrolls.Divi
             AssertTableIsComplete();
         }
 
-        [TestCase("Alarm", 1)]
-        [TestCase("Bless Weapon", 10)]
-        public override void AssertPercentile(string content, int roll)
-        {
-            base.AssertPercentile(content, roll);
-        }
-
+        [TestCase("Alarm", 1, 1)]
         [TestCase("Bane", 2, 3)]
         [TestCase("Bless", 4, 6)]
         [TestCase("Bless Water", 7, 9)]
+        [TestCase("Bless Weapon", 10, 10)]
         [TestCase("Calm Animals", 11, 12)]
         [TestCase("Cause Fear", 13, 14)]
         [TestCase("Charm Animal", 15, 16)]
@@ -71,9 +66,9 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Scrolls.Divi
         [TestCase("Speak with Animals", 95, 96)]
         [TestCase("Summon Monster I", 97, 98)]
         [TestCase("Summon Nature's Ally I", 99, 100)]
-        public override void AssertPercentile(string content, int lower, int upper)
+        public void Level1DivineSpellsPercentile(string content, int lower, int upper)
         {
-            base.AssertPercentile(content, lower, upper);
+            AssertPercentile(content, lower, upper);
         }
     }
 }

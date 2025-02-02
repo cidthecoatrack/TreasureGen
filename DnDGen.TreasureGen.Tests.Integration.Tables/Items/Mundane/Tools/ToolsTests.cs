@@ -9,7 +9,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Mundane.Tools
     {
         protected override string tableName
         {
-            get { return TableNameConstants.Percentiles.Set.Tools; }
+            get { return TableNameConstants.Percentiles.Tools; }
         }
 
         [TestCase(ToolConstants.Backpack_Empty, 1, 3)]
@@ -32,7 +32,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Mundane.Tools
         [TestCase(ToolConstants.MagnifyingGlass, 82, 88)]
         [TestCase(ToolConstants.MusicalInstrument_Masterwork, 89, 95)]
         [TestCase(ToolConstants.ThievesTools_Masterwork, 96, 100)]
-        public override void AssertPercentile(string content, int lower, int upper)
+        public void Percentile(string content, int lower, int upper)
         {
             base.AssertPercentile(content, lower, upper);
         }

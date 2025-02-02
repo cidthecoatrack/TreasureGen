@@ -15,7 +15,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Mundane.Weapons
     [TestFixture]
     public class WeaponCriticalDamagesTests : CollectionsTests
     {
-        protected override string tableName => TableNameConstants.Collections.Set.WeaponCriticalDamages;
+        protected override string tableName => TableNameConstants.Collections.WeaponCriticalDamages;
 
         private Dictionary<string, List<string>> weaponDamages;
         private ICollectionDataSelector<WeaponDataSelection> weaponDataSelector;
@@ -51,7 +51,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Mundane.Weapons
         public void WeaponCriticalDamages(string weapon)
         {
             var sizes = TraitConstants.Sizes.GetAll();
-            var weaponData = weaponDataSelector.SelectFrom(Config.Name, TableNameConstants.Collections.Set.WeaponData, weapon).Single();
+            var weaponData = weaponDataSelector.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponData, weapon).Single();
 
             foreach (var size in sizes)
             {
@@ -104,7 +104,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Mundane.Weapons
 
         private void AssertWeaponCriticalDamagesHaveCorrectMultiplier(string weapon, string key, WeaponDataSelection weaponData)
         {
-            var normalDamages = damageDataSelector.SelectFrom(Config.Name, TableNameConstants.Collections.Set.WeaponDamages, key).ToArray();
+            var normalDamages = damageDataSelector.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponDamages, key).ToArray();
             var criticalDamages = weaponDamages[key].Select(DataHelper.Parse<DamageDataSelection>).ToArray();
 
             Assert.That(normalDamages, Has.Length.EqualTo(criticalDamages.Length), key);

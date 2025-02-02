@@ -9,7 +9,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Weapons.Medi
     {
         protected override string tableName
         {
-            get { return string.Format(TableNameConstants.Percentiles.Formattable.POWERSpecificITEMTYPEs, PowerConstants.Medium, ItemTypeConstants.Weapon); }
+            get { return TableNameConstants.Percentiles.POWERSpecificITEMTYPEs, PowerConstants.Medium, ItemTypeConstants.Weapon); }
         }
 
         [Test]
@@ -42,7 +42,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Weapons.Medi
         [TestCase(WeaponConstants.NineLivesStealer, 2, 92, 95)]
         [TestCase(WeaponConstants.SwordOfLifeStealing, 2, 96, 98)]
         [TestCase(WeaponConstants.Oathbow, 2, 99, 100)]
-        public override void AssertTypeAndAmountPercentile(string type, int amount, int lower, int upper)
+        public void TypeAndAmountPercentile(string type, int amount, int lower, int upper)
         {
             base.AssertTypeAndAmountPercentile(type, amount, lower, upper);
         }

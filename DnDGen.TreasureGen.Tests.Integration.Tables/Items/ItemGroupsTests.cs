@@ -12,7 +12,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items
         {
             get
             {
-                return TableNameConstants.Collections.Set.ItemGroups;
+                return TableNameConstants.Collections.ItemGroups;
             }
         }
 

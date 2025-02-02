@@ -32,7 +32,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Selectors.Collections
             data[DataIndexConstants.Weapon.SecondaryCriticalMultiplier] = string.Empty;
             data[DataIndexConstants.Weapon.Ammunition] = "dirty laundry";
 
-            mockInnerSelector.Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.Set.WeaponData, "weapon")).Returns(data);
+            mockInnerSelector.Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponData, "weapon")).Returns(data);
 
             var damages = new string[14];
             damages[0] = damageHelper.BuildEntry("almost nothing", "emotional", string.Empty);
@@ -50,7 +50,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Selectors.Collections
             damages[12] = damageHelper.BuildEntry("way too much but more", "emotional", string.Empty);
             damages[13] = damageHelper.BuildEntry("DAYUM but more", "emotional", string.Empty);
 
-            mockInnerSelector.Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.Set.WeaponDamages, "weapon")).Returns(damages);
+            mockInnerSelector.Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponDamages, "weapon")).Returns(damages);
 
             var selection = weaponDataSelector.Select("weapon");
             Assert.That(selection.ThreatRange, Is.EqualTo(9266));
@@ -98,7 +98,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Selectors.Collections
             data[DataIndexConstants.Weapon.SecondaryCriticalMultiplier] = "threefold";
             data[DataIndexConstants.Weapon.Ammunition] = "dirty laundry";
 
-            mockInnerSelector.Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.Set.WeaponData, "weapon")).Returns(data);
+            mockInnerSelector.Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponData, "weapon")).Returns(data);
 
             var damages = new string[14];
             damages[0] = damageHelper.BuildEntries("almost nothing", "emotional", string.Empty, "sort of nothing", "spiritual", string.Empty);
@@ -116,7 +116,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Selectors.Collections
             damages[12] = damageHelper.BuildEntries("way too much but more", "emotional", string.Empty, "far too much but more", "spiritual", string.Empty);
             damages[13] = damageHelper.BuildEntries("DAYUM but more", "emotional", string.Empty, "OHLAWDITCOMIN' but more", "spiritual", string.Empty);
 
-            mockInnerSelector.Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.Set.WeaponDamages, "weapon")).Returns(damages);
+            mockInnerSelector.Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponDamages, "weapon")).Returns(damages);
 
             var selection = weaponDataSelector.Select("weapon");
             Assert.That(selection.ThreatRange, Is.EqualTo(9266));

@@ -10,7 +10,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Mundane.Weapons
     [TestFixture]
     public class WeaponDataTests : CollectionsTests
     {
-        protected override string tableName => TableNameConstants.Collections.Set.WeaponData;
+        protected override string tableName => TableNameConstants.Collections.WeaponData;
 
         [TestCase(WeaponConstants.Gauntlet, 1, "x2", "", "")]
         [TestCase(WeaponConstants.Dagger, 2, "x2", "", "")]

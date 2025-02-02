@@ -8,7 +8,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical
     [TestFixture]
     public class SpecialAbilityAttributeRequirementsTests : CollectionsTests
     {
-        protected override string tableName => TableNameConstants.Collections.Set.SpecialAbilityAttributeRequirements;
+        protected override string tableName => TableNameConstants.Collections.SpecialAbilityAttributeRequirements;
 
         [TestCase(SpecialAbilityConstants.Glamered)]
         [TestCase(SpecialAbilityConstants.Fortification)]

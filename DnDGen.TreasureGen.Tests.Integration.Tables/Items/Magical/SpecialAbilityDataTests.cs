@@ -9,7 +9,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical
     [TestFixture]
     public class SpecialAbilityDataTests : CollectionsTests
     {
-        protected override string tableName => TableNameConstants.Collections.Set.SpecialAbilityData;
+        protected override string tableName => TableNameConstants.Collections.SpecialAbilityData;
 
         [Test]
         public void AllAbilitiesPresentInTable()

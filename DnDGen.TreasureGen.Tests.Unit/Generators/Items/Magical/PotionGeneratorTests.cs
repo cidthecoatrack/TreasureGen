@@ -40,7 +40,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             result.Type = "potion";
             power = "power";
 
-            var tableName = string.Format(TableNameConstants.Percentiles.Formattable.POWERITEMTYPEs, power, ItemTypeConstants.Potion);
+            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs, power, ItemTypeConstants.Potion);
             mockTypeAndAmountPercentileSelector.Setup(s => s.SelectFrom(tableName)).Returns(result);
         }
 
@@ -90,7 +90,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
         [Test]
         public void GenerateFromName()
         {
-            var tableName = string.Format(TableNameConstants.Percentiles.Formattable.POWERITEMTYPEs, power, ItemTypeConstants.Potion);
+            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs, power, ItemTypeConstants.Potion);
             mockTypeAndAmountPercentileSelector.Setup(s => s.SelectAllFrom(tableName)).Returns(new[]
             {
                 new TypeAndAmountSelection { Amount = 666, Type = "wrong potion" },
@@ -103,7 +103,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
                 .Returns((IEnumerable<TypeAndAmountSelection> c) => c.Last());
 
             mockCollectionsSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.Set.PowerGroups, "potion"))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, "potion"))
                 .Returns(new[] { "wrong power", power, "other power" });
 
             var potion = potionGenerator.Generate(power, "potion");
@@ -119,7 +119,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
         [Test]
         public void GenerateFromName_WithTraits()
         {
-            var tableName = string.Format(TableNameConstants.Percentiles.Formattable.POWERITEMTYPEs, power, ItemTypeConstants.Potion);
+            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs, power, ItemTypeConstants.Potion);
             mockTypeAndAmountPercentileSelector.Setup(s => s.SelectAllFrom(tableName)).Returns(new[]
             {
                 new TypeAndAmountSelection { Amount = 666, Type = "wrong potion" },
@@ -132,7 +132,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
                 .Returns((IEnumerable<TypeAndAmountSelection> c) => c.Last());
 
             mockCollectionsSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.Set.PowerGroups, "potion"))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, "potion"))
                 .Returns(new[] { "wrong power", power, "other power" });
 
             var potion = potionGenerator.Generate(power, "potion", "trait 1", "trait 2");
@@ -151,7 +151,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
         [Test]
         public void GenerateFromName_MultipleOfPower()
         {
-            var tableName = string.Format(TableNameConstants.Percentiles.Formattable.POWERITEMTYPEs, power, ItemTypeConstants.Potion);
+            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs, power, ItemTypeConstants.Potion);
             mockTypeAndAmountPercentileSelector.Setup(s => s.SelectAllFrom(tableName)).Returns(new[]
             {
                 new TypeAndAmountSelection { Amount = 666, Type = "wrong potion" },
@@ -164,7 +164,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
                 .Returns((IEnumerable<TypeAndAmountSelection> c) => c.Last());
 
             mockCollectionsSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.Set.PowerGroups, "potion"))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, "potion"))
                 .Returns(new[] { "wrong power", power, "other power" });
 
             var potion = potionGenerator.Generate(power, "potion");
@@ -180,7 +180,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
         [Test]
         public void GenerateFromName_NoneOfPower()
         {
-            var tableName = string.Format(TableNameConstants.Percentiles.Formattable.POWERITEMTYPEs, power, ItemTypeConstants.Potion);
+            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs, power, ItemTypeConstants.Potion);
             mockTypeAndAmountPercentileSelector.Setup(s => s.SelectAllFrom(tableName)).Returns(new[]
             {
                 new TypeAndAmountSelection { Amount = 666, Type = "wrong potion" },
@@ -193,7 +193,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
                 .Returns((IEnumerable<TypeAndAmountSelection> c) => c.Last());
 
             mockCollectionsSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.Set.PowerGroups, "potion"))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, "potion"))
                 .Returns(new[] { power, "wrong power" });
 
             var potion = potionGenerator.Generate("other power", "potion");
@@ -209,7 +209,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
         [Test]
         public void BUG_GenerateFromName_NeedsReplacement()
         {
-            var tableName = string.Format(TableNameConstants.Percentiles.Formattable.POWERITEMTYPEs, power, ItemTypeConstants.Potion);
+            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs, power, ItemTypeConstants.Potion);
             mockTypeAndAmountPercentileSelector.Setup(s => s.SelectAllFrom(tableName)).Returns(new[]
             {
                 new TypeAndAmountSelection { Amount = 666, Type = "wrong potion" },
@@ -230,7 +230,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
                 });
 
             mockCollectionsSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.Set.PowerGroups, "needs replacement"))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, "needs replacement"))
                 .Returns(new[] { "wrong power", power, "other power" });
 
             var potion = potionGenerator.Generate(power, "needs replacement");

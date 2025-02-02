@@ -27,7 +27,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Selectors.Collections
             data[DataIndexConstants.Intelligence.LesserPowersCount] = "42";
             data[DataIndexConstants.Intelligence.Senses] = "senses";
 
-            mockInnerSelector.Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.Set.IntelligenceData, "name")).Returns(data);
+            mockInnerSelector.Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.IntelligenceData, "name")).Returns(data);
 
             var selection = selector.SelectFrom("name");
             Assert.That(selection.Senses, Is.EqualTo("senses"));

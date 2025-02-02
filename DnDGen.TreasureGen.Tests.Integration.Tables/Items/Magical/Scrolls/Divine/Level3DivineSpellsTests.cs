@@ -66,16 +66,16 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Scrolls.Divi
         [TestCase("Water Breathing", 94, 96)]
         [TestCase("Water Walk", 97, 98)]
         [TestCase("Wind Wall", 99, 100)]
-        public override void AssertPercentile(string content, int lower, int upper)
+        public void Level3DivineSpellsPercentile(string content, int lower, int upper)
         {
-            base.AssertPercentile(content, lower, upper);
+            AssertPercentile(content, lower, upper);
         }
 
         [TestCase("Darkvision", 19)]
         [TestCase("Heal Mount", 32)]
-        public override void AssertPercentile(string content, int roll)
+        public void Level3DivineSpellsPercentile(string content, int roll)
         {
-            base.AssertPercentile(content, roll);
+            AssertPercentile(content, roll);
         }
     }
 }

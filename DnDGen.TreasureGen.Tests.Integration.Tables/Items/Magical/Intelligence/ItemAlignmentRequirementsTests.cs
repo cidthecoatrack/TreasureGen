@@ -10,7 +10,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Intelligence
     {
         protected override string tableName
         {
-            get { return TableNameConstants.Collections.Set.ItemAlignmentRequirements; }
+            get { return TableNameConstants.Collections.ItemAlignmentRequirements; }
         }
 
         [TestCase(ArmorConstants.CelestialArmor, AlignmentConstants.Good)]
@@ -42,7 +42,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Intelligence
         [TestCase(WondrousItemConstants.StoneOfWeight_Loadstone, AlignmentConstants.Evil)]
         [TestCase(WondrousItemConstants.VacousGrimoire, AlignmentConstants.Evil)]
         [TestCase(WeaponConstants.CursedMinus2Sword, AlignmentConstants.Evil)]
-        public override void AssertCollection(string name, params string[] attributes)
+        public void Collection(string name, params string[] attributes)
         {
             base.AssertCollection(name, attributes);
         }

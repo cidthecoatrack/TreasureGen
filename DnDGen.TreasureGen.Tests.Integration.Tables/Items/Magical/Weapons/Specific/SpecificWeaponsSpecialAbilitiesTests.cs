@@ -10,7 +10,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Weapons.Spec
     {
         protected override string tableName
         {
-            get { return string.Format(TableNameConstants.Collections.Formattable.SpecificITEMTYPESpecialAbilities, ItemTypeConstants.Weapon); }
+            get { return TableNameConstants.Collections.SpecificITEMTYPESpecialAbilities(ItemTypeConstants.Weapon); }
         }
 
         [TestCase(WeaponConstants.SleepArrow)]

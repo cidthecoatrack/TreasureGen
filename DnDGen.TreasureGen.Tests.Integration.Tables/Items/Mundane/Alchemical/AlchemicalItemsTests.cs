@@ -8,7 +8,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Mundane.Alchemical
     {
         protected override string tableName
         {
-            get { return TableNameConstants.Percentiles.Set.AlchemicalItems; }
+            get { return TableNameConstants.Percentiles.AlchemicalItems; }
         }
 
         [Test]
@@ -31,7 +31,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Mundane.Alchemical
         [TestCase("Everburning torch", "1", 63, 74)]
         [TestCase("Tanglefoot bag", "1d4", 75, 88)]
         [TestCase("Thunderstone", "1d4", 89, 100)]
-        public override void AssertTypeAndAmountPercentile(string type, string amount, int lower, int upper)
+        public void TypeAndAmountPercentile(string type, string amount, int lower, int upper)
         {
             base.AssertTypeAndAmountPercentile(type, amount, lower, upper);
         }

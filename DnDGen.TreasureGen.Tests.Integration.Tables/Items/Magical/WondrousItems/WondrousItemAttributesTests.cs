@@ -10,7 +10,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.WondrousItem
     {
         protected override string tableName
         {
-            get { return string.Format(TableNameConstants.Collections.Formattable.ITEMTYPEAttributes, ItemTypeConstants.WondrousItem); }
+            get { return TableNameConstants.Collections.ITEMTYPEAttributes, ItemTypeConstants.WondrousItem); }
         }
 
         [TestCase(WondrousItemConstants.BeadOfForce,
@@ -322,7 +322,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.WondrousItem
         [TestCase(WondrousItemConstants.BottleOfAir)]
         [TestCase(WondrousItemConstants.BagOfHolding_III)]
         [TestCase(WondrousItemConstants.PeriaptOfHealth)]
-        public override void AssertCollection(string name, params string[] attributes)
+        public void Collection(string name, params string[] attributes)
         {
             base.AssertCollection(name, attributes);
         }

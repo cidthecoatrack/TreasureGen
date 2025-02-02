@@ -10,7 +10,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Weapons.Mino
     {
         protected override string tableName
         {
-            get { return string.Format(TableNameConstants.Percentiles.Formattable.POWERITEMTYPEs, PowerConstants.Minor, ItemTypeConstants.Weapon); }
+            get { return TableNameConstants.Percentiles.POWERITEMTYPEs, PowerConstants.Minor, ItemTypeConstants.Weapon); }
         }
 
         [Test]
@@ -27,7 +27,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Weapons.Mino
 
         [TestCase(ItemTypeConstants.Weapon, 86, 90)]
         [TestCase("SpecialAbility", 91, 100)]
-        public override void AssertPercentile(string content, int lower, int upper)
+        public void Percentile(string content, int lower, int upper)
         {
             base.AssertPercentile(content, lower, upper);
         }

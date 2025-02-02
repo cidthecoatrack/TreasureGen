@@ -9,7 +9,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Armor
     {
         protected override string tableName
         {
-            get { return string.Format(TableNameConstants.Collections.Formattable.SpecificITEMTYPEAttributes, ItemTypeConstants.Armor); }
+            get { return TableNameConstants.Collections.SpecificITEMTYPEAttributes(ItemTypeConstants.Armor); }
         }
 
         [TestCase(ArmorConstants.BandedMailOfLuck,
@@ -61,7 +61,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Armor
         [TestCase(ArmorConstants.ArmorOfArrowAttraction)]
         public void SpecificCursedArmorMatchesAttributes(string item)
         {
-            var specificCursedAttributes = CollectionMapper.Map(Name, TableNameConstants.Collections.Set.SpecificCursedItemAttributes);
+            var specificCursedAttributes = CollectionMapper.Map(Name, TableNameConstants.Collections.SpecificCursedItemAttributes);
             var specificAttributes = GetCollection(item);
 
             Assert.That(specificAttributes, Is.EquivalentTo(specificCursedAttributes[item]));

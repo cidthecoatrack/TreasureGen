@@ -9,7 +9,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Mundane.Armors
     [TestFixture]
     public class ArmorDataTests : CollectionsTests
     {
-        protected override string tableName => TableNameConstants.Collections.Set.ArmorData;
+        protected override string tableName => TableNameConstants.Collections.ArmorData;
 
         [TestCase(ArmorConstants.Buckler, 1, -1, int.MaxValue)]
         [TestCase(ArmorConstants.LightWoodenShield, 1, -1, int.MaxValue)]

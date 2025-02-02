@@ -56,9 +56,9 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Scrolls.Divi
         [TestCase("Summon Nature's Ally IV", 91, 93)]
         [TestCase("Tongues", 94, 98)]
         [TestCase("Tree Stride", 99, 100)]
-        public override void AssertPercentile(string content, int lower, int upper)
+        public void Level4DivineSpellsPercentile(string content, int lower, int upper)
         {
-            base.AssertPercentile(content, lower, upper);
+            AssertPercentile(content, lower, upper);
         }
     }
 }

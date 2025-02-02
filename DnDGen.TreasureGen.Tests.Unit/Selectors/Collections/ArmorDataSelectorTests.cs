@@ -27,7 +27,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Selectors.Collections
             data[DataIndexConstants.Armor.ArmorCheckPenalty] = "-90210";
             data[DataIndexConstants.Armor.MaxDexterityBonus] = "42";
 
-            mockInnerSelector.Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.Set.ArmorData, "armor")).Returns(data);
+            mockInnerSelector.Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.ArmorData, "armor")).Returns(data);
 
             var selection = armorDataSelector.Select("armor");
             Assert.That(selection.ArmorBonus, Is.EqualTo(9266));

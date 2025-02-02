@@ -10,7 +10,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Intelligence
     {
         protected override string tableName
         {
-            get { return string.Format(TableNameConstants.Percentiles.Formattable.IsITEMTYPEIntelligent, ItemTypeConstants.Ring); }
+            get { return TableNameConstants.Percentiles.IsITEMTYPEIntelligent, ItemTypeConstants.Ring); }
         }
 
         [Test]

@@ -10,7 +10,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Staves
     {
         protected override string tableName
         {
-            get { return string.Format(TableNameConstants.Percentiles.Formattable.POWERITEMTYPEs, PowerConstants.Medium, ItemTypeConstants.Staff); }
+            get { return TableNameConstants.Percentiles.POWERITEMTYPEs, PowerConstants.Medium, ItemTypeConstants.Staff); }
         }
 
         [Test]

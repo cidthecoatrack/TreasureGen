@@ -9,7 +9,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Goods.Gems
     {
         protected override string tableName
         {
-            get { return string.Format(TableNameConstants.Collections.Formattable.GOODTYPEDescriptions, GoodsConstants.Gem); }
+            get { return TableNameConstants.Collections.GOODTYPEDescriptions(GoodsConstants.Gem); }
         }
 
         [TestCase("4d4", "eye agate",
@@ -80,7 +80,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Goods.Gems
                               "brown diamond",
                               "blue diamond",
                               "jacinth")]
-        public override void AssertCollection(string name, params string[] attributes)
+        public void Collection(string name, params string[] attributes)
         {
             base.AssertCollection(name, attributes);
         }

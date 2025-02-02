@@ -1,6 +1,6 @@
-﻿using NUnit.Framework;
+﻿using DnDGen.TreasureGen.Items;
 using DnDGen.TreasureGen.Tables;
-using DnDGen.TreasureGen.Items;
+using NUnit.Framework;
 
 namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Scrolls
 {
@@ -9,7 +9,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Scrolls
     {
         protected override string tableName
         {
-            get { return string.Format(TableNameConstants.Percentiles.Formattable.POWERSpellLevels, PowerConstants.Medium); }
+            get { return TableNameConstants.Percentiles.POWERSpellLevels(PowerConstants.Medium); }
         }
 
         [Test]
@@ -28,7 +28,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Scrolls
         [TestCase("3", 6, 65)]
         [TestCase("4", 66, 95)]
         [TestCase("5", 96, 100)]
-        public override void AssertPercentile(string content, int lower, int upper)
+        public void Percentile(string content, int lower, int upper)
         {
             base.AssertPercentile(content, lower, upper);
         }

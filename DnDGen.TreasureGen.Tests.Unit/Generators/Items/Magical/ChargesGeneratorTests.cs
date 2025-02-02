@@ -242,7 +242,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             result.Maximum = 92;
             result.Minimum = 66;
 
-            mockRangeDataSelector.Setup(s => s.SelectFrom(TableNameConstants.Collections.Set.ChargeLimits, "name")).Returns(result);
+            mockRangeDataSelector.Setup(s => s.SelectFrom(TableNameConstants.Collections.ChargeLimits, "name")).Returns(result);
 
             SetUpRoll(66, 92, 9266);
 
@@ -260,13 +260,13 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             fullResult.Maximum = 34;
             fullResult.Minimum = 34;
 
-            mockRangeDataSelector.Setup(s => s.SelectFrom(TableNameConstants.Collections.Set.ChargeLimits, WondrousItemConstants.DeckOfIllusions)).Returns(result);
-            mockRangeDataSelector.Setup(s => s.SelectFrom(TableNameConstants.Collections.Set.ChargeLimits, WondrousItemConstants.DeckOfIllusions_Full)).Returns(fullResult);
+            mockRangeDataSelector.Setup(s => s.SelectFrom(TableNameConstants.Collections.ChargeLimits, WondrousItemConstants.DeckOfIllusions)).Returns(result);
+            mockRangeDataSelector.Setup(s => s.SelectFrom(TableNameConstants.Collections.ChargeLimits, WondrousItemConstants.DeckOfIllusions_Full)).Returns(fullResult);
 
             SetUpRoll(66, 92, 9266);
             SetUpRoll(34, 34, 34);
 
-            mockPercentileSelector.Setup(s => s.SelectFrom<bool>(Config.Name, TableNameConstants.Percentiles.Set.IsDeckOfIllusionsFullyCharged)).Returns(true);
+            mockPercentileSelector.Setup(s => s.SelectFrom<bool>(Config.Name, TableNameConstants.Percentiles.IsDeckOfIllusionsFullyCharged)).Returns(true);
 
             var charges = generator.GenerateFor(string.Empty, WondrousItemConstants.DeckOfIllusions);
             Assert.That(charges, Is.EqualTo(34));
@@ -282,13 +282,13 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             fullResult.Maximum = 34;
             fullResult.Minimum = 34;
 
-            mockRangeDataSelector.Setup(s => s.SelectFrom(TableNameConstants.Collections.Set.ChargeLimits, WondrousItemConstants.DeckOfIllusions)).Returns(result);
-            mockRangeDataSelector.Setup(s => s.SelectFrom(TableNameConstants.Collections.Set.ChargeLimits, WondrousItemConstants.DeckOfIllusions_Full)).Returns(fullResult);
+            mockRangeDataSelector.Setup(s => s.SelectFrom(TableNameConstants.Collections.ChargeLimits, WondrousItemConstants.DeckOfIllusions)).Returns(result);
+            mockRangeDataSelector.Setup(s => s.SelectFrom(TableNameConstants.Collections.ChargeLimits, WondrousItemConstants.DeckOfIllusions_Full)).Returns(fullResult);
 
             SetUpRoll(66, 92, 9266);
             SetUpRoll(34, 34, 34);
 
-            mockPercentileSelector.Setup(s => s.SelectFrom<bool>(Config.Name, TableNameConstants.Percentiles.Set.IsDeckOfIllusionsFullyCharged)).Returns(false);
+            mockPercentileSelector.Setup(s => s.SelectFrom<bool>(Config.Name, TableNameConstants.Percentiles.IsDeckOfIllusionsFullyCharged)).Returns(false);
 
             var charges = generator.GenerateFor(string.Empty, WondrousItemConstants.DeckOfIllusions);
             Assert.That(charges, Is.EqualTo(9266));

@@ -10,7 +10,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Weapons.Majo
     {
         protected override string tableName
         {
-            get { return string.Format(TableNameConstants.Percentiles.Formattable.POWERITEMTYPEs, PowerConstants.Major, ItemTypeConstants.Weapon); }
+            get { return TableNameConstants.Percentiles.POWERITEMTYPEs, PowerConstants.Major, ItemTypeConstants.Weapon); }
         }
 
         [Test]
@@ -27,7 +27,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Weapons.Majo
 
         [TestCase(ItemTypeConstants.Weapon, 50, 63)]
         [TestCase("SpecialAbility", 64, 100)]
-        public override void AssertPercentile(string content, int lower, int upper)
+        public void Percentile(string content, int lower, int upper)
         {
             base.AssertPercentile(content, lower, upper);
         }

@@ -34,10 +34,10 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Mundane
             selection.Type = "alchemical item";
             selection.Amount = 9266;
             mockTypeAndAmountPercentileSelector
-                .Setup(p => p.SelectFrom(TableNameConstants.Percentiles.Set.AlchemicalItems))
+                .Setup(p => p.SelectFrom(TableNameConstants.Percentiles.AlchemicalItems))
                 .Returns(selection);
             mockTypeAndAmountPercentileSelector
-                .Setup(p => p.SelectAllFrom(TableNameConstants.Percentiles.Set.AlchemicalItems))
+                .Setup(p => p.SelectAllFrom(TableNameConstants.Percentiles.AlchemicalItems))
                 .Returns(new[]
                 {
                     new TypeAndAmountSelection { Type = "wrong item", Amount = 666 },
@@ -85,7 +85,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Mundane
             selection.Type = "alchemical item";
             selection.Amount = 9266;
             mockTypeAndAmountPercentileSelector
-                .SetupSequence(p => p.SelectAllFrom(TableNameConstants.Percentiles.Set.AlchemicalItems))
+                .SetupSequence(p => p.SelectAllFrom(TableNameConstants.Percentiles.AlchemicalItems))
                 .Returns(new[]
                 {
                     new TypeAndAmountSelection { Type = "wrong alchemical item", Amount = 666 },
@@ -108,7 +108,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Mundane
         public void GenerateFromName_IfNoneMatching_SetQuantityTo1()
         {
             mockTypeAndAmountPercentileSelector
-                .SetupSequence(p => p.SelectAllFrom(TableNameConstants.Percentiles.Set.AlchemicalItems))
+                .SetupSequence(p => p.SelectAllFrom(TableNameConstants.Percentiles.AlchemicalItems))
                 .Returns(new[]
                 {
                     new TypeAndAmountSelection { Type = "wrong alchemical item", Amount = 9266 },
@@ -132,7 +132,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Mundane
             selection.Type = "alchemical item";
             selection.Amount = 9266;
             mockTypeAndAmountPercentileSelector
-                .SetupSequence(p => p.SelectAllFrom(TableNameConstants.Percentiles.Set.AlchemicalItems))
+                .SetupSequence(p => p.SelectAllFrom(TableNameConstants.Percentiles.AlchemicalItems))
                 .Returns(new[]
                 {
                     new TypeAndAmountSelection { Type = "wrong alchemical item", Amount = 666 },
@@ -159,7 +159,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Mundane
             selection.Type = "alchemical item";
             selection.Amount = 9266;
             mockTypeAndAmountPercentileSelector
-                .SetupSequence(p => p.SelectAllFrom(TableNameConstants.Percentiles.Set.AlchemicalItems))
+                .SetupSequence(p => p.SelectAllFrom(TableNameConstants.Percentiles.AlchemicalItems))
                 .Returns(new[]
                 {
                     new TypeAndAmountSelection { Type = "wrong alchemical item", Amount = 666 },

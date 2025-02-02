@@ -10,7 +10,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables
     {
         protected override string tableName
         {
-            get { return TableNameConstants.Collections.Set.ReplacementStrings; }
+            get { return TableNameConstants.Collections.ReplacementStrings; }
         }
 
         [TestCase(ReplacementStringConstants.Gender,
@@ -66,7 +66,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables
         [TestCase(WeaponConstants.LuckBlade1, WeaponConstants.LuckBlade)]
         [TestCase(WeaponConstants.LuckBlade2, WeaponConstants.LuckBlade)]
         [TestCase(WeaponConstants.LuckBlade3, WeaponConstants.LuckBlade)]
-        public override void AssertCollection(string name, params string[] entries)
+        public void Collection(string name, params string[] entries)
         {
             base.AssertCollection(name, entries);
         }

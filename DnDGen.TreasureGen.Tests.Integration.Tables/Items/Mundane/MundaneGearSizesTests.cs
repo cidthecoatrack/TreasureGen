@@ -9,7 +9,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Mundane
     {
         protected override string tableName
         {
-            get { return TableNameConstants.Percentiles.Set.MundaneGearSizes; }
+            get { return TableNameConstants.Percentiles.MundaneGearSizes; }
         }
 
         [Test]
@@ -25,7 +25,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Mundane
         [TestCase(TraitConstants.Sizes.Huge, 98, 98)]
         [TestCase(TraitConstants.Sizes.Gargantuan, 99, 99)]
         [TestCase(TraitConstants.Sizes.Colossal, 100, 100)]
-        public override void AssertPercentile(string content, int lower, int upper)
+        public void Percentile(string content, int lower, int upper)
         {
             base.AssertPercentile(content, lower, upper);
         }
