@@ -1,6 +1,6 @@
-﻿using NUnit.Framework;
+﻿using DnDGen.TreasureGen.Items;
 using DnDGen.TreasureGen.Tables;
-using DnDGen.TreasureGen.Items;
+using NUnit.Framework;
 
 namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Mundane.Weapons
 {
@@ -9,7 +9,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Mundane.Weapons
     {
         protected override string tableName
         {
-            get { return TableNameConstants.Percentiles.WEAPONTYPEWeapons, "CommonRanged"); }
+            get { return TableNameConstants.Percentiles.WEAPONTYPEWeapons("CommonRanged"); }
         }
 
         [Test]

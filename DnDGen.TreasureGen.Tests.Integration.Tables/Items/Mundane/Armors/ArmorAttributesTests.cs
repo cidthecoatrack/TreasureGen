@@ -1,6 +1,6 @@
-﻿using NUnit.Framework;
+﻿using DnDGen.TreasureGen.Items;
 using DnDGen.TreasureGen.Tables;
-using DnDGen.TreasureGen.Items;
+using NUnit.Framework;
 
 namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Mundane.Armors
 {
@@ -9,7 +9,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Mundane.Armors
     {
         protected override string tableName
         {
-            get { return TableNameConstants.Collections.ITEMTYPEAttributes, ItemTypeConstants.Armor); }
+            get { return TableNameConstants.Collections.ITEMTYPEAttributes(ItemTypeConstants.Armor); }
         }
 
         [TestCase(ArmorConstants.Buckler,
