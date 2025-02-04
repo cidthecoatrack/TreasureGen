@@ -292,7 +292,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
         public void GetLesserPowersFromAttributesSelector()
         {
             intelligenceSelection.LesserPowersCount = 2;
-            var tableName = TableNameConstants.Percentiles.IntelligencePOWERPowers, "Lesser");
+            var tableName = TableNameConstants.Percentiles.IntelligenceLesserPowers;
             mockPercentileSelector.SetupSequence(s => s.SelectFrom(Config.Name, tableName)).Returns("power 1").Returns("power 2");
 
             var intelligence = intelligenceGenerator.GenerateFor(item);
@@ -303,7 +303,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
         public void CannotHaveDuplicateLesserPowers()
         {
             intelligenceSelection.LesserPowersCount = 2;
-            var tableName = TableNameConstants.Percentiles.IntelligencePOWERPowers, "Lesser");
+            var tableName = TableNameConstants.Percentiles.IntelligenceLesserPowers;
             mockPercentileSelector.SetupSequence(s => s.SelectFrom(Config.Name, tableName)).Returns("power 1").Returns("power 1").Returns("power 2");
 
             var intelligence = intelligenceGenerator.GenerateFor(item);
@@ -316,7 +316,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
         public void GetGreaterPowersFromAttributesSelector()
         {
             intelligenceSelection.GreaterPowersCount = 2;
-            var tableName = TableNameConstants.Percentiles.IntelligencePOWERPowers, "Greater");
+            var tableName = TableNameConstants.Percentiles.IntelligenceGreaterPowers;
             mockPercentileSelector.SetupSequence(s => s.SelectFrom(Config.Name, tableName)).Returns("power 1").Returns("power 2");
 
             var intelligence = intelligenceGenerator.GenerateFor(item);
@@ -327,7 +327,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
         public void CannotHaveDuplicateGreaterPowers()
         {
             intelligenceSelection.GreaterPowersCount = 2;
-            var tableName = TableNameConstants.Percentiles.IntelligencePOWERPowers, "Greater");
+            var tableName = TableNameConstants.Percentiles.IntelligenceGreaterPowers;
             mockPercentileSelector.SetupSequence(s => s.SelectFrom(Config.Name, tableName)).Returns("power 1").Returns("power 1").Returns("power 2");
 
             var intelligence = intelligenceGenerator.GenerateFor(item);
@@ -342,10 +342,10 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             intelligenceSelection.LesserPowersCount = 2;
             intelligenceSelection.GreaterPowersCount = 0;
 
-            var lesserTableName = TableNameConstants.Percentiles.IntelligencePOWERPowers, "Lesser");
+            var lesserTableName = TableNameConstants.Percentiles.IntelligenceLesserPowers;
             mockPercentileSelector.SetupSequence(s => s.SelectFrom(Config.Name, lesserTableName)).Returns("power 1").Returns("power 2");
 
-            var greaterTableName = TableNameConstants.Percentiles.IntelligencePOWERPowers, "Greater");
+            var greaterTableName = TableNameConstants.Percentiles.IntelligenceGreaterPowers;
             mockPercentileSelector.Setup(s => s.SelectFrom(Config.Name, greaterTableName)).Returns("greater power");
 
             mockDice.Setup(d => d.Roll(1).d(4).AsTrueOrFalse(5)).Returns(true);
@@ -367,10 +367,10 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             intelligenceSelection.LesserPowersCount = 2;
             intelligenceSelection.GreaterPowersCount = 1;
 
-            var lesserTableName = TableNameConstants.Percentiles.IntelligencePOWERPowers, "Lesser");
+            var lesserTableName = TableNameConstants.Percentiles.IntelligenceLesserPowers;
             mockPercentileSelector.SetupSequence(s => s.SelectFrom(Config.Name, lesserTableName)).Returns("power 1").Returns("power 2");
 
-            var greaterTableName = TableNameConstants.Percentiles.IntelligencePOWERPowers, "Greater");
+            var greaterTableName = TableNameConstants.Percentiles.IntelligenceGreaterPowers;
             mockPercentileSelector.Setup(s => s.SelectFrom(Config.Name, greaterTableName)).Returns("greater power");
 
             mockDice.Setup(d => d.Roll(1).d(4).AsTrueOrFalse(4)).Returns(true);
@@ -392,10 +392,10 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             intelligenceSelection.LesserPowersCount = 2;
             intelligenceSelection.GreaterPowersCount = 1;
 
-            var lesserTableName = TableNameConstants.Percentiles.IntelligencePOWERPowers, "Lesser");
+            var lesserTableName = TableNameConstants.Percentiles.IntelligenceLesserPowers;
             mockPercentileSelector.SetupSequence(s => s.SelectFrom(Config.Name, lesserTableName)).Returns("power 1").Returns("power 2");
 
-            var greaterTableName = TableNameConstants.Percentiles.IntelligencePOWERPowers, "Greater");
+            var greaterTableName = TableNameConstants.Percentiles.IntelligenceGreaterPowers;
             mockPercentileSelector.Setup(s => s.SelectFrom(Config.Name, greaterTableName)).Returns("greater power");
 
             mockDice.Setup(d => d.Roll(1).d(4).AsTrueOrFalse(4)).Returns(false);
@@ -421,10 +421,10 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             mockPercentileSelector.Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Percentiles.IntelligenceSpecialPurposes)).Returns("purpose");
             mockPercentileSelector.Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Percentiles.IntelligenceDedicatedPowers)).Returns("dedicated power");
 
-            var lesserTableName = TableNameConstants.Percentiles.IntelligencePOWERPowers, "Lesser");
+            var lesserTableName = TableNameConstants.Percentiles.IntelligenceLesserPowers;
             mockPercentileSelector.SetupSequence(s => s.SelectFrom(Config.Name, lesserTableName)).Returns("power 1").Returns("power 2");
 
-            var greaterTableName = TableNameConstants.Percentiles.IntelligencePOWERPowers, "Greater");
+            var greaterTableName = TableNameConstants.Percentiles.IntelligenceGreaterPowers;
             mockPercentileSelector.SetupSequence(s => s.SelectFrom(Config.Name, greaterTableName)).Returns("greater power 1").Returns("greater power 2");
 
             mockDice.Setup(d => d.Roll(1).d(4).AsTrueOrFalse(3)).Returns(true);
@@ -447,10 +447,10 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             mockPercentileSelector.Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Percentiles.IntelligenceSpecialPurposes)).Returns("purpose");
             mockPercentileSelector.Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Percentiles.IntelligenceDedicatedPowers)).Returns("dedicated power");
 
-            var lesserTableName = TableNameConstants.Percentiles.IntelligencePOWERPowers, "Lesser");
+            var lesserTableName = TableNameConstants.Percentiles.IntelligenceLesserPowers;
             mockPercentileSelector.SetupSequence(s => s.SelectFrom(Config.Name, lesserTableName)).Returns("power 1").Returns("power 2");
 
-            var greaterTableName = TableNameConstants.Percentiles.IntelligencePOWERPowers, "Greater");
+            var greaterTableName = TableNameConstants.Percentiles.IntelligenceGreaterPowers;
             mockPercentileSelector.SetupSequence(s => s.SelectFrom(Config.Name, greaterTableName)).Returns("greater power 1").Returns("greater power 2");
 
             mockDice.Setup(d => d.Roll(1).d(4).AsTrueOrFalse(3)).Returns(false);
@@ -474,10 +474,10 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             mockPercentileSelector.Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Percentiles.IntelligenceSpecialPurposes)).Returns("purpose");
             mockPercentileSelector.Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Percentiles.IntelligenceDedicatedPowers)).Returns("dedicated power");
 
-            var lesserTableName = TableNameConstants.Percentiles.IntelligencePOWERPowers, "Lesser");
+            var lesserTableName = TableNameConstants.Percentiles.IntelligenceLesserPowers;
             mockPercentileSelector.SetupSequence(s => s.SelectFrom(Config.Name, lesserTableName)).Returns("power 1").Returns("power 2");
 
-            var greaterTableName = TableNameConstants.Percentiles.IntelligencePOWERPowers, "Greater");
+            var greaterTableName = TableNameConstants.Percentiles.IntelligenceGreaterPowers;
             mockPercentileSelector.SetupSequence(s => s.SelectFrom(Config.Name, greaterTableName)).Returns("greater power 1").Returns("greater power 2").Returns("greater power 3");
 
             mockDice.Setup(d => d.Roll(1).d(4).AsTrueOrFalse(2)).Returns(true);
@@ -501,10 +501,10 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             mockPercentileSelector.Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Percentiles.IntelligenceSpecialPurposes)).Returns("purpose");
             mockPercentileSelector.Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Percentiles.IntelligenceDedicatedPowers)).Returns("dedicated power");
 
-            var lesserTableName = TableNameConstants.Percentiles.IntelligencePOWERPowers, "Lesser");
+            var lesserTableName = TableNameConstants.Percentiles.IntelligenceLesserPowers;
             mockPercentileSelector.SetupSequence(s => s.SelectFrom(Config.Name, lesserTableName)).Returns("power 1").Returns("power 2");
 
-            var greaterTableName = TableNameConstants.Percentiles.IntelligencePOWERPowers, "Greater");
+            var greaterTableName = TableNameConstants.Percentiles.IntelligenceGreaterPowers;
             mockPercentileSelector.SetupSequence(s => s.SelectFrom(Config.Name, greaterTableName)).Returns("greater power 1").Returns("greater power 2").Returns("greater power 3");
 
             mockDice.Setup(d => d.Roll(1).d(4).AsTrueOrFalse(2)).Returns(false);
@@ -802,7 +802,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
         public void EgoIncludesLesserPowers()
         {
             intelligenceSelection.LesserPowersCount = 2;
-            var tableName = TableNameConstants.Percentiles.IntelligencePOWERPowers, "Lesser");
+            var tableName = TableNameConstants.Percentiles.IntelligenceLesserPowers;
             mockPercentileSelector.SetupSequence(s => s.SelectFrom(Config.Name, tableName)).Returns("power 1").Returns("power 2");
 
             var intelligence = intelligenceGenerator.GenerateFor(item);
@@ -813,7 +813,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
         public void EgoIncludesGreaterPowers()
         {
             intelligenceSelection.GreaterPowersCount = 2;
-            var tableName = TableNameConstants.Percentiles.IntelligencePOWERPowers, "Greater");
+            var tableName = TableNameConstants.Percentiles.IntelligenceGreaterPowers;
             mockPercentileSelector.SetupSequence(s => s.SelectFrom(Config.Name, tableName)).Returns("greater power 1").Returns("greater power 2");
 
             var intelligence = intelligenceGenerator.GenerateFor(item);
@@ -824,7 +824,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
         public void EgoIncludesDedicatedPower()
         {
             intelligenceSelection.GreaterPowersCount = 1;
-            var tableName = TableNameConstants.Percentiles.IntelligencePOWERPowers, "Greater");
+            var tableName = TableNameConstants.Percentiles.IntelligenceGreaterPowers;
             mockPercentileSelector.Setup(s => s.SelectFrom(Config.Name, tableName)).Returns("greater power");
             mockDice.Setup(d => d.Roll(1).d(4).AsTrueOrFalse(4)).Returns(true);
 
@@ -892,14 +892,14 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             intelligenceSelection.LesserPowersCount = 2;
             intelligenceSelection.GreaterPowersCount = 2;
 
-            var tableName = TableNameConstants.Percentiles.IntelligencePOWERPowers, "Greater");
+            var tableName = TableNameConstants.Percentiles.IntelligenceGreaterPowers;
             mockPercentileSelector.SetupSequence(s => s.SelectFrom(Config.Name, tableName)).Returns("greater power 1").Returns("greater power 2");
             mockDice.Setup(d => d.Roll(1).d(4).AsTrueOrFalse(3)).Returns(true);
 
             mockPercentileSelector.Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Percentiles.IntelligenceSpecialPurposes)).Returns("purpose");
             mockPercentileSelector.Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Percentiles.IntelligenceDedicatedPowers)).Returns("dedicated power");
 
-            tableName = TableNameConstants.Percentiles.IntelligencePOWERPowers, "Lesser");
+            tableName = TableNameConstants.Percentiles.IntelligenceLesserPowers;
             mockPercentileSelector.SetupSequence(s => s.SelectFrom(Config.Name, tableName)).Returns("power 1").Returns("power 2");
 
             var ability = new SpecialAbility();
