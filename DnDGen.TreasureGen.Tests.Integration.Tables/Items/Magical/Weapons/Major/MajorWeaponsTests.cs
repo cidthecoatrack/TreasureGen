@@ -1,7 +1,7 @@
-﻿using NUnit.Framework;
-using System;
+﻿using DnDGen.TreasureGen.Items;
 using DnDGen.TreasureGen.Tables;
-using DnDGen.TreasureGen.Items;
+using NUnit.Framework;
+using System;
 
 namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Weapons.Major
 {
@@ -10,7 +10,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Weapons.Majo
     {
         protected override string tableName
         {
-            get { return TableNameConstants.Percentiles.POWERITEMTYPEs, PowerConstants.Major, ItemTypeConstants.Weapon); }
+            get { return TableNameConstants.Percentiles.POWERITEMTYPEs(PowerConstants.Major, ItemTypeConstants.Weapon); }
         }
 
         [Test]

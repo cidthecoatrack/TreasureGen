@@ -17,24 +17,22 @@ namespace DnDGen.TreasureGen.Generators.Items.Magical
         private readonly ITreasurePercentileSelector percentileSelector;
         private readonly ISpecialAbilitiesGenerator specialAbilitiesGenerator;
         private readonly ISpecificGearGenerator specificGearGenerator;
-        private readonly ISpellGenerator spellGenerator;
         private readonly JustInTimeFactory justInTimeFactory;
 
-        private const string SpecialAbility = "SpecialAbility";
+        public const string SpecialAbility = "SpecialAbility";
+        public const string SpecificWeapon = ItemTypeConstants.Weapon;
 
         public MagicalWeaponGenerator(
             ICollectionSelector collectionsSelector,
             ITreasurePercentileSelector percentileSelector,
             ISpecialAbilitiesGenerator specialAbilitiesGenerator,
             ISpecificGearGenerator specificGearGenerator,
-            ISpellGenerator spellGenerator,
             JustInTimeFactory justInTimeFactory)
         {
             this.collectionsSelector = collectionsSelector;
             this.percentileSelector = percentileSelector;
             this.specialAbilitiesGenerator = specialAbilitiesGenerator;
             this.specificGearGenerator = specificGearGenerator;
-            this.spellGenerator = spellGenerator;
             this.justInTimeFactory = justInTimeFactory;
         }
 
@@ -89,19 +87,19 @@ namespace DnDGen.TreasureGen.Generators.Items.Magical
             var specialAbilitiesCount = 0;
 
             do bonus = percentileSelector.SelectFrom(Config.Name, tableName);
-            while (!canBeSpecific && bonus == ItemTypeConstants.Weapon);
+            while (!canBeSpecific && bonus == SpecificWeapon);
 
             while (bonus == SpecialAbility)
             {
                 specialAbilitiesCount++;
 
                 do bonus = percentileSelector.SelectFrom(Config.Name, tableName);
-                while (!canBeSpecific && bonus == ItemTypeConstants.Weapon);
+                while (!canBeSpecific && bonus == SpecificWeapon);
             }
 
             prototype.Traits = new HashSet<string>(traits);
 
-            if (bonus == ItemTypeConstants.Weapon && canBeSpecific)
+            if (bonus == SpecificWeapon && canBeSpecific)
             {
                 var specificName = specificGearGenerator.GenerateNameFrom(power, ItemTypeConstants.Weapon, itemName);
                 var specificItem = specificGearGenerator.GeneratePrototypeFrom(power, ItemTypeConstants.Weapon, specificName, traits);
@@ -193,7 +191,7 @@ namespace DnDGen.TreasureGen.Generators.Items.Magical
 
             if (weapon.Attributes.Contains(AttributeConstants.Specific))
             {
-                //Double rule and special abilities were already applied within the specific gear generator
+                //Double weapon rules and special abilities were already applied within the specific gear generator
                 return weapon;
             }
 

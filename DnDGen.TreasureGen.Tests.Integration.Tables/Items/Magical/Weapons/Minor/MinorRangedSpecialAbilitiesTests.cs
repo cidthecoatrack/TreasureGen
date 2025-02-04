@@ -10,7 +10,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Weapons.Mino
     {
         protected override string tableName
         {
-            get { return TableNameConstants.Percentiles.POWERATTRIBUTESpecialAbilities, PowerConstants.Minor, AttributeConstants.Ranged); }
+            get { return TableNameConstants.Percentiles.POWERATTRIBUTESpecialAbilities(PowerConstants.Minor, AttributeConstants.Ranged); }
         }
 
         [Test]

@@ -9,7 +9,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Mundane.Armors
     {
         protected override string tableName
         {
-            get { return TableNameConstants.Percentiles.POWERITEMTYPEs, PowerConstants.Mundane, ItemTypeConstants.Armor); }
+            get { return TableNameConstants.Percentiles.POWERITEMTYPEs(PowerConstants.Mundane, ItemTypeConstants.Armor); }
         }
 
         [Test]

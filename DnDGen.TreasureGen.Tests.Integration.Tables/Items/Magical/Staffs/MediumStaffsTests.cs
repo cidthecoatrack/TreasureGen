@@ -1,7 +1,7 @@
-﻿using NUnit.Framework;
-using DnDGen.TreasureGen.Tables;
-using DnDGen.TreasureGen.Items;
+﻿using DnDGen.TreasureGen.Items;
 using DnDGen.TreasureGen.Items.Magical;
+using DnDGen.TreasureGen.Tables;
+using NUnit.Framework;
 
 namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Staves
 {
@@ -10,7 +10,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Staves
     {
         protected override string tableName
         {
-            get { return TableNameConstants.Percentiles.POWERITEMTYPEs, PowerConstants.Medium, ItemTypeConstants.Staff); }
+            get { return TableNameConstants.Percentiles.POWERITEMTYPEs(PowerConstants.Medium, ItemTypeConstants.Staff); }
         }
 
         [Test]

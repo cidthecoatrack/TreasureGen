@@ -10,7 +10,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.WondrousItem
     {
         protected override string tableName
         {
-            get { return TableNameConstants.Percentiles.POWERITEMTYPEs, PowerConstants.Minor, ItemTypeConstants.WondrousItem); }
+            get { return TableNameConstants.Percentiles.POWERITEMTYPEs(PowerConstants.Minor, ItemTypeConstants.WondrousItem); }
         }
 
         [Test]

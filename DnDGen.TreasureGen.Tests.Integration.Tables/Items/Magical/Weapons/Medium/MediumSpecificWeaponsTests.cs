@@ -9,7 +9,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Weapons.Medi
     {
         protected override string tableName
         {
-            get { return TableNameConstants.Percentiles.POWERSpecificITEMTYPEs, PowerConstants.Medium, ItemTypeConstants.Weapon); }
+            get { return TableNameConstants.Percentiles.POWERSpecificITEMTYPEs(PowerConstants.Medium, ItemTypeConstants.Weapon); }
         }
 
         [Test]

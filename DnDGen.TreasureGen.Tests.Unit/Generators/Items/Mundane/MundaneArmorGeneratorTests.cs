@@ -189,7 +189,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Mundane
         public void GetAttributesFromSelector()
         {
             var attributes = new[] { "attribute 1", "attribute 2" };
-            var tableName = TableNameConstants.Collections.ITEMTYPEAttributes, ItemTypeConstants.Armor);
+            var tableName = TableNameConstants.Collections.ITEMTYPEAttributes(ItemTypeConstants.Armor);
             mockCollectionsSelector.Setup(p => p.SelectFrom(Config.Name, tableName, "armor type")).Returns(attributes);
 
             var armor = mundaneArmorGenerator.GenerateRandom();
@@ -215,7 +215,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Mundane
             mockArmorDataSelector.Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.ArmorData, "big shield")).Returns([armorSelection]);
 
             var attributes = new[] { "attribute 1", "attribute 2" };
-            var tableName = TableNameConstants.Collections.ITEMTYPEAttributes, ItemTypeConstants.Armor);
+            var tableName = TableNameConstants.Collections.ITEMTYPEAttributes(ItemTypeConstants.Armor);
             mockCollectionsSelector.Setup(p => p.SelectFrom(Config.Name, tableName, "big shield")).Returns(attributes);
 
             var armor = mundaneArmorGenerator.GenerateRandom();
@@ -271,7 +271,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Mundane
             var template = itemVerifier.CreateRandomArmorTemplate(name);
 
             var attributes = new[] { "attribute 1", "attribute 2" };
-            var tableName = TableNameConstants.Collections.ITEMTYPEAttributes, ItemTypeConstants.Armor);
+            var tableName = TableNameConstants.Collections.ITEMTYPEAttributes(ItemTypeConstants.Armor);
             mockCollectionsSelector.Setup(p => p.SelectFrom(Config.Name, tableName, name)).Returns(attributes);
 
             mockPercentileSelector.Setup(p => p.SelectFrom(Config.Name, TableNameConstants.Percentiles.MundaneGearSizes)).Returns("size");
@@ -308,7 +308,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Mundane
             var template = itemVerifier.CreateRandomTemplate(name);
 
             var attributes = new[] { "attribute 1", "attribute 2" };
-            var tableName = TableNameConstants.Collections.ITEMTYPEAttributes, ItemTypeConstants.Armor);
+            var tableName = TableNameConstants.Collections.ITEMTYPEAttributes(ItemTypeConstants.Armor);
             mockCollectionsSelector.Setup(p => p.SelectFrom(Config.Name, tableName, name)).Returns(attributes);
 
             mockPercentileSelector.Setup(p => p.SelectFrom<bool>(Config.Name, TableNameConstants.Percentiles.IsMasterwork)).Returns(true);
@@ -344,7 +344,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Mundane
             var template = itemVerifier.CreateRandomArmorTemplate(name);
 
             var attributes = new[] { "attribute 1", "attribute 2" };
-            var tableName = TableNameConstants.Collections.ITEMTYPEAttributes, ItemTypeConstants.Armor);
+            var tableName = TableNameConstants.Collections.ITEMTYPEAttributes(ItemTypeConstants.Armor);
             mockCollectionsSelector.Setup(p => p.SelectFrom(Config.Name, tableName, name)).Returns(attributes);
 
             mockPercentileSelector.Setup(p => p.SelectFrom<bool>(Config.Name, TableNameConstants.Percentiles.IsMasterwork)).Returns(true);
@@ -381,7 +381,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Mundane
             template.Traits.Add("custom size");
 
             var attributes = new[] { "attribute 1", "attribute 2" };
-            var tableName = TableNameConstants.Collections.ITEMTYPEAttributes, ItemTypeConstants.Armor);
+            var tableName = TableNameConstants.Collections.ITEMTYPEAttributes(ItemTypeConstants.Armor);
             mockCollectionsSelector.Setup(p => p.SelectFrom(Config.Name, tableName, name)).Returns(attributes);
 
             var sizes = new[] { "size", "custom size", "other size" };
@@ -423,7 +423,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Mundane
             template.Size = "custom size";
 
             var attributes = new[] { "attribute 1", "attribute 2" };
-            var tableName = TableNameConstants.Collections.ITEMTYPEAttributes, ItemTypeConstants.Armor);
+            var tableName = TableNameConstants.Collections.ITEMTYPEAttributes(ItemTypeConstants.Armor);
             mockCollectionsSelector.Setup(p => p.SelectFrom(Config.Name, tableName, name)).Returns(attributes);
 
             var sizes = new[] { "size", "custom size", "other size" };
@@ -472,7 +472,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Mundane
             mockPercentileSelector.Setup(p => p.SelectFrom<bool>(Config.Name, TableNameConstants.Percentiles.IsMasterwork)).Returns(false);
 
             var attributes = new[] { "attribute 1", "attribute 2" };
-            var tableName = TableNameConstants.Collections.ITEMTYPEAttributes, ItemTypeConstants.Armor);
+            var tableName = TableNameConstants.Collections.ITEMTYPEAttributes(ItemTypeConstants.Armor);
             mockCollectionsSelector.Setup(p => p.SelectFrom(Config.Name, tableName, "armor")).Returns(attributes);
 
             armorSelection.ArmorBonus = 9266;
@@ -511,7 +511,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Mundane
             mockPercentileSelector.Setup(p => p.SelectFrom<bool>(Config.Name, TableNameConstants.Percentiles.IsMasterwork)).Returns(true);
 
             var attributes = new[] { "attribute 1", "attribute 2" };
-            var tableName = TableNameConstants.Collections.ITEMTYPEAttributes, ItemTypeConstants.Armor);
+            var tableName = TableNameConstants.Collections.ITEMTYPEAttributes(ItemTypeConstants.Armor);
             mockCollectionsSelector.Setup(p => p.SelectFrom(Config.Name, tableName, "armor")).Returns(attributes);
 
             armorSelection.ArmorBonus = 9266;
@@ -551,7 +551,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Mundane
             mockPercentileSelector.Setup(p => p.SelectFrom<bool>(Config.Name, TableNameConstants.Percentiles.IsMasterwork)).Returns(false);
 
             var attributes = new[] { "attribute 1", "attribute 2" };
-            var tableName = TableNameConstants.Collections.ITEMTYPEAttributes, ItemTypeConstants.Armor);
+            var tableName = TableNameConstants.Collections.ITEMTYPEAttributes(ItemTypeConstants.Armor);
             mockCollectionsSelector.Setup(p => p.SelectFrom(Config.Name, tableName, "shield")).Returns(attributes);
 
             armorSelection.ArmorBonus = 9266;
@@ -591,7 +591,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Mundane
             mockPercentileSelector.Setup(p => p.SelectFrom<bool>(Config.Name, TableNameConstants.Percentiles.IsMasterwork)).Returns(true);
 
             var attributes = new[] { "attribute 1", "attribute 2" };
-            var tableName = TableNameConstants.Collections.ITEMTYPEAttributes, ItemTypeConstants.Armor);
+            var tableName = TableNameConstants.Collections.ITEMTYPEAttributes(ItemTypeConstants.Armor);
             mockCollectionsSelector.Setup(p => p.SelectFrom(Config.Name, tableName, "shield")).Returns(attributes);
 
             armorSelection.ArmorBonus = 9266;
@@ -630,7 +630,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Mundane
             mockPercentileSelector.Setup(p => p.SelectFrom<bool>(Config.Name, TableNameConstants.Percentiles.IsMasterwork)).Returns(false);
 
             var attributes = new[] { "attribute 1", "attribute 2" };
-            var tableName = TableNameConstants.Collections.ITEMTYPEAttributes, ItemTypeConstants.Armor);
+            var tableName = TableNameConstants.Collections.ITEMTYPEAttributes(ItemTypeConstants.Armor);
             mockCollectionsSelector.Setup(p => p.SelectFrom(Config.Name, tableName, "armor")).Returns(attributes);
 
             armorSelection.ArmorBonus = 9266;
@@ -671,7 +671,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Mundane
             mockPercentileSelector.Setup(p => p.SelectFrom<bool>(Config.Name, TableNameConstants.Percentiles.IsMasterwork)).Returns(false);
 
             var attributes = new[] { "attribute 1", "attribute 2" };
-            var tableName = TableNameConstants.Collections.ITEMTYPEAttributes, ItemTypeConstants.Armor);
+            var tableName = TableNameConstants.Collections.ITEMTYPEAttributes(ItemTypeConstants.Armor);
             mockCollectionsSelector.Setup(p => p.SelectFrom(Config.Name, tableName, "armor")).Returns(attributes);
 
             armorSelection.ArmorBonus = 9266;
@@ -714,7 +714,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Mundane
             mockPercentileSelector.Setup(p => p.SelectFrom<bool>(Config.Name, TableNameConstants.Percentiles.IsMasterwork)).Returns(false);
 
             var attributes = new[] { "attribute 1", "attribute 2" };
-            var tableName = TableNameConstants.Collections.ITEMTYPEAttributes, ItemTypeConstants.Armor);
+            var tableName = TableNameConstants.Collections.ITEMTYPEAttributes(ItemTypeConstants.Armor);
             mockCollectionsSelector.Setup(p => p.SelectFrom(Config.Name, tableName, "armor")).Returns(attributes);
 
             armorSelection.ArmorBonus = 9266;

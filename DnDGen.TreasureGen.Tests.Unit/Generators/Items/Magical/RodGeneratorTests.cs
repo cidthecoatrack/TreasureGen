@@ -1,11 +1,12 @@
 ﻿using DnDGen.Infrastructure.Factories;
+using DnDGen.Infrastructure.Models;
 using DnDGen.Infrastructure.Selectors.Collections;
+using DnDGen.Infrastructure.Selectors.Percentiles;
 using DnDGen.TreasureGen.Generators.Items.Magical;
 using DnDGen.TreasureGen.Items;
 using DnDGen.TreasureGen.Items.Magical;
 using DnDGen.TreasureGen.Items.Mundane;
 using DnDGen.TreasureGen.Selectors.Percentiles;
-using DnDGen.TreasureGen.Selectors.Selections;
 using DnDGen.TreasureGen.Tables;
 using Moq;
 using NUnit.Framework;
@@ -19,11 +20,11 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
     public class RodGeneratorTests
     {
         private MagicalItemGenerator rodGenerator;
-        private Mock<ITypeAndAmountPercentileSelector> mockTypeAndAmountPercentileSelector;
+        private Mock<IPercentileTypeAndAmountSelector> mockTypeAndAmountPercentileSelector;
         private Mock<ICollectionSelector> mockCollectionsSelector;
         private Mock<IChargesGenerator> mockChargesGenerator;
         private Mock<ITreasurePercentileSelector> mockPercentileSelector;
-        private TypeAndAmountSelection selection;
+        private TypeAndAmountDataSelection selection;
         private string power;
         private ItemVerifier itemVerifier;
         private Mock<ISpecialAbilitiesGenerator> mockSpecialAbilitiesGenerator;
@@ -32,10 +33,10 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
         [SetUp]
         public void Setup()
         {
-            mockTypeAndAmountPercentileSelector = new Mock<ITypeAndAmountPercentileSelector>();
+            mockTypeAndAmountPercentileSelector = new Mock<IPercentileTypeAndAmountSelector>();
             mockCollectionsSelector = new Mock<ICollectionSelector>();
             mockChargesGenerator = new Mock<IChargesGenerator>();
-            selection = new TypeAndAmountSelection();
+            selection = new TypeAndAmountDataSelection();
             mockPercentileSelector = new Mock<ITreasurePercentileSelector>();
             mockSpecialAbilitiesGenerator = new Mock<ISpecialAbilitiesGenerator>();
             mockMundaneWeaponGenerator = new Mock<MundaneItemGenerator>();
@@ -52,11 +53,11 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             itemVerifier = new ItemVerifier();
 
             selection.Type = "rod of ability";
-            selection.Amount = 9266;
+            selection.AmountAsDouble = 9266;
             power = "power";
 
-            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs, power, ItemTypeConstants.Rod);
-            mockTypeAndAmountPercentileSelector.Setup(s => s.SelectFrom(tableName)).Returns(selection);
+            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(power, ItemTypeConstants.Rod);
+            mockTypeAndAmountPercentileSelector.Setup(s => s.SelectFrom(Config.Name, tableName)).Returns(selection);
         }
 
         [Test]
@@ -298,11 +299,11 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             var baseNames = new[] { "base name", "other base name" };
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.ItemGroups, name)).Returns(baseNames);
 
-            tableName = TableNameConstants.Percentiles.POWERITEMTYPEs, PowerConstants.Medium, ItemTypeConstants.Rod);
+            tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(PowerConstants.Medium, ItemTypeConstants.Rod);
             mockTypeAndAmountPercentileSelector.Setup(s => s.SelectAllFrom(tableName)).Returns(new[]
             {
-                new TypeAndAmountSelection { Amount = 9266, Type = "other rod" },
-                new TypeAndAmountSelection { Amount = 0, Type = name },
+                new TypeAndAmountDataSelection { AmountAsDouble = 9266, Type = "other rod" },
+                new TypeAndAmountDataSelection { AmountAsDouble = 0, Type = name },
             });
 
             var rod = rodGenerator.Generate(template);
@@ -338,11 +339,11 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.ItemGroups, name)).Returns(baseNames);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.ItemGroups, name)).Returns(baseNames);
 
-            tableName = TableNameConstants.Percentiles.POWERITEMTYPEs, PowerConstants.Medium, ItemTypeConstants.Rod);
+            tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(PowerConstants.Medium, ItemTypeConstants.Rod);
             mockTypeAndAmountPercentileSelector.Setup(s => s.SelectAllFrom(tableName)).Returns(new[]
             {
-                new TypeAndAmountSelection { Amount = 90210, Type = "other rod" },
-                new TypeAndAmountSelection { Amount = 9266, Type = name },
+                new TypeAndAmountDataSelection { AmountAsDouble = 90210, Type = "other rod" },
+                new TypeAndAmountDataSelection { AmountAsDouble = 9266, Type = name },
             });
 
             var rod = rodGenerator.Generate(template);
@@ -379,11 +380,11 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             var baseNames = new[] { "base name", "other base name", WeaponConstants.Club };
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.ItemGroups, name)).Returns(baseNames);
 
-            tableName = TableNameConstants.Percentiles.POWERITEMTYPEs, PowerConstants.Medium, ItemTypeConstants.Rod);
+            tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(PowerConstants.Medium, ItemTypeConstants.Rod);
             mockTypeAndAmountPercentileSelector.Setup(s => s.SelectAllFrom(tableName)).Returns(new[]
             {
-                new TypeAndAmountSelection { Amount = 90210, Type = "other rod" },
-                new TypeAndAmountSelection { Amount = 9266, Type = name },
+                new TypeAndAmountDataSelection { AmountAsDouble = 90210, Type = "other rod" },
+                new TypeAndAmountDataSelection { AmountAsDouble = 9266, Type = name },
             });
 
             var mundaneWeapon = itemVerifier.CreateRandomWeaponTemplate(WeaponConstants.Club);
@@ -442,11 +443,11 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             var baseNames = new[] { "base name", "other base name", WeaponConstants.DireFlail };
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.ItemGroups, name)).Returns(baseNames);
 
-            tableName = TableNameConstants.Percentiles.POWERITEMTYPEs, PowerConstants.Medium, ItemTypeConstants.Rod);
+            tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(PowerConstants.Medium, ItemTypeConstants.Rod);
             mockTypeAndAmountPercentileSelector.Setup(s => s.SelectAllFrom(tableName)).Returns(new[]
             {
-                new TypeAndAmountSelection { Amount = 90210, Type = "other rod" },
-                new TypeAndAmountSelection { Amount = 9266, Type = name },
+                new TypeAndAmountDataSelection { AmountAsDouble = 90210, Type = "other rod" },
+                new TypeAndAmountDataSelection { AmountAsDouble = 9266, Type = name },
             });
 
             var mundaneWeapon = itemVerifier.CreateRandomWeaponTemplate(WeaponConstants.DireFlail);
@@ -498,11 +499,11 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             var baseNames = new[] { "base name", "other base name", WeaponConstants.DireFlail };
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.ItemGroups, name)).Returns(baseNames);
 
-            tableName = TableNameConstants.Percentiles.POWERITEMTYPEs, PowerConstants.Medium, ItemTypeConstants.Rod);
+            tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(PowerConstants.Medium, ItemTypeConstants.Rod);
             mockTypeAndAmountPercentileSelector.Setup(s => s.SelectAllFrom(tableName)).Returns(new[]
             {
-                new TypeAndAmountSelection { Amount = 90210, Type = "other rod" },
-                new TypeAndAmountSelection { Amount = 9266, Type = name },
+                new TypeAndAmountDataSelection { AmountAsDouble = 90210, Type = "other rod" },
+                new TypeAndAmountDataSelection { AmountAsDouble = 9266, Type = name },
             });
 
             var mundaneWeapon = itemVerifier.CreateRandomWeaponTemplate(WeaponConstants.DireFlail);
@@ -590,11 +591,11 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             var baseNames = new[] { "base name", "other base name", WeaponConstants.Club };
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.ItemGroups, name)).Returns(baseNames);
 
-            tableName = TableNameConstants.Percentiles.POWERITEMTYPEs, PowerConstants.Medium, ItemTypeConstants.Rod);
+            tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(PowerConstants.Medium, ItemTypeConstants.Rod);
             mockTypeAndAmountPercentileSelector.Setup(s => s.SelectAllFrom(tableName)).Returns(new[]
             {
-                new TypeAndAmountSelection { Amount = 90210, Type = "other rod" },
-                new TypeAndAmountSelection { Amount = 9266, Type = name },
+                new TypeAndAmountDataSelection { AmountAsDouble = 90210, Type = "other rod" },
+                new TypeAndAmountDataSelection { AmountAsDouble = 9266, Type = name },
             });
 
             var mundaneWeapon = itemVerifier.CreateRandomWeaponTemplate(WeaponConstants.Club);
@@ -651,11 +652,11 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             var baseNames = new[] { "base name", "other base name" };
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.ItemGroups, name)).Returns(baseNames);
 
-            tableName = TableNameConstants.Percentiles.POWERITEMTYPEs, PowerConstants.Medium, ItemTypeConstants.Rod);
+            tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(PowerConstants.Medium, ItemTypeConstants.Rod);
             mockTypeAndAmountPercentileSelector.Setup(s => s.SelectAllFrom(tableName)).Returns(new[]
             {
-                new TypeAndAmountSelection { Amount = 90210, Type = "other rod" },
-                new TypeAndAmountSelection { Amount = 9266, Type = name },
+                new TypeAndAmountDataSelection { AmountAsDouble = 90210, Type = "other rod" },
+                new TypeAndAmountDataSelection { AmountAsDouble = 9266, Type = name },
             });
 
             var rod = rodGenerator.Generate(template, true);
@@ -690,11 +691,11 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             var baseNames = new[] { "base name", "other base name" };
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.ItemGroups, name)).Returns(baseNames);
 
-            tableName = TableNameConstants.Percentiles.POWERITEMTYPEs, PowerConstants.Medium, ItemTypeConstants.Rod);
+            tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(PowerConstants.Medium, ItemTypeConstants.Rod);
             mockTypeAndAmountPercentileSelector.Setup(s => s.SelectAllFrom(tableName)).Returns(new[]
             {
-                new TypeAndAmountSelection { Amount = 90210, Type = "other rod" },
-                new TypeAndAmountSelection { Amount = 0, Type = name },
+                new TypeAndAmountDataSelection { AmountAsDouble = 90210, Type = "other rod" },
+                new TypeAndAmountDataSelection { AmountAsDouble = 0, Type = name },
             });
 
             var rod = rodGenerator.Generate(template);
@@ -745,14 +746,14 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
         [TestCase(RodConstants.Wonder)]
         public void GenerateFromName(string rodName)
         {
-            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs, power, ItemTypeConstants.Rod);
+            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(power, ItemTypeConstants.Rod);
             mockTypeAndAmountPercentileSelector
                 .Setup(s => s.SelectAllFrom(tableName))
                 .Returns(new[]
                 {
-                    new TypeAndAmountSelection { Type = "wrong rod", Amount = 9266 },
-                    new TypeAndAmountSelection { Type = rodName, Amount = 90210 },
-                    new TypeAndAmountSelection { Type = "other rod", Amount = 42 },
+                    new TypeAndAmountDataSelection { Type = "wrong rod", AmountAsDouble = 9266 },
+                    new TypeAndAmountDataSelection { Type = rodName, AmountAsDouble = 90210 },
+                    new TypeAndAmountDataSelection { Type = "other rod", AmountAsDouble = 42 },
                 });
 
             var baseNames = new[] { "base name", "other base name" };
@@ -763,8 +764,8 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, rodName)).Returns(attributes);
 
             mockCollectionsSelector
-                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountSelection>>()))
-                .Returns((IEnumerable<TypeAndAmountSelection> c) => c.Last());
+                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountDataSelection>>()))
+                .Returns((IEnumerable<TypeAndAmountDataSelection> c) => c.Last());
 
             mockCollectionsSelector
                 .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, rodName))
@@ -783,14 +784,14 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
         [Test]
         public void GenerateFromName_WithTraits()
         {
-            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs, power, ItemTypeConstants.Rod);
+            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(power, ItemTypeConstants.Rod);
             mockTypeAndAmountPercentileSelector
                 .Setup(s => s.SelectAllFrom(tableName))
                 .Returns(new[]
                 {
-                    new TypeAndAmountSelection { Type = "wrong rod", Amount = 9266 },
-                    new TypeAndAmountSelection { Type = RodConstants.Alertness, Amount = 90210 },
-                    new TypeAndAmountSelection { Type = "other rod", Amount = 42 },
+                    new TypeAndAmountDataSelection { Type = "wrong rod", AmountAsDouble = 9266 },
+                    new TypeAndAmountDataSelection { Type = RodConstants.Alertness, AmountAsDouble = 90210 },
+                    new TypeAndAmountDataSelection { Type = "other rod", AmountAsDouble = 42 },
                 });
 
             var baseNames = new[] { "base name", "other base name" };
@@ -801,8 +802,8 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, RodConstants.Alertness)).Returns(attributes);
 
             mockCollectionsSelector
-                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountSelection>>()))
-                .Returns((IEnumerable<TypeAndAmountSelection> c) => c.Last());
+                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountDataSelection>>()))
+                .Returns((IEnumerable<TypeAndAmountDataSelection> c) => c.Last());
 
             mockCollectionsSelector
                 .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, RodConstants.Alertness))
@@ -824,14 +825,14 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
         [Test]
         public void GenerateFromBaseName()
         {
-            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs, power, ItemTypeConstants.Rod);
+            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(power, ItemTypeConstants.Rod);
             mockTypeAndAmountPercentileSelector
                 .Setup(s => s.SelectAllFrom(tableName))
                 .Returns(new[]
                 {
-                    new TypeAndAmountSelection { Type = "wrong rod", Amount = 9266 },
-                    new TypeAndAmountSelection { Type = "rod", Amount = 90210 },
-                    new TypeAndAmountSelection { Type = "other rod", Amount = 42 },
+                    new TypeAndAmountDataSelection { Type = "wrong rod", AmountAsDouble = 9266 },
+                    new TypeAndAmountDataSelection { Type = "rod", AmountAsDouble = 90210 },
+                    new TypeAndAmountDataSelection { Type = "other rod", AmountAsDouble = 42 },
                 });
 
             var baseNames = new[] { "base name", "other base name" };
@@ -842,8 +843,8 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, "rod")).Returns(attributes);
 
             mockCollectionsSelector
-                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountSelection>>()))
-                .Returns((IEnumerable<TypeAndAmountSelection> c) => c.Last());
+                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountDataSelection>>()))
+                .Returns((IEnumerable<TypeAndAmountDataSelection> c) => c.Last());
 
             var rods = RodConstants.GetAllRods();
             mockCollectionsSelector
@@ -875,14 +876,14 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
                 .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, RodConstants.Alertness))
                 .Returns(new[] { "wrong power", power, "other power" });
 
-            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs, power, ItemTypeConstants.Rod);
+            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(power, ItemTypeConstants.Rod);
             mockTypeAndAmountPercentileSelector
                 .Setup(s => s.SelectAllFrom(tableName))
                 .Returns(new[]
                 {
-                    new TypeAndAmountSelection { Type = "wrong rod", Amount = 9266 },
-                    new TypeAndAmountSelection { Type = RodConstants.Alertness, Amount = 90210 },
-                    new TypeAndAmountSelection { Type = "other rod", Amount = 42 },
+                    new TypeAndAmountDataSelection { Type = "wrong rod", AmountAsDouble = 9266 },
+                    new TypeAndAmountDataSelection { Type = RodConstants.Alertness, AmountAsDouble = 90210 },
+                    new TypeAndAmountDataSelection { Type = "other rod", AmountAsDouble = 42 },
                 });
 
             var baseNames = new[] { WeaponConstants.LightMace, "other base name" };
@@ -898,8 +899,8 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
                 .Returns(mundaneWeapon);
 
             mockCollectionsSelector
-                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountSelection>>()))
-                .Returns((IEnumerable<TypeAndAmountSelection> c) => c.Last());
+                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountDataSelection>>()))
+                .Returns((IEnumerable<TypeAndAmountDataSelection> c) => c.Last());
 
             var rod = rodGenerator.Generate(power, RodConstants.Alertness);
             Assert.That(rod.ItemType, Is.EqualTo(ItemTypeConstants.Rod));
@@ -930,14 +931,14 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
                 .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, RodConstants.Flailing))
                 .Returns(new[] { "wrong power", power, "other power" });
 
-            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs, power, ItemTypeConstants.Rod);
+            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(power, ItemTypeConstants.Rod);
             mockTypeAndAmountPercentileSelector
                 .Setup(s => s.SelectAllFrom(tableName))
                 .Returns(new[]
                 {
-                    new TypeAndAmountSelection { Type = "wrong rod", Amount = 9266 },
-                    new TypeAndAmountSelection { Type = RodConstants.Flailing, Amount = 90210 },
-                    new TypeAndAmountSelection { Type = "other rod", Amount = 42 },
+                    new TypeAndAmountDataSelection { Type = "wrong rod", AmountAsDouble = 9266 },
+                    new TypeAndAmountDataSelection { Type = RodConstants.Flailing, AmountAsDouble = 90210 },
+                    new TypeAndAmountDataSelection { Type = "other rod", AmountAsDouble = 42 },
                 });
 
             var baseNames = new[] { WeaponConstants.DireFlail, "other base name" };
@@ -955,8 +956,8 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
                 .Returns(mundaneWeapon);
 
             mockCollectionsSelector
-                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountSelection>>()))
-                .Returns((IEnumerable<TypeAndAmountSelection> c) => c.Last());
+                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountDataSelection>>()))
+                .Returns((IEnumerable<TypeAndAmountDataSelection> c) => c.Last());
 
             var rod = rodGenerator.Generate(power, RodConstants.Flailing);
             Assert.That(rod.ItemType, Is.EqualTo(ItemTypeConstants.Rod));
@@ -987,14 +988,14 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
                 .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, RodConstants.Alertness))
                 .Returns(new[] { "wrong power", power, "other power" });
 
-            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs, power, ItemTypeConstants.Rod);
+            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(power, ItemTypeConstants.Rod);
             mockTypeAndAmountPercentileSelector
                 .Setup(s => s.SelectAllFrom(tableName))
                 .Returns(new[]
                 {
-                    new TypeAndAmountSelection { Type = "wrong rod", Amount = 9266 },
-                    new TypeAndAmountSelection { Type = RodConstants.Alertness, Amount = 90210 },
-                    new TypeAndAmountSelection { Type = "other rod", Amount = 42 },
+                    new TypeAndAmountDataSelection { Type = "wrong rod", AmountAsDouble = 9266 },
+                    new TypeAndAmountDataSelection { Type = RodConstants.Alertness, AmountAsDouble = 90210 },
+                    new TypeAndAmountDataSelection { Type = "other rod", AmountAsDouble = 42 },
                 });
 
             var baseNames = new[] { WeaponConstants.LightMace, "other base name" };
@@ -1012,8 +1013,8 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             mockMundaneWeaponGenerator.Setup(g => g.Generate(WeaponConstants.LightMace, "trait 1", "trait 2")).Returns(mundaneWeapon);
 
             mockCollectionsSelector
-                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountSelection>>()))
-                .Returns((IEnumerable<TypeAndAmountSelection> c) => c.Last());
+                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountDataSelection>>()))
+                .Returns((IEnumerable<TypeAndAmountDataSelection> c) => c.Last());
 
             var rod = rodGenerator.Generate(power, RodConstants.Alertness, "trait 1", "trait 2");
             Assert.That(rod.ItemType, Is.EqualTo(ItemTypeConstants.Rod));
@@ -1040,14 +1041,14 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
         [Test]
         public void MinorPowerFromNameAdjustsPower()
         {
-            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs, power, ItemTypeConstants.Rod);
+            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(power, ItemTypeConstants.Rod);
             mockTypeAndAmountPercentileSelector
                 .Setup(s => s.SelectAllFrom(tableName))
                 .Returns(new[]
                 {
-                    new TypeAndAmountSelection { Type = "wrong rod", Amount = 9266 },
-                    new TypeAndAmountSelection { Type = RodConstants.Alertness, Amount = 90210 },
-                    new TypeAndAmountSelection { Type = "other rod", Amount = 42 },
+                    new TypeAndAmountDataSelection { Type = "wrong rod", AmountAsDouble = 9266 },
+                    new TypeAndAmountDataSelection { Type = RodConstants.Alertness, AmountAsDouble = 90210 },
+                    new TypeAndAmountDataSelection { Type = "other rod", AmountAsDouble = 42 },
                 });
 
             var baseNames = new[] { "base name", "other base name" };
@@ -1058,8 +1059,8 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, RodConstants.Alertness)).Returns(attributes);
 
             mockCollectionsSelector
-                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountSelection>>()))
-                .Returns((IEnumerable<TypeAndAmountSelection> c) => c.Last());
+                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountDataSelection>>()))
+                .Returns((IEnumerable<TypeAndAmountDataSelection> c) => c.Last());
 
             mockCollectionsSelector
                 .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, RodConstants.Alertness))
@@ -1078,14 +1079,14 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
         [Test]
         public void GenerateFromName_MultipleOfPower()
         {
-            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs, power, ItemTypeConstants.Rod);
+            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(power, ItemTypeConstants.Rod);
             mockTypeAndAmountPercentileSelector
                 .Setup(s => s.SelectAllFrom(tableName))
                 .Returns(new[]
                 {
-                    new TypeAndAmountSelection { Type = "wrong rod", Amount = 9266 },
-                    new TypeAndAmountSelection { Type = RodConstants.Alertness, Amount = 90210 },
-                    new TypeAndAmountSelection { Type = RodConstants.Alertness, Amount = 42 },
+                    new TypeAndAmountDataSelection { Type = "wrong rod", AmountAsDouble = 9266 },
+                    new TypeAndAmountDataSelection { Type = RodConstants.Alertness, AmountAsDouble = 90210 },
+                    new TypeAndAmountDataSelection { Type = RodConstants.Alertness, AmountAsDouble = 42 },
                 });
 
             var baseNames = new[] { "base name", "other base name" };
@@ -1096,8 +1097,8 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, RodConstants.Alertness)).Returns(attributes);
 
             mockCollectionsSelector
-                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountSelection>>()))
-                .Returns((IEnumerable<TypeAndAmountSelection> c) => c.Last());
+                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountDataSelection>>()))
+                .Returns((IEnumerable<TypeAndAmountDataSelection> c) => c.Last());
 
             mockCollectionsSelector
                 .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, RodConstants.Alertness))
@@ -1116,14 +1117,14 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
         [Test]
         public void GenerateFromName_NoneOfPower()
         {
-            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs, power, ItemTypeConstants.Rod);
+            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(power, ItemTypeConstants.Rod);
             mockTypeAndAmountPercentileSelector
                 .Setup(s => s.SelectAllFrom(tableName))
                 .Returns(new[]
                 {
-                    new TypeAndAmountSelection { Type = "wrong rod", Amount = 9266 },
-                    new TypeAndAmountSelection { Type = RodConstants.Alertness, Amount = 90210 },
-                    new TypeAndAmountSelection { Type = "other rod", Amount = 42 },
+                    new TypeAndAmountDataSelection { Type = "wrong rod", AmountAsDouble = 9266 },
+                    new TypeAndAmountDataSelection { Type = RodConstants.Alertness, AmountAsDouble = 90210 },
+                    new TypeAndAmountDataSelection { Type = "other rod", AmountAsDouble = 42 },
                 });
 
             var baseNames = new[] { "base name", "other base name" };
@@ -1134,8 +1135,8 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, RodConstants.Alertness)).Returns(attributes);
 
             mockCollectionsSelector
-                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountSelection>>()))
-                .Returns((IEnumerable<TypeAndAmountSelection> c) => c.Last());
+                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountDataSelection>>()))
+                .Returns((IEnumerable<TypeAndAmountDataSelection> c) => c.Last());
 
             mockCollectionsSelector
                 .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, RodConstants.Alertness))
