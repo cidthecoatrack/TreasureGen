@@ -1086,10 +1086,12 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             CreateSpecialAbility("ability 2.1", "base 2", 1337, 1336);
             CreateSpecialAbility("ability 3", "base 3", 96, 783);
 
-            var attributeRequirements = new List<IEnumerable<string>>();
-            attributeRequirements.Add(new[] { "other type 1", "type 1" });
-            attributeRequirements.Add(new[] { "other type 2", "type 2" });
-            attributeRequirements.Add(new[] { "other type 3", "type 3" });
+            var attributeRequirements = new List<IEnumerable<string>>
+            {
+                (["other type 1", "type 1"]),
+                (["other type 2", "type 2"]),
+                (["other type 3", "type 3"])
+            };
 
             mockSpecialAbilityDataSelector.Setup(s => s.IsCollection(Config.Name, TableNameConstants.Collections.SpecialAbilityData, "ability 1")).Returns(true);
             mockSpecialAbilityDataSelector.Setup(s => s.IsCollection(Config.Name, TableNameConstants.Collections.SpecialAbilityData, "ability 2")).Returns(true);
@@ -1106,22 +1108,26 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
                 .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.SpecialAbilityAttributeRequirements, "base 3"))
                 .Returns(attributeRequirements[2]);
 
-            var damage = damageHelper.BuildEntry("my roll", "my damage type", string.Empty);
-            mockCollectionsSelector
+            mockDamageDataSelector
                 .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponDamages, "ability 2"))
-                .Returns(new[] { damage, string.Empty, string.Empty, string.Empty });
+                .Returns(
+                [
+                    new DamageDataSelection { Type = "my damage type", Roll = "my roll" },
+                ]);
 
-            var higherDamage = damageHelper.BuildEntry("my higher roll", "my higher damage type", string.Empty);
-            mockCollectionsSelector
+            mockDamageDataSelector
                 .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponDamages, "ability 2.1"))
-                .Returns(new[] { higherDamage, string.Empty, string.Empty, string.Empty });
+                .Returns(
+                [
+                    new DamageDataSelection { Type = "my higher damage type", Roll = "my higher roll" },
+                ]);
 
-            var damage1 = damageHelper.BuildEntry("my roll", "my damage type", string.Empty);
-            var damage2 = damageHelper.BuildEntry("my other roll", "my other damage type", string.Empty);
-            var damage3 = damageHelper.BuildEntry("my third roll", "my third damage type", string.Empty);
-            mockCollectionsSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponDamages, "ability 3"))
-                .Returns(new[] { string.Empty, damage1, damage2, damage3 });
+            mockDamageDataSelector
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponDamages, "ability 3x90210"))
+                .Returns(
+                [
+                    new DamageDataSelection { Type = "my crit damage type", Roll = "my crit roll" },
+                ]);
 
             var abilityPrototypes = new[]
             {
@@ -1131,7 +1137,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
                 new SpecialAbility { Name = "ability 3" },
             };
 
-            var abilities = specialAbilitiesGenerator.GenerateFor(abilityPrototypes);
+            var abilities = specialAbilitiesGenerator.GenerateFor(abilityPrototypes, "x90210");
             Assert.That(abilities, Is.Not.Empty);
 
             var abilityArray = abilities.ToArray();
@@ -1157,19 +1163,9 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             Assert.That(abilityArray[2].Power, Is.EqualTo(783));
             Assert.That(abilityArray[2].BonusEquivalent, Is.EqualTo(96));
             Assert.That(abilityArray[2].Damages, Is.Empty);
-            Assert.That(abilityArray[2].CriticalDamages, Has.Count.EqualTo(3)
-                .And.ContainKey("x2")
-                .And.ContainKey("x3")
-                .And.ContainKey("x4"));
-            Assert.That(abilityArray[2].CriticalDamages["x2"], Has.Count.EqualTo(1));
-            Assert.That(abilityArray[2].CriticalDamages["x2"][0].Roll, Is.EqualTo("my roll"));
-            Assert.That(abilityArray[2].CriticalDamages["x2"][0].Type, Is.EqualTo("my damage type"));
-            Assert.That(abilityArray[2].CriticalDamages["x3"], Has.Count.EqualTo(1));
-            Assert.That(abilityArray[2].CriticalDamages["x3"][0].Roll, Is.EqualTo("my other roll"));
-            Assert.That(abilityArray[2].CriticalDamages["x3"][0].Type, Is.EqualTo("my other damage type"));
-            Assert.That(abilityArray[2].CriticalDamages["x4"], Has.Count.EqualTo(1));
-            Assert.That(abilityArray[2].CriticalDamages["x4"][0].Roll, Is.EqualTo("my third roll"));
-            Assert.That(abilityArray[2].CriticalDamages["x4"][0].Type, Is.EqualTo("my third damage type"));
+            Assert.That(abilityArray[2].CriticalDamages, Has.Count.EqualTo(1));
+            Assert.That(abilityArray[2].CriticalDamages[0].Roll, Is.EqualTo("my crit roll"));
+            Assert.That(abilityArray[2].CriticalDamages[0].Type, Is.EqualTo("my crit damage type"));
             Assert.That(abilityArray.Length, Is.EqualTo(3));
         }
 
@@ -1180,10 +1176,12 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             CreateSpecialAbility("ability 2", "base 2", 42, 600);
             CreateSpecialAbility("ability 3", "base 3", 1337, 1234);
 
-            var attributeRequirements = new List<IEnumerable<string>>();
-            attributeRequirements.Add(new[] { "other type 1", "type 1" });
-            attributeRequirements.Add(new[] { "other type 2", "type 2" });
-            attributeRequirements.Add(new[] { "other type 3", "type 3" });
+            var attributeRequirements = new List<IEnumerable<string>>
+            {
+                (["other type 1", "type 1"]),
+                (["other type 2", "type 2"]),
+                (["other type 3", "type 3"])
+            };
 
             mockSpecialAbilityDataSelector.Setup(s => s.IsCollection(Config.Name, TableNameConstants.Collections.SpecialAbilityData, "ability 1")).Returns(true);
             mockSpecialAbilityDataSelector.Setup(s => s.IsCollection(Config.Name, TableNameConstants.Collections.SpecialAbilityData, "ability 2")).Returns(true);
@@ -1199,17 +1197,19 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
                 .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.SpecialAbilityAttributeRequirements, "base 3"))
                 .Returns(attributeRequirements[2]);
 
-            var damage = damageHelper.BuildEntry("my roll", "my damage type", string.Empty);
-            mockCollectionsSelector
+            mockDamageDataSelector
                 .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponDamages, "ability 2"))
-                .Returns(new[] { damage, string.Empty, string.Empty, string.Empty });
+                .Returns(
+                [
+                    new DamageDataSelection { Type = "my damage type", Roll = "my roll" },
+                ]);
 
-            var damage1 = damageHelper.BuildEntry("my roll", "my damage type", string.Empty);
-            var damage2 = damageHelper.BuildEntry("my other roll", "my other damage type", string.Empty);
-            var damage3 = damageHelper.BuildEntry("my third roll", "my third damage type", string.Empty);
-            mockCollectionsSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponDamages, "ability 3"))
-                .Returns(new[] { string.Empty, damage1, damage2, damage3 });
+            mockDamageDataSelector
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponDamages, "ability 3x90210"))
+                .Returns(
+                [
+                    new DamageDataSelection { Type = "my crit damage type", Roll = "my crit roll" },
+                ]);
 
             var abilityPrototypes = new[]
             {
@@ -1219,7 +1219,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
                 new SpecialAbility { Name = "ability 3" },
             };
 
-            var abilities = specialAbilitiesGenerator.GenerateFor(abilityPrototypes);
+            var abilities = specialAbilitiesGenerator.GenerateFor(abilityPrototypes, "x90210");
             Assert.That(abilities, Is.Not.Empty);
 
             var abilityArray = abilities.ToArray();
@@ -1245,19 +1245,9 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             Assert.That(abilityArray[2].Power, Is.EqualTo(1234));
             Assert.That(abilityArray[2].BonusEquivalent, Is.EqualTo(1337));
             Assert.That(abilityArray[2].Damages, Is.Empty);
-            Assert.That(abilityArray[2].CriticalDamages, Has.Count.EqualTo(3)
-                .And.ContainKey("x2")
-                .And.ContainKey("x3")
-                .And.ContainKey("x4"));
-            Assert.That(abilityArray[2].CriticalDamages["x2"], Has.Count.EqualTo(1));
-            Assert.That(abilityArray[2].CriticalDamages["x2"][0].Roll, Is.EqualTo("my roll"));
-            Assert.That(abilityArray[2].CriticalDamages["x2"][0].Type, Is.EqualTo("my damage type"));
-            Assert.That(abilityArray[2].CriticalDamages["x3"], Has.Count.EqualTo(1));
-            Assert.That(abilityArray[2].CriticalDamages["x3"][0].Roll, Is.EqualTo("my other roll"));
-            Assert.That(abilityArray[2].CriticalDamages["x3"][0].Type, Is.EqualTo("my other damage type"));
-            Assert.That(abilityArray[2].CriticalDamages["x4"], Has.Count.EqualTo(1));
-            Assert.That(abilityArray[2].CriticalDamages["x4"][0].Roll, Is.EqualTo("my third roll"));
-            Assert.That(abilityArray[2].CriticalDamages["x4"][0].Type, Is.EqualTo("my third damage type"));
+            Assert.That(abilityArray[2].CriticalDamages, Has.Count.EqualTo(1));
+            Assert.That(abilityArray[2].CriticalDamages[0].Roll, Is.EqualTo("my crit roll"));
+            Assert.That(abilityArray[2].CriticalDamages[0].Type, Is.EqualTo("my crit damage type"));
             Assert.That(abilityArray.Length, Is.EqualTo(3));
         }
 
@@ -1268,10 +1258,12 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             CreateSpecialAbility("ability 2", "base 2", 42, 600);
             CreateSpecialAbility("ability 3", "base 3", 1337, 1234);
 
-            var attributeRequirements = new List<IEnumerable<string>>();
-            attributeRequirements.Add(new[] { "other type 1", "type 1" });
-            attributeRequirements.Add(new[] { "other type 2", "type 2" });
-            attributeRequirements.Add(new[] { "other type 3", "type 3" });
+            var attributeRequirements = new List<IEnumerable<string>>
+            {
+                (["other type 1", "type 1"]),
+                (["other type 2", "type 2"]),
+                (["other type 3", "type 3"])
+            };
 
             mockSpecialAbilityDataSelector.Setup(s => s.IsCollection(Config.Name, TableNameConstants.Collections.SpecialAbilityData, "ability 1")).Returns(false);
             mockSpecialAbilityDataSelector.Setup(s => s.IsCollection(Config.Name, TableNameConstants.Collections.SpecialAbilityData, "ability 2")).Returns(false);
@@ -1287,17 +1279,19 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
                 .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.SpecialAbilityAttributeRequirements, "base 3"))
                 .Returns(attributeRequirements[2]);
 
-            var damage = damageHelper.BuildEntry("my roll", "my damage type");
-            mockCollectionsSelector
+            mockDamageDataSelector
                 .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponDamages, "ability 2"))
-                .Returns(new[] { damage, string.Empty, string.Empty, string.Empty });
+                .Returns(
+                [
+                    new DamageDataSelection { Type = "my damage type", Roll = "my roll" },
+                ]);
 
-            var damage1 = damageHelper.BuildEntry("my roll", "my damage type");
-            var damage2 = damageHelper.BuildEntry("my other roll", "my other damage type");
-            var damage3 = damageHelper.BuildEntry("my third roll", "my third damage type");
-            mockCollectionsSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponDamages, "ability 3"))
-                .Returns(new[] { string.Empty, damage1, damage2, damage3 });
+            mockDamageDataSelector
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponDamages, "ability 3x90210"))
+                .Returns(
+                [
+                    new DamageDataSelection { Type = "my crit damage type", Roll = "my crit roll" },
+                ]);
 
             var abilityPrototypes = new[]
             {
@@ -1306,7 +1300,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
                 new SpecialAbility { Name = "ability 3", BaseName = "custom base 3", BonusEquivalent = 4567, Power = 7654 },
             };
 
-            var abilities = specialAbilitiesGenerator.GenerateFor(abilityPrototypes);
+            var abilities = specialAbilitiesGenerator.GenerateFor(abilityPrototypes, "x90210");
             Assert.That(abilities, Is.Not.Empty);
 
             var abilityArray = abilities.ToArray();
@@ -1341,10 +1335,12 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             CreateSpecialAbility("ability 2", "base 2", 42, 600);
             CreateSpecialAbility("ability 3", "base 3", 1337, 1234);
 
-            var attributeRequirements = new List<IEnumerable<string>>();
-            attributeRequirements.Add(new[] { "other type 1", "type 1" });
-            attributeRequirements.Add(new[] { "other type 2", "type 2" });
-            attributeRequirements.Add(new[] { "other type 3", "type 3" });
+            var attributeRequirements = new List<IEnumerable<string>>
+            {
+                (["other type 1", "type 1"]),
+                (["other type 2", "type 2"]),
+                (["other type 3", "type 3"])
+            };
 
             mockSpecialAbilityDataSelector.Setup(s => s.IsCollection(Config.Name, TableNameConstants.Collections.SpecialAbilityData, "ability 1")).Returns(true);
             mockSpecialAbilityDataSelector.Setup(s => s.IsCollection(Config.Name, TableNameConstants.Collections.SpecialAbilityData, "ability 2")).Returns(false);
@@ -1360,17 +1356,19 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
                 .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.SpecialAbilityAttributeRequirements, "base 3"))
                 .Returns(attributeRequirements[2]);
 
-            var damage = damageHelper.BuildEntry("my roll", "my damage type", string.Empty);
-            mockCollectionsSelector
+            mockDamageDataSelector
                 .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponDamages, "ability 2"))
-                .Returns(new[] { damage, string.Empty, string.Empty, string.Empty });
+                .Returns(
+                [
+                    new DamageDataSelection { Type = "my damage type", Roll = "my roll" },
+                ]);
 
-            var damage1 = damageHelper.BuildEntry("my roll", "my damage type", string.Empty);
-            var damage2 = damageHelper.BuildEntry("my other roll", "my other damage type", string.Empty);
-            var damage3 = damageHelper.BuildEntry("my third roll", "my third damage type", string.Empty);
-            mockCollectionsSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponDamages, "ability 3"))
-                .Returns(new[] { string.Empty, damage1, damage2, damage3 });
+            mockDamageDataSelector
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponDamages, "ability 3x90210"))
+                .Returns(
+                [
+                    new DamageDataSelection { Type = "my crit damage type", Roll = "my crit roll" },
+                ]);
 
             var abilityPrototypes = new[]
             {
@@ -1379,7 +1377,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
                 new SpecialAbility { Name = "ability 3", BaseName = "custom base 3", BonusEquivalent = 4567, Power = 7654 },
             };
 
-            var abilities = specialAbilitiesGenerator.GenerateFor(abilityPrototypes);
+            var abilities = specialAbilitiesGenerator.GenerateFor(abilityPrototypes, "x90210");
             Assert.That(abilities, Is.Not.Empty);
 
             var abilityArray = abilities.ToArray();
@@ -1403,19 +1401,9 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             Assert.That(abilityArray[2].Power, Is.EqualTo(1234));
             Assert.That(abilityArray[2].BonusEquivalent, Is.EqualTo(1337));
             Assert.That(abilityArray[2].Damages, Is.Empty);
-            Assert.That(abilityArray[2].CriticalDamages, Has.Count.EqualTo(3)
-                .And.ContainKey("x2")
-                .And.ContainKey("x3")
-                .And.ContainKey("x4"));
-            Assert.That(abilityArray[2].CriticalDamages["x2"], Has.Count.EqualTo(1));
-            Assert.That(abilityArray[2].CriticalDamages["x2"][0].Roll, Is.EqualTo("my roll"));
-            Assert.That(abilityArray[2].CriticalDamages["x2"][0].Type, Is.EqualTo("my damage type"));
-            Assert.That(abilityArray[2].CriticalDamages["x3"], Has.Count.EqualTo(1));
-            Assert.That(abilityArray[2].CriticalDamages["x3"][0].Roll, Is.EqualTo("my other roll"));
-            Assert.That(abilityArray[2].CriticalDamages["x3"][0].Type, Is.EqualTo("my other damage type"));
-            Assert.That(abilityArray[2].CriticalDamages["x4"], Has.Count.EqualTo(1));
-            Assert.That(abilityArray[2].CriticalDamages["x4"][0].Roll, Is.EqualTo("my third roll"));
-            Assert.That(abilityArray[2].CriticalDamages["x4"][0].Type, Is.EqualTo("my third damage type"));
+            Assert.That(abilityArray[2].CriticalDamages, Has.Count.EqualTo(1));
+            Assert.That(abilityArray[2].CriticalDamages[0].Roll, Is.EqualTo("my crit roll"));
+            Assert.That(abilityArray[2].CriticalDamages[0].Type, Is.EqualTo("my crit damage type"));
             Assert.That(abilityArray.Length, Is.EqualTo(3));
         }
 
@@ -1427,10 +1415,12 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             CreateSpecialAbility("ability 3.1", "base 3", 1337, 1234);
             CreateSpecialAbility("ability 3", "base 3", 1336, 96);
 
-            var attributeRequirements = new List<IEnumerable<string>>();
-            attributeRequirements.Add(new[] { "other type 1", "type 1" });
-            attributeRequirements.Add(new[] { "other type 2", "type 2" });
-            attributeRequirements.Add(new[] { "other type 3", "type 3" });
+            var attributeRequirements = new List<IEnumerable<string>>
+            {
+                (["other type 1", "type 1"]),
+                (["other type 2", "type 2"]),
+                (["other type 3", "type 3"])
+            };
 
             mockSpecialAbilityDataSelector.Setup(s => s.IsCollection(Config.Name, TableNameConstants.Collections.SpecialAbilityData, "ability 1")).Returns(true);
             mockSpecialAbilityDataSelector.Setup(s => s.IsCollection(Config.Name, TableNameConstants.Collections.SpecialAbilityData, "ability 2")).Returns(false);
@@ -1447,24 +1437,26 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
                 .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.SpecialAbilityAttributeRequirements, "base 3"))
                 .Returns(attributeRequirements[2]);
 
-            var damage = damageHelper.BuildEntry("my roll", "my damage type", string.Empty);
-            mockCollectionsSelector
+            mockDamageDataSelector
                 .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponDamages, "ability 2"))
-                .Returns(new[] { damage, string.Empty, string.Empty, string.Empty });
+                .Returns(
+                [
+                    new DamageDataSelection { Type = "my damage type", Roll = "my roll" },
+                ]);
 
-            var damage1 = damageHelper.BuildEntry("my roll", "my damage type", string.Empty);
-            var damage2 = damageHelper.BuildEntry("my other roll", "my other damage type", string.Empty);
-            var damage3 = damageHelper.BuildEntry("my third roll", "my third damage type", string.Empty);
-            mockCollectionsSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponDamages, "ability 3"))
-                .Returns(new[] { string.Empty, damage1, damage2, damage3 });
+            mockDamageDataSelector
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponDamages, "ability 3x90210"))
+                .Returns(
+                [
+                    new DamageDataSelection { Type = "my crit damage type", Roll = "my crit roll" },
+                ]);
 
-            var damage11 = damageHelper.BuildEntry("my higher roll", "my higher damage type", string.Empty);
-            var damage21 = damageHelper.BuildEntry("my other higher roll", "my other higher damage type", string.Empty);
-            var damage31 = damageHelper.BuildEntry("my third higher roll", "my third higher damage type", string.Empty);
-            mockCollectionsSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponDamages, "ability 3.1"))
-                .Returns(new[] { string.Empty, damage11, damage21, damage31 });
+            mockDamageDataSelector
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponDamages, "ability 3.1x90210"))
+                .Returns(
+                [
+                    new DamageDataSelection { Type = "my higher crit damage type", Roll = "my higher crit roll" },
+                ]);
 
             var abilityPrototypes = new[]
             {
@@ -1474,7 +1466,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
                 new SpecialAbility { Name = "ability 3.1", BaseName = "custom base 3", BonusEquivalent = 5678, Power = 6543 },
             };
 
-            var abilities = specialAbilitiesGenerator.GenerateFor(abilityPrototypes);
+            var abilities = specialAbilitiesGenerator.GenerateFor(abilityPrototypes, "x90210");
             Assert.That(abilities, Is.Not.Empty);
 
             var abilityArray = abilities.ToArray();
@@ -1498,19 +1490,9 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             Assert.That(abilityArray[2].Power, Is.EqualTo(1234));
             Assert.That(abilityArray[2].BonusEquivalent, Is.EqualTo(1337));
             Assert.That(abilityArray[2].Damages, Is.Empty);
-            Assert.That(abilityArray[2].CriticalDamages, Has.Count.EqualTo(3)
-                .And.ContainKey("x2")
-                .And.ContainKey("x3")
-                .And.ContainKey("x4"));
-            Assert.That(abilityArray[2].CriticalDamages["x2"], Has.Count.EqualTo(1));
-            Assert.That(abilityArray[2].CriticalDamages["x2"][0].Roll, Is.EqualTo("my higher roll"));
-            Assert.That(abilityArray[2].CriticalDamages["x2"][0].Type, Is.EqualTo("my higher damage type"));
-            Assert.That(abilityArray[2].CriticalDamages["x3"], Has.Count.EqualTo(1));
-            Assert.That(abilityArray[2].CriticalDamages["x3"][0].Roll, Is.EqualTo("my other higher roll"));
-            Assert.That(abilityArray[2].CriticalDamages["x3"][0].Type, Is.EqualTo("my other higher damage type"));
-            Assert.That(abilityArray[2].CriticalDamages["x4"], Has.Count.EqualTo(1));
-            Assert.That(abilityArray[2].CriticalDamages["x4"][0].Roll, Is.EqualTo("my third higher roll"));
-            Assert.That(abilityArray[2].CriticalDamages["x4"][0].Type, Is.EqualTo("my third higher damage type"));
+            Assert.That(abilityArray[2].CriticalDamages, Has.Count.EqualTo(1));
+            Assert.That(abilityArray[2].CriticalDamages[0].Roll, Is.EqualTo("my higher crit roll"));
+            Assert.That(abilityArray[2].CriticalDamages[0].Type, Is.EqualTo("my higher crit damage type"));
             Assert.That(abilityArray.Length, Is.EqualTo(3));
         }
 
@@ -1521,10 +1503,12 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             CreateSpecialAbility("ability 2", "base 2", 42, 600);
             CreateSpecialAbility("ability 3", "base 3", 1337, 1234);
 
-            var attributeRequirements = new List<IEnumerable<string>>();
-            attributeRequirements.Add(new[] { "other type 1", "type 1" });
-            attributeRequirements.Add(new[] { "other type 2", "type 2" });
-            attributeRequirements.Add(new[] { "other type 3", "type 3" });
+            var attributeRequirements = new List<IEnumerable<string>>
+            {
+                (["other type 1", "type 1"]),
+                (["other type 2", "type 2"]),
+                (["other type 3", "type 3"])
+            };
 
             mockSpecialAbilityDataSelector.Setup(s => s.IsCollection(Config.Name, TableNameConstants.Collections.SpecialAbilityData, "ability 1")).Returns(true);
             mockSpecialAbilityDataSelector.Setup(s => s.IsCollection(Config.Name, TableNameConstants.Collections.SpecialAbilityData, "ability 2")).Returns(false);
@@ -1540,17 +1524,19 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
                 .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.SpecialAbilityAttributeRequirements, "base 3"))
                 .Returns(attributeRequirements[2]);
 
-            var damage = damageHelper.BuildEntry("my roll", "my damage type", string.Empty);
-            mockCollectionsSelector
+            mockDamageDataSelector
                 .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponDamages, "ability 2"))
-                .Returns(new[] { damage, string.Empty, string.Empty, string.Empty });
+                .Returns(
+                [
+                    new DamageDataSelection { Type = "my damage type", Roll = "my roll" },
+                ]);
 
-            var damage1 = damageHelper.BuildEntry("my roll", "my damage type", string.Empty);
-            var damage2 = damageHelper.BuildEntry("my other roll", "my other damage type", string.Empty);
-            var damage3 = damageHelper.BuildEntry("my third roll", "my third damage type", string.Empty);
-            mockCollectionsSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponDamages, "ability 3"))
-                .Returns(new[] { string.Empty, damage1, damage2, damage3 });
+            mockDamageDataSelector
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponDamages, "ability 3x90210"))
+                .Returns(
+                [
+                    new DamageDataSelection { Type = "my crit damage type", Roll = "my crit roll" },
+                ]);
 
             var abilityPrototypes = new[]
             {
@@ -1560,7 +1546,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
                 new SpecialAbility { Name = "ability 3", BaseName = "custom base 3", BonusEquivalent = 4567, Power = 7654 },
             };
 
-            var abilities = specialAbilitiesGenerator.GenerateFor(abilityPrototypes);
+            var abilities = specialAbilitiesGenerator.GenerateFor(abilityPrototypes, "x90210");
             Assert.That(abilities, Is.Not.Empty);
 
             var abilityArray = abilities.ToArray();
@@ -1584,59 +1570,74 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             Assert.That(abilityArray[2].Power, Is.EqualTo(1234));
             Assert.That(abilityArray[2].BonusEquivalent, Is.EqualTo(1337));
             Assert.That(abilityArray[2].Damages, Is.Empty);
-            Assert.That(abilityArray[2].CriticalDamages, Has.Count.EqualTo(3)
-                .And.ContainKey("x2")
-                .And.ContainKey("x3")
-                .And.ContainKey("x4"));
-            Assert.That(abilityArray[2].CriticalDamages["x2"], Has.Count.EqualTo(1));
-            Assert.That(abilityArray[2].CriticalDamages["x2"][0].Roll, Is.EqualTo("my roll"));
-            Assert.That(abilityArray[2].CriticalDamages["x2"][0].Type, Is.EqualTo("my damage type"));
-            Assert.That(abilityArray[2].CriticalDamages["x3"], Has.Count.EqualTo(1));
-            Assert.That(abilityArray[2].CriticalDamages["x3"][0].Roll, Is.EqualTo("my other roll"));
-            Assert.That(abilityArray[2].CriticalDamages["x3"][0].Type, Is.EqualTo("my other damage type"));
-            Assert.That(abilityArray[2].CriticalDamages["x4"], Has.Count.EqualTo(1));
-            Assert.That(abilityArray[2].CriticalDamages["x4"][0].Roll, Is.EqualTo("my third roll"));
-            Assert.That(abilityArray[2].CriticalDamages["x4"][0].Type, Is.EqualTo("my third damage type"));
+            Assert.That(abilityArray[2].CriticalDamages, Has.Count.EqualTo(1));
+            Assert.That(abilityArray[2].CriticalDamages[0].Roll, Is.EqualTo("my crit roll"));
+            Assert.That(abilityArray[2].CriticalDamages[0].Type, Is.EqualTo("my crit damage type"));
             Assert.That(abilityArray.Length, Is.EqualTo(3));
         }
 
         [Test]
         public void ApplyAbilitiesToWeapon_NoAbilities()
         {
-            Assert.Fail("not yet written");
+            var weapon = CreateWeapon();
+
+            var updatedWeapon = specialAbilitiesGenerator.ApplyAbilitiesToWeapon(weapon);
+            Assert.That(updatedWeapon, Is.EqualTo(weapon));
+            Assert.That(updatedWeapon.Magic.SpecialAbilities, Is.Empty);
+            Assert.That(updatedWeapon.Damages, Has.Count.EqualTo(1));
+            Assert.That(updatedWeapon.CriticalDamages, Has.Count.EqualTo(1));
+        }
+
+        private Weapon CreateWeapon()
+        {
+            var weapon = new Weapon
+            {
+                Name = "my weapon",
+                Damages = [new Damage { Type = "my damage type", Roll = "my roll" }],
+                CriticalDamages = [new Damage { Type = "my crit damage type", Roll = "my crit roll" }],
+                CriticalMultiplier = "x9266",
+            };
+
+            return weapon;
         }
 
         [Test]
-        public void ApplyAbilitiesToWeapon_NoDamages()
+        public void ApplyAbilitiesToWeapon_NoAbilityDamages()
         {
-            Assert.Fail("not yet written");
+            var weapon = CreateWeapon();
+            weapon.Magic.SpecialAbilities = [new SpecialAbility { Name = "my special ability" }];
+
+            var updatedWeapon = specialAbilitiesGenerator.ApplyAbilitiesToWeapon(weapon);
+            Assert.That(updatedWeapon, Is.EqualTo(weapon));
+            Assert.That(updatedWeapon.Magic.SpecialAbilities, Is.Empty);
+            Assert.That(updatedWeapon.Damages, Has.Count.EqualTo(1));
+            Assert.That(updatedWeapon.CriticalDamages, Has.Count.EqualTo(1));
         }
 
         [Test]
         public void ApplyAbilitiesToWeapon_Damages()
         {
-            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(power, ItemTypeConstants.Weapon);
-            mockPercentileSelector.SetupSequence(p => p.SelectFrom(Config.Name, tableName)).Returns(MagicalWeaponGenerator.SpecialAbility).Returns(MagicalWeaponGenerator.SpecialAbility).Returns("9266");
-
             var ability = new SpecialAbility();
             ability.Damages.Add(new Damage { Roll = "some", Type = "plasma", Condition = "my condition" });
             ability.Damages.Add(new Damage { Roll = "a bit", Type = "ether", Condition = "my other condition" });
 
-            var abilities = new[] { new SpecialAbility(), ability };
-            mockSpecialAbilitiesGenerator.Setup(p => p.GenerateFor(mundaneWeapon, power, 2)).Returns(abilities);
+            var weapon = CreateWeapon();
+            weapon.Magic.SpecialAbilities = [new SpecialAbility { Name = "my special ability" }, ability];
 
-            var weapon = magicalWeaponGenerator.GenerateRandom(power) as Weapon;
-            Assert.That(weapon.Magic.SpecialAbilities, Is.EqualTo(abilities));
-            Assert.That(weapon.Damages, Has.Count.EqualTo(3)
-                .And.SupersetOf(mundaneWeapon.Damages));
+            var updatedWeapon = specialAbilitiesGenerator.ApplyAbilitiesToWeapon(weapon);
+            Assert.That(updatedWeapon, Is.EqualTo(weapon));
+            Assert.That(weapon.Magic.SpecialAbilities.Count(), Is.EqualTo(2));
+            Assert.That(weapon.Damages, Has.Count.EqualTo(3));
+            Assert.That(weapon.Damages[0].Roll, Is.EqualTo("my roll"));
+            Assert.That(weapon.Damages[0].Type, Is.EqualTo("my damage type"));
+            Assert.That(weapon.Damages[0].Condition, Is.Empty);
             Assert.That(weapon.Damages[1].Roll, Is.EqualTo("some"));
             Assert.That(weapon.Damages[1].Type, Is.EqualTo("plasma"));
             Assert.That(weapon.Damages[1].Condition, Is.EqualTo("my condition"));
             Assert.That(weapon.Damages[2].Roll, Is.EqualTo("a bit"));
             Assert.That(weapon.Damages[2].Type, Is.EqualTo("ether"));
             Assert.That(weapon.Damages[2].Condition, Is.EqualTo("my other condition"));
-            Assert.That(weapon.CriticalDamages, Has.Count.EqualTo(1)
-                .And.SupersetOf(mundaneWeapon.CriticalDamages));
+            Assert.That(weapon.CriticalDamages, Has.Count.EqualTo(1));
             Assert.That(weapon.SecondaryDamages, Is.Empty);
             Assert.That(weapon.SecondaryCriticalDamages, Is.Empty);
         }
@@ -1644,17 +1645,15 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
         [Test]
         public void ApplyAbilitiesToWeapon_Damages_EmptyDamageType()
         {
-            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(power, ItemTypeConstants.Weapon);
-            mockPercentileSelector.SetupSequence(p => p.SelectFrom(Config.Name, tableName)).Returns(MagicalWeaponGenerator.SpecialAbility).Returns(MagicalWeaponGenerator.SpecialAbility).Returns("9266");
-
             var ability = new SpecialAbility();
             ability.Damages.Add(new Damage { Roll = "some", Type = string.Empty, Condition = "my condition" });
             ability.Damages.Add(new Damage { Roll = "a bit", Type = string.Empty, Condition = "my other condition" });
 
-            var abilities = new[] { new SpecialAbility(), ability };
-            mockSpecialAbilitiesGenerator.Setup(p => p.GenerateFor(mundaneWeapon, power, 2)).Returns(abilities);
+            var weapon = CreateWeapon();
+            weapon.Magic.SpecialAbilities = [new SpecialAbility { Name = "my special ability" }, ability];
 
-            var weapon = magicalWeaponGenerator.GenerateRandom(power) as Weapon;
+            var updatedWeapon = specialAbilitiesGenerator.ApplyAbilitiesToWeapon(weapon);
+            Assert.That(updatedWeapon, Is.EqualTo(weapon));
             Assert.That(weapon.Magic.SpecialAbilities, Is.EqualTo(abilities));
             Assert.That(weapon.Damages, Has.Count.EqualTo(3)
                 .And.SupersetOf(mundaneWeapon.Damages));
@@ -1673,9 +1672,6 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
         [Test]
         public void ApplyAbilitiesToWeapon_CriticalDamages()
         {
-            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(power, ItemTypeConstants.Weapon);
-            mockPercentileSelector.SetupSequence(p => p.SelectFrom(Config.Name, tableName)).Returns(MagicalWeaponGenerator.SpecialAbility).Returns(MagicalWeaponGenerator.SpecialAbility).Returns("9266");
-
             var ability = new SpecialAbility
             {
                 CriticalDamages =
@@ -1688,7 +1684,8 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             var abilities = new[] { new SpecialAbility(), ability };
             mockSpecialAbilitiesGenerator.Setup(p => p.GenerateFor(mundaneWeapon, power, 2)).Returns(abilities);
 
-            var weapon = magicalWeaponGenerator.GenerateRandom(power) as Weapon;
+            var updatedWeapon = specialAbilitiesGenerator.ApplyAbilitiesToWeapon(weapon);
+            Assert.That(updatedWeapon, Is.EqualTo(weapon));
             Assert.That(weapon.Magic.SpecialAbilities, Is.EqualTo(abilities));
             Assert.That(weapon.Damages, Has.Count.EqualTo(1));
             Assert.That(weapon.CriticalDamages, Has.Count.EqualTo(3)
@@ -1700,9 +1697,6 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
         [Test]
         public void ApplyAbilitiesToWeapon_CriticalDamages_EmptyDamageType()
         {
-            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(power, ItemTypeConstants.Weapon);
-            mockPercentileSelector.SetupSequence(p => p.SelectFrom(Config.Name, tableName)).Returns(MagicalWeaponGenerator.SpecialAbility).Returns(MagicalWeaponGenerator.SpecialAbility).Returns("9266");
-
             var ability = new SpecialAbility
             {
                 CriticalDamages =
@@ -1715,7 +1709,8 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             var abilities = new[] { new SpecialAbility(), ability };
             mockSpecialAbilitiesGenerator.Setup(p => p.GenerateFor(mundaneWeapon, power, 2)).Returns(abilities);
 
-            var weapon = magicalWeaponGenerator.GenerateRandom(power) as Weapon;
+            var updatedWeapon = specialAbilitiesGenerator.ApplyAbilitiesToWeapon(weapon);
+            Assert.That(updatedWeapon, Is.EqualTo(weapon));
             Assert.That(weapon.Magic.SpecialAbilities, Is.EqualTo(abilities));
             Assert.That(weapon.Damages, Has.Count.EqualTo(1));
             Assert.That(weapon.CriticalDamages, Has.Count.EqualTo(3)
@@ -1729,9 +1724,6 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
         [Test]
         public void ApplyAbilitiesToWeapon_DamagesAndCriticalDamages()
         {
-            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(power, ItemTypeConstants.Weapon);
-            mockPercentileSelector.SetupSequence(p => p.SelectFrom(Config.Name, tableName)).Returns(MagicalWeaponGenerator.SpecialAbility).Returns(MagicalWeaponGenerator.SpecialAbility).Returns("9266");
-
             var ability = new SpecialAbility();
             ability.Damages.Add(new Damage { Roll = "some", Type = "plasma", Condition = "my condition" });
             ability.Damages.Add(new Damage { Roll = "a bit", Type = "ether", Condition = "my other condition" });
@@ -1745,7 +1737,8 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             var abilities = new[] { new SpecialAbility(), ability };
             mockSpecialAbilitiesGenerator.Setup(p => p.GenerateFor(mundaneWeapon, power, 2)).Returns(abilities);
 
-            var weapon = magicalWeaponGenerator.GenerateRandom(power) as Weapon;
+            var updatedWeapon = specialAbilitiesGenerator.ApplyAbilitiesToWeapon(weapon);
+            Assert.That(updatedWeapon, Is.EqualTo(weapon));
             Assert.That(weapon.Magic.SpecialAbilities, Is.EqualTo(abilities));
             Assert.That(weapon.Damages, Has.Count.EqualTo(3)
                 .And.SupersetOf(mundaneWeapon.Damages));
@@ -1764,9 +1757,6 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
         [Test]
         public void ApplyAbilitiesToWeapon_DamagesAndCriticalDamages_EmptyDamageTypes()
         {
-            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(power, ItemTypeConstants.Weapon);
-            mockPercentileSelector.SetupSequence(p => p.SelectFrom(Config.Name, tableName)).Returns(MagicalWeaponGenerator.SpecialAbility).Returns(MagicalWeaponGenerator.SpecialAbility).Returns("9266");
-
             var ability = new SpecialAbility();
             ability.Damages.Add(new Damage { Roll = "some", Type = string.Empty, Condition = "my condition" });
             ability.Damages.Add(new Damage { Roll = "a bit", Type = "ether", Condition = "my other condition" });
@@ -1780,7 +1770,8 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             var abilities = new[] { new SpecialAbility(), ability };
             mockSpecialAbilitiesGenerator.Setup(p => p.GenerateFor(mundaneWeapon, power, 2)).Returns(abilities);
 
-            var weapon = magicalWeaponGenerator.GenerateRandom(power) as Weapon;
+            var updatedWeapon = specialAbilitiesGenerator.ApplyAbilitiesToWeapon(weapon);
+            Assert.That(updatedWeapon, Is.EqualTo(weapon));
             Assert.That(weapon.Magic.SpecialAbilities, Is.EqualTo(abilities));
             Assert.That(weapon.Damages, Has.Count.EqualTo(3)
                 .And.SupersetOf(mundaneWeapon.Damages));
@@ -1808,9 +1799,6 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
 
             mockPercentileSelector.Setup(s => s.SelectFrom(.5)).Returns(true);
 
-            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(power, ItemTypeConstants.Weapon);
-            mockPercentileSelector.SetupSequence(p => p.SelectFrom(Config.Name, tableName)).Returns(MagicalWeaponGenerator.SpecialAbility).Returns(MagicalWeaponGenerator.SpecialAbility).Returns("9266");
-
             var ability = new SpecialAbility();
             ability.Damages.Add(new Damage { Roll = "some", Type = "plasma", Condition = "my condition" });
             ability.Damages.Add(new Damage { Roll = "a bit", Type = "ether", Condition = "my other condition" });
@@ -1818,7 +1806,8 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             var abilities = new[] { new SpecialAbility(), ability };
             mockSpecialAbilitiesGenerator.Setup(p => p.GenerateFor(mundaneWeapon, power, 2)).Returns(abilities);
 
-            var weapon = magicalWeaponGenerator.GenerateRandom(power) as Weapon;
+            var updatedWeapon = specialAbilitiesGenerator.ApplyAbilitiesToWeapon(weapon);
+            Assert.That(updatedWeapon, Is.EqualTo(weapon));
             Assert.That(weapon.Magic.SpecialAbilities, Is.EqualTo(abilities));
             Assert.That(weapon.Damages, Has.Count.EqualTo(3)
                 .And.SupersetOf(mundaneWeapon.Damages));
@@ -1852,9 +1841,6 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
 
             mockPercentileSelector.Setup(s => s.SelectFrom(.5)).Returns(true);
 
-            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(power, ItemTypeConstants.Weapon);
-            mockPercentileSelector.SetupSequence(p => p.SelectFrom(Config.Name, tableName)).Returns(MagicalWeaponGenerator.SpecialAbility).Returns(MagicalWeaponGenerator.SpecialAbility).Returns("9266");
-
             var ability = new SpecialAbility();
             ability.Damages.Add(new Damage { Roll = "some", Type = string.Empty, Condition = "my condition" });
             ability.Damages.Add(new Damage { Roll = "a bit", Type = "ether", Condition = "my other condition" });
@@ -1862,7 +1848,8 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             var abilities = new[] { new SpecialAbility(), ability };
             mockSpecialAbilitiesGenerator.Setup(p => p.GenerateFor(mundaneWeapon, power, 2)).Returns(abilities);
 
-            var weapon = magicalWeaponGenerator.GenerateRandom(power) as Weapon;
+            var updatedWeapon = specialAbilitiesGenerator.ApplyAbilitiesToWeapon(weapon);
+            Assert.That(updatedWeapon, Is.EqualTo(weapon));
             Assert.That(weapon.Magic.SpecialAbilities, Is.EqualTo(abilities));
             Assert.That(weapon.Damages, Has.Count.EqualTo(3)
                 .And.SupersetOf(mundaneWeapon.Damages));
@@ -1894,11 +1881,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             mundaneWeapon.SecondaryDamages.Add(new Damage { Roll = "jab", Type = "punch" });
             mundaneWeapon.SecondaryCriticalDamages.Add(new Damage { Roll = "cross", Type = "punch" });
 
-            mockPercentileSelector.Setup(s => s.SelectFrom(.5)).Returns(true);
-
-            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(power, ItemTypeConstants.Weapon);
-            mockPercentileSelector.SetupSequence(p => p.SelectFrom(Config.Name, tableName)).Returns(MagicalWeaponGenerator.SpecialAbility).Returns(MagicalWeaponGenerator.SpecialAbility).Returns("9266");
-
+            mock
             var ability = new SpecialAbility();
             ability.CriticalDamages["crit"] = new List<Damage>();
             ability.CriticalDamages["other crit"] = new List<Damage>();
@@ -1911,7 +1894,8 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             var abilities = new[] { new SpecialAbility(), ability };
             mockSpecialAbilitiesGenerator.Setup(p => p.GenerateFor(mundaneWeapon, power, 2)).Returns(abilities);
 
-            var weapon = magicalWeaponGenerator.GenerateRandom(power) as Weapon;
+            var updatedWeapon = specialAbilitiesGenerator.ApplyAbilitiesToWeapon(weapon);
+            Assert.That(updatedWeapon, Is.EqualTo(weapon));
             Assert.That(weapon.Magic.SpecialAbilities, Is.EqualTo(abilities));
             Assert.That(weapon.Damages, Has.Count.EqualTo(1));
             Assert.That(weapon.CriticalDamages, Has.Count.EqualTo(3)
@@ -1931,9 +1915,6 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
 
             mockPercentileSelector.Setup(s => s.SelectFrom(.5)).Returns(true);
 
-            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(power, ItemTypeConstants.Weapon);
-            mockPercentileSelector.SetupSequence(p => p.SelectFrom(Config.Name, tableName)).Returns(MagicalWeaponGenerator.SpecialAbility).Returns(MagicalWeaponGenerator.SpecialAbility).Returns("9266");
-
             var ability = new SpecialAbility();
             ability.Damages.Add(new Damage { Roll = "some", Type = "plasma", Condition = "my condition" });
             ability.Damages.Add(new Damage { Roll = "a bit", Type = "ether", Condition = "my other condition" });
@@ -1952,7 +1933,8 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             var abilities = new[] { new SpecialAbility(), ability };
             mockSpecialAbilitiesGenerator.Setup(p => p.GenerateFor(mundaneWeapon, power, 2)).Returns(abilities);
 
-            var weapon = magicalWeaponGenerator.GenerateRandom(power) as Weapon;
+            var updatedWeapon = specialAbilitiesGenerator.ApplyAbilitiesToWeapon(weapon);
+            Assert.That(updatedWeapon, Is.EqualTo(weapon));
             Assert.That(weapon.Magic.SpecialAbilities, Is.EqualTo(abilities));
             Assert.That(weapon.Damages, Has.Count.EqualTo(3)
                 .And.SupersetOf(mundaneWeapon.Damages));
@@ -1998,9 +1980,6 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
 
             mockPercentileSelector.Setup(s => s.SelectFrom(.5)).Returns(false);
 
-            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(power, ItemTypeConstants.Weapon);
-            mockPercentileSelector.SetupSequence(p => p.SelectFrom(Config.Name, tableName)).Returns(MagicalWeaponGenerator.SpecialAbility).Returns(MagicalWeaponGenerator.SpecialAbility).Returns("9266");
-
             var ability = new SpecialAbility();
             ability.Damages.Add(new Damage { Roll = "some", Type = "plasma", Condition = "my condition" });
             ability.Damages.Add(new Damage { Roll = "a bit", Type = "ether", Condition = "my other condition" });
@@ -2008,7 +1987,8 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             var abilities = new[] { new SpecialAbility(), ability };
             mockSpecialAbilitiesGenerator.Setup(p => p.GenerateFor(mundaneWeapon, power, 2)).Returns(abilities);
 
-            var weapon = magicalWeaponGenerator.GenerateRandom(power) as Weapon;
+            var updatedWeapon = specialAbilitiesGenerator.ApplyAbilitiesToWeapon(weapon);
+            Assert.That(updatedWeapon, Is.EqualTo(weapon));
             Assert.That(weapon.Magic.SpecialAbilities, Is.EqualTo(abilities));
             Assert.That(weapon.Damages, Has.Count.EqualTo(3)
                 .And.SupersetOf(mundaneWeapon.Damages));
@@ -2048,7 +2028,8 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             var abilities = new[] { new SpecialAbility(), ability };
             mockSpecialAbilitiesGenerator.Setup(p => p.GenerateFor(mundaneWeapon, power, 2)).Returns(abilities);
 
-            var weapon = magicalWeaponGenerator.GenerateRandom(power) as Weapon;
+            var updatedWeapon = specialAbilitiesGenerator.ApplyAbilitiesToWeapon(weapon);
+            Assert.That(updatedWeapon, Is.EqualTo(weapon));
             Assert.That(weapon.Magic.SpecialAbilities, Is.EqualTo(abilities));
             Assert.That(weapon.Damages, Has.Count.EqualTo(1));
             Assert.That(weapon.CriticalDamages, Has.Count.EqualTo(3)
@@ -2085,7 +2066,8 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             var abilities = new[] { new SpecialAbility(), ability };
             mockSpecialAbilitiesGenerator.Setup(p => p.GenerateFor(mundaneWeapon, power, 2)).Returns(abilities);
 
-            var weapon = magicalWeaponGenerator.GenerateRandom(power) as Weapon;
+            var updatedWeapon = specialAbilitiesGenerator.ApplyAbilitiesToWeapon(weapon);
+            Assert.That(updatedWeapon, Is.EqualTo(weapon));
             Assert.That(weapon.Magic.SpecialAbilities, Is.EqualTo(abilities));
             Assert.That(weapon.Damages, Has.Count.EqualTo(3)
                 .And.SupersetOf(mundaneWeapon.Damages));
@@ -2134,7 +2116,8 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             var abilities = new[] { new SpecialAbility(), ability1, ability2 };
             mockSpecialAbilitiesGenerator.Setup(p => p.GenerateFor(mundaneWeapon, power, 2)).Returns(abilities);
 
-            var weapon = magicalWeaponGenerator.GenerateRandom(power) as Weapon;
+            var updatedWeapon = specialAbilitiesGenerator.ApplyAbilitiesToWeapon(weapon);
+            Assert.That(updatedWeapon, Is.EqualTo(weapon));
             Assert.That(weapon.Magic.SpecialAbilities, Is.EqualTo(abilities));
             Assert.That(weapon.Damages, Has.Count.EqualTo(5)
                 .And.SupersetOf(mundaneWeapon.Damages));
@@ -2182,7 +2165,8 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             var abilities = new[] { new SpecialAbility(), keen };
             mockSpecialAbilitiesGenerator.Setup(p => p.GenerateFor(mundaneWeapon, power, 2)).Returns(abilities);
 
-            var weapon = magicalWeaponGenerator.GenerateRandom(power) as Weapon;
+            var updatedWeapon = specialAbilitiesGenerator.ApplyAbilitiesToWeapon(weapon);
+            Assert.That(updatedWeapon, Is.EqualTo(weapon));
             Assert.That(weapon.Magic.SpecialAbilities, Is.EqualTo(abilities));
             Assert.That(weapon.ThreatRange, Is.EqualTo(originalThreatRange * 2));
             Assert.That(weapon.ThreatRangeDescription, Is.EqualTo(keenDescription));
@@ -2202,7 +2186,8 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             mockSpellGenerator.Setup(g => g.GenerateLevel(PowerConstants.Minor)).Returns(1337);
             mockSpellGenerator.Setup(g => g.Generate("spell type", 1337)).Returns("spell");
 
-            var weapon = magicalWeaponGenerator.GenerateRandom(power);
+            var updatedWeapon = specialAbilitiesGenerator.ApplyAbilitiesToWeapon(weapon);
+            Assert.That(updatedWeapon, Is.EqualTo(weapon));
             Assert.That(weapon.Contents, Contains.Item("spell"));
         }
 
@@ -2220,7 +2205,8 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             mockSpellGenerator.Setup(g => g.GenerateLevel(PowerConstants.Minor)).Returns(1337);
             mockSpellGenerator.Setup(g => g.Generate("spell type", 1337)).Returns("spell");
 
-            var weapon = magicalWeaponGenerator.GenerateRandom(power);
+            var updatedWeapon = specialAbilitiesGenerator.ApplyAbilitiesToWeapon(weapon);
+            Assert.That(updatedWeapon, Is.EqualTo(weapon));
             Assert.That(weapon.Contents, Is.Empty);
         }
     }
