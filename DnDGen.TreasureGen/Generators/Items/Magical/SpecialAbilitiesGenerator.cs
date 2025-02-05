@@ -59,7 +59,7 @@ namespace DnDGen.TreasureGen.Generators.Items.Magical
                 }
 
                 var ability = GenerateAbilityFrom(availableAbilities, tableNames);
-                if (ability.Name == "BonusSpecialAbility")
+                if (ability.Name == BonusSpecialAbility)
                 {
                     quantity++;
                     continue;
@@ -128,7 +128,7 @@ namespace DnDGen.TreasureGen.Generators.Items.Magical
 
                 foreach (var abilityName in abilityNames)
                 {
-                    if (abilityName == "BonusSpecialAbility")
+                    if (abilityName == BonusSpecialAbility)
                         continue;
 
                     var ability = GetSpecialAbility(abilityName, weapon.CriticalMultiplier);
@@ -208,7 +208,7 @@ namespace DnDGen.TreasureGen.Generators.Items.Magical
 
                 abilityName = percentileSelector.SelectFrom(Config.Name, tableName);
 
-                if (abilityName == "BonusSpecialAbility")
+                if (abilityName == BonusSpecialAbility)
                     return new SpecialAbility { Name = abilityName };
             } while (!availableAbilities.Any(a => a.Name == abilityName));
 
