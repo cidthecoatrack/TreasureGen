@@ -1654,17 +1654,21 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
 
             var updatedWeapon = specialAbilitiesGenerator.ApplyAbilitiesToWeapon(weapon);
             Assert.That(updatedWeapon, Is.EqualTo(weapon));
-            Assert.That(weapon.Magic.SpecialAbilities, Is.EqualTo(abilities));
-            Assert.That(weapon.Damages, Has.Count.EqualTo(3)
-                .And.SupersetOf(mundaneWeapon.Damages));
+            Assert.That(weapon.Magic.SpecialAbilities.Count(), Is.EqualTo(2));
+            Assert.That(weapon.Damages, Has.Count.EqualTo(3));
+            Assert.That(weapon.Damages[0].Roll, Is.EqualTo("my roll"));
+            Assert.That(weapon.Damages[0].Type, Is.EqualTo("my damage type"));
+            Assert.That(weapon.Damages[0].Condition, Is.Empty);
             Assert.That(weapon.Damages[1].Roll, Is.EqualTo("some"));
-            Assert.That(weapon.Damages[1].Type, Is.EqualTo(mundaneWeapon.Damages[0].Type));
+            Assert.That(weapon.Damages[1].Type, Is.EqualTo("my damage type"));
             Assert.That(weapon.Damages[1].Condition, Is.EqualTo("my condition"));
             Assert.That(weapon.Damages[2].Roll, Is.EqualTo("a bit"));
-            Assert.That(weapon.Damages[2].Type, Is.EqualTo(mundaneWeapon.Damages[0].Type));
+            Assert.That(weapon.Damages[2].Type, Is.EqualTo("my damage type"));
             Assert.That(weapon.Damages[2].Condition, Is.EqualTo("my other condition"));
-            Assert.That(weapon.CriticalDamages, Has.Count.EqualTo(1)
-                .And.SupersetOf(mundaneWeapon.CriticalDamages));
+            Assert.That(weapon.CriticalDamages, Has.Count.EqualTo(1));
+            Assert.That(weapon.CriticalDamages[0].Roll, Is.EqualTo("my crit roll"));
+            Assert.That(weapon.CriticalDamages[0].Type, Is.EqualTo("my crit damage type"));
+            Assert.That(weapon.CriticalDamages[0].Condition, Is.Empty);
             Assert.That(weapon.SecondaryDamages, Is.Empty);
             Assert.That(weapon.SecondaryCriticalDamages, Is.Empty);
         }
