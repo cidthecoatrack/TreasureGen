@@ -1,12 +1,13 @@
 ﻿using DnDGen.Infrastructure.Factories;
+using DnDGen.Infrastructure.Models;
 using DnDGen.Infrastructure.Selectors.Collections;
+using DnDGen.Infrastructure.Selectors.Percentiles;
 using DnDGen.TreasureGen.Generators.Items;
 using DnDGen.TreasureGen.Generators.Items.Magical;
 using DnDGen.TreasureGen.Items;
 using DnDGen.TreasureGen.Items.Magical;
 using DnDGen.TreasureGen.Items.Mundane;
 using DnDGen.TreasureGen.Selectors.Percentiles;
-using DnDGen.TreasureGen.Selectors.Selections;
 using DnDGen.TreasureGen.Tables;
 using Moq;
 using NUnit.Framework;
@@ -20,7 +21,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
     public class SpecificGearGeneratorTests
     {
         private ISpecificGearGenerator specificGearGenerator;
-        private Mock<ITypeAndAmountPercentileSelector> mockTypeAndAmountPercentileSelector;
+        private Mock<IPercentileTypeAndAmountSelector> mockTypeAndAmountPercentileSelector;
         private Mock<ICollectionSelector> mockCollectionsSelector;
         private Mock<ISpecialAbilitiesGenerator> mockSpecialAbilitiesGenerator;
         private Mock<IChargesGenerator> mockChargesGenerator;
@@ -29,7 +30,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
         private Mock<MundaneItemGenerator> mockMundaneArmorGenerator;
         private Mock<MundaneItemGenerator> mockMundaneWeaponGenerator;
         private Mock<IReplacementSelector> mockReplacementSelector;
-        private TypeAndAmountSelection selection;
+        private TypeAndAmountDataSelection selection;
         private string power;
         private string gearType;
         private ItemVerifier itemVerifier;
@@ -41,7 +42,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
         [SetUp]
         public void Setup()
         {
-            mockTypeAndAmountPercentileSelector = new Mock<ITypeAndAmountPercentileSelector>();
+            mockTypeAndAmountPercentileSelector = new Mock<IPercentileTypeAndAmountSelector>();
             mockCollectionsSelector = new Mock<ICollectionSelector>();
             mockSpecialAbilitiesGenerator = new Mock<ISpecialAbilitiesGenerator>();
             mockChargesGenerator = new Mock<IChargesGenerator>();
@@ -65,12 +66,11 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
                 mockJustInTimeFactory.Object,
                 mockReplacementSelector.Object);
 
-            selection = new TypeAndAmountSelection();
+            selection = new TypeAndAmountDataSelection();
             itemVerifier = new ItemVerifier();
             baseNames = new List<string> { "base name" };
             mundaneArmor = itemVerifier.CreateRandomArmorTemplate(baseNames[0]);
             mundaneWeapon = itemVerifier.CreateRandomWeaponTemplate(baseNames[0]);
-            template = new Item();
 
             mundaneArmor.Contents.Clear();
             mundaneWeapon.Contents.Clear();
@@ -79,17 +79,18 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
             gearType = "gear type";
 
             selection.Type = ArmorConstants.BandedMailOfLuck;
-            selection.Amount = 9266;
+            selection.AmountAsDouble = 9266;
 
+            template = new Item();
             template.Magic.Bonus = selection.Amount;
             template.Name = selection.Type;
 
-            var tableName = TableNameConstants.Percentiles.POWERSpecificITEMTYPEs, power, gearType);
-            mockTypeAndAmountPercentileSelector.Setup(s => s.SelectFrom(tableName)).Returns(selection);
+            var tableName = TableNameConstants.Percentiles.POWERSpecificITEMTYPEs(power, gearType);
+            mockTypeAndAmountPercentileSelector.Setup(s => s.SelectFrom(Config.Name, tableName)).Returns(selection);
 
             mockCollectionsSelector
                 .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.ItemGroups, It.IsAny<string>()))
-                .Returns((string assembly, string table, string name) => new[] { name });
+                .Returns((string assembly, string table, string name) => [name]);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.ItemGroups, selection.Type)).Returns(baseNames);
 
             mockMundaneArmorGenerator.Setup(g => g.Generate(It.IsAny<string>(), It.IsAny<string[]>())).Returns(new Armor());
@@ -99,8 +100,8 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
             mockMundaneWeaponGenerator.Setup(g => g.Generate(baseNames[0], It.IsAny<string[]>())).Returns(mundaneWeapon);
 
             mockCollectionsSelector
-                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountSelection>>()))
-                .Returns((IEnumerable<TypeAndAmountSelection> ss) => ss.Last());
+                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountDataSelection>>()))
+                .Returns((IEnumerable<TypeAndAmountDataSelection> ss) => ss.Last());
 
             mockReplacementSelector
                 .Setup(s => s.SelectSingle(It.IsAny<string>()))
@@ -112,12 +113,12 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
         {
             selection.Type = WeaponConstants.HolyAvenger;
 
-            var tableName = TableNameConstants.Percentiles.POWERSpecificITEMTYPEs, power, gearType);
+            var tableName = TableNameConstants.Percentiles.POWERSpecificITEMTYPEs(power, gearType);
             mockTypeAndAmountPercentileSelector
-                .Setup(s => s.SelectAllFrom(tableName))
+                .Setup(s => s.SelectAllFrom(Config.Name, tableName))
                 .Returns(new[]
                 {
-                    new TypeAndAmountSelection { Type = "another item name", Amount = 90210 },
+                    new TypeAndAmountDataSelection { Type = "another item name", AmountAsDouble = 90210 },
                     selection
                 });
 
@@ -144,14 +145,14 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
         {
             selection.Type = "item name";
 
-            var tableName = TableNameConstants.Percentiles.POWERSpecificITEMTYPEs, power, gearType);
+            var tableName = TableNameConstants.Percentiles.POWERSpecificITEMTYPEs(power, gearType);
             mockTypeAndAmountPercentileSelector
-                .Setup(s => s.SelectAllFrom(tableName))
-                .Returns(new[]
-                {
-                    new TypeAndAmountSelection { Type = "another item name", Amount = 9266 },
+                .Setup(s => s.SelectAllFrom(Config.Name, tableName))
+                .Returns(
+                [
+                    new TypeAndAmountDataSelection { Type = "another item name", AmountAsDouble = 9266 },
                     selection
-                });
+                ]);
 
             mockCollectionsSelector
                 .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, "item name"))
@@ -164,17 +165,17 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
         [Test]
         public void ReturnMundanePrototype()
         {
-            selection.Amount = 0;
+            selection.AmountAsDouble = 0;
             selection.Type = WeaponConstants.Battleaxe_Adamantine;
 
-            var tableName = TableNameConstants.Percentiles.POWERSpecificITEMTYPEs, power, gearType);
+            var tableName = TableNameConstants.Percentiles.POWERSpecificITEMTYPEs(power, gearType);
             mockTypeAndAmountPercentileSelector
-                .Setup(s => s.SelectAllFrom(tableName))
-                .Returns(new[]
-                {
-                    new TypeAndAmountSelection { Type = "another item name", Amount = 9266 },
+                .Setup(s => s.SelectAllFrom(Config.Name, tableName))
+                .Returns(
+                [
+                    new TypeAndAmountDataSelection { Type = "another item name", AmountAsDouble = 9266 },
                     selection
-                });
+                ]);
 
             mockCollectionsSelector
                 .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, WeaponConstants.Battleaxe_Adamantine))
@@ -205,7 +206,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
         public void SpecificallyMasterworkMagicGearIsMasterwork()
         {
             var traits = new[] { "trait 1", "trait 2", TraitConstants.Masterwork };
-            var tableName = TableNameConstants.Collections.SpecificITEMTYPETraits, gearType);
+            var tableName = TableNameConstants.Collections.SpecificITEMTYPETraits(gearType);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, selection.Type)).Returns(traits);
 
             var gear = specificGearGenerator.GenerateFrom(template);
@@ -220,7 +221,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
             template.Magic.Bonus = 0;
 
             var traits = new[] { "trait 1", "trait 2" };
-            var tableName = TableNameConstants.Collections.SpecificITEMTYPETraits, gearType);
+            var tableName = TableNameConstants.Collections.SpecificITEMTYPETraits(gearType);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, selection.Type)).Returns(traits);
 
             var gear = specificGearGenerator.GenerateFrom(template);
@@ -234,7 +235,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
             template.Magic.Bonus = 0;
 
             var traits = new[] { "trait 1", "trait 2", TraitConstants.Masterwork };
-            var tableName = TableNameConstants.Collections.SpecificITEMTYPETraits, ItemTypeConstants.Armor);
+            var tableName = TableNameConstants.Collections.SpecificITEMTYPETraits(ItemTypeConstants.Armor);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, template.Name)).Returns(traits);
 
             var gear = specificGearGenerator.GenerateFrom(template);
@@ -246,7 +247,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
         public void GetAttributesFromSelector()
         {
             var attributes = new[] { "attribute 1", "attribute 2" };
-            var tableName = TableNameConstants.Collections.SpecificITEMTYPEAttributes, ItemTypeConstants.Armor);
+            var tableName = TableNameConstants.Collections.SpecificITEMTYPEAttributes(ItemTypeConstants.Armor);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, selection.Type)).Returns(attributes);
 
             var gear = specificGearGenerator.GenerateFrom(template);
@@ -257,7 +258,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
         public void GetTraitsFromSelector()
         {
             var traits = new[] { "trait 1", "trait 2" };
-            var tableName = TableNameConstants.Collections.SpecificITEMTYPETraits, ItemTypeConstants.Armor);
+            var tableName = TableNameConstants.Collections.SpecificITEMTYPETraits(ItemTypeConstants.Armor);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, selection.Type)).Returns(traits);
 
             var gear = specificGearGenerator.GenerateFrom(template);
@@ -270,15 +271,15 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
             template.ItemType = ItemTypeConstants.Armor;
 
             var attributes = new[] { "attribute 1", "attribute 2" };
-            var tableName = TableNameConstants.Collections.SpecificITEMTYPEAttributes, ItemTypeConstants.Armor);
+            var tableName = TableNameConstants.Collections.SpecificITEMTYPEAttributes(ItemTypeConstants.Armor);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, template.Name)).Returns(attributes);
 
             var traits = new[] { "trait 1", "trait 2" };
-            tableName = TableNameConstants.Collections.SpecificITEMTYPETraits, ItemTypeConstants.Armor);
+            tableName = TableNameConstants.Collections.SpecificITEMTYPETraits(ItemTypeConstants.Armor);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, template.Name)).Returns(traits);
 
             var specialAbilityNames = new[] { "ability 1", "ability 2" };
-            tableName = TableNameConstants.Collections.SpecificITEMTYPESpecialAbilities, ItemTypeConstants.Armor);
+            tableName = TableNameConstants.Collections.SpecificITEMTYPESpecialAbilities(ItemTypeConstants.Armor);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, template.Name)).Returns(specialAbilityNames);
 
             var specialAbilities = new[]
@@ -287,12 +288,11 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
                 new SpecialAbility()
             };
 
-            mockSpecialAbilitiesGenerator.Setup(s => s.GenerateFor(
-                It.Is<IEnumerable<SpecialAbility>>(aa =>
-                    aa.First().Name == "ability 1"
-                    && aa.Last().Name == "ability 2")
-                )
-            ).Returns(specialAbilities);
+            mockSpecialAbilitiesGenerator
+                .Setup(s => s.GenerateFor(
+                    It.Is<IEnumerable<SpecialAbility>>(aa => aa.First().Name == "ability 1" && aa.Last().Name == "ability 2"),
+                    string.Empty))
+                .Returns(specialAbilities);
 
             var gear = specificGearGenerator.GenerateFrom(template);
             Assert.That(gear.Name, Is.EqualTo(selection.Type));
@@ -317,15 +317,15 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
             template.Name = WeaponConstants.HolyAvenger;
 
             var attributes = new[] { "attribute 1", "attribute 2" };
-            var tableName = TableNameConstants.Collections.SpecificITEMTYPEAttributes, ItemTypeConstants.Weapon);
+            var tableName = TableNameConstants.Collections.SpecificITEMTYPEAttributes(ItemTypeConstants.Weapon);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, template.Name)).Returns(attributes);
 
             var traits = new[] { "trait 1", "trait 2" };
-            tableName = TableNameConstants.Collections.SpecificITEMTYPETraits, ItemTypeConstants.Weapon);
+            tableName = TableNameConstants.Collections.SpecificITEMTYPETraits(ItemTypeConstants.Weapon);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, template.Name)).Returns(traits);
 
             var specialAbilityNames = new[] { "ability 1", "ability 2" };
-            tableName = TableNameConstants.Collections.SpecificITEMTYPESpecialAbilities, ItemTypeConstants.Weapon);
+            tableName = TableNameConstants.Collections.SpecificITEMTYPESpecialAbilities(ItemTypeConstants.Weapon);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, template.Name)).Returns(specialAbilityNames);
 
             var specialAbilities = new[]
@@ -334,12 +334,11 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
                 new SpecialAbility()
             };
 
-            mockSpecialAbilitiesGenerator.Setup(s => s.GenerateFor(
-                It.Is<IEnumerable<SpecialAbility>>(aa =>
-                    aa.First().Name == "ability 1"
-                    && aa.Last().Name == "ability 2")
-                )
-            ).Returns(specialAbilities);
+            mockSpecialAbilitiesGenerator
+                .Setup(s => s.GenerateFor(
+                    It.Is<IEnumerable<SpecialAbility>>(aa => aa.First().Name == "ability 1" && aa.Last().Name == "ability 2"),
+                    string.Empty))
+                .Returns(specialAbilities);
 
             mockCollectionsSelector
                 .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.ItemGroups, template.Name))
@@ -374,15 +373,15 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
             template.Traits.Add("my other trait");
 
             var attributes = new[] { "attribute 1", "attribute 2" };
-            var tableName = TableNameConstants.Collections.SpecificITEMTYPEAttributes, ItemTypeConstants.Armor);
+            var tableName = TableNameConstants.Collections.SpecificITEMTYPEAttributes(ItemTypeConstants.Armor);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, template.Name)).Returns(attributes);
 
             var traits = new[] { "trait 1", "trait 2" };
-            tableName = TableNameConstants.Collections.SpecificITEMTYPETraits, ItemTypeConstants.Armor);
+            tableName = TableNameConstants.Collections.SpecificITEMTYPETraits(ItemTypeConstants.Armor);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, template.Name)).Returns(traits);
 
             var specialAbilityNames = new[] { "ability 1", "ability 2" };
-            tableName = TableNameConstants.Collections.SpecificITEMTYPESpecialAbilities, ItemTypeConstants.Armor);
+            tableName = TableNameConstants.Collections.SpecificITEMTYPESpecialAbilities(ItemTypeConstants.Armor);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, template.Name)).Returns(specialAbilityNames);
 
             var specialAbilities = new[]
@@ -395,7 +394,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
                 It.Is<IEnumerable<SpecialAbility>>(aa =>
                     aa.First().Name == "ability 1"
                     && aa.Last().Name == "ability 2")
-                )
+                , mundaneWeapon.CriticalMultiplier)
             ).Returns(specialAbilities);
 
             var gear = specificGearGenerator.GenerateFrom(template);
@@ -438,15 +437,15 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
                 .Returns(baseNames);
 
             var attributes = new[] { "attribute 1", "attribute 2" };
-            var tableName = TableNameConstants.Collections.SpecificITEMTYPEAttributes, ItemTypeConstants.Armor);
+            var tableName = TableNameConstants.Collections.SpecificITEMTYPEAttributes(ItemTypeConstants.Armor);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, template.Name)).Returns(attributes);
 
             var traits = new[] { "trait 1", "trait 2" };
-            tableName = TableNameConstants.Collections.SpecificITEMTYPETraits, ItemTypeConstants.Armor);
+            tableName = TableNameConstants.Collections.SpecificITEMTYPETraits(ItemTypeConstants.Armor);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, template.Name)).Returns(traits);
 
             var specialAbilityNames = new[] { "ability 1", "ability 2" };
-            tableName = TableNameConstants.Collections.SpecificITEMTYPESpecialAbilities, ItemTypeConstants.Armor);
+            tableName = TableNameConstants.Collections.SpecificITEMTYPESpecialAbilities(ItemTypeConstants.Armor);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, template.Name)).Returns(specialAbilityNames);
 
             var specialAbilities = new[]
@@ -459,7 +458,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
                 It.Is<IEnumerable<SpecialAbility>>(aa =>
                     aa.First().Name == "ability 1"
                     && aa.Last().Name == "ability 2")
-                )
+                , string.Empty)
             ).Returns(specialAbilities);
 
             var gear = specificGearGenerator.GenerateFrom(template);
@@ -489,15 +488,15 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
             template.Traits.Add("my other trait");
 
             var attributes = new[] { "attribute 1", "attribute 2" };
-            var tableName = TableNameConstants.Collections.SpecificITEMTYPEAttributes, ItemTypeConstants.Weapon);
+            var tableName = TableNameConstants.Collections.SpecificITEMTYPEAttributes(ItemTypeConstants.Weapon);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, template.Name)).Returns(attributes);
 
             var traits = new[] { "trait 1", "trait 2" };
-            tableName = TableNameConstants.Collections.SpecificITEMTYPETraits, ItemTypeConstants.Weapon);
+            tableName = TableNameConstants.Collections.SpecificITEMTYPETraits(ItemTypeConstants.Weapon);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, template.Name)).Returns(traits);
 
             var specialAbilityNames = new[] { "ability 1", "ability 2" };
-            tableName = TableNameConstants.Collections.SpecificITEMTYPESpecialAbilities, ItemTypeConstants.Weapon);
+            tableName = TableNameConstants.Collections.SpecificITEMTYPESpecialAbilities(ItemTypeConstants.Weapon);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, template.Name)).Returns(specialAbilityNames);
 
             var specialAbilities = new[]
@@ -510,7 +509,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
                 It.Is<IEnumerable<SpecialAbility>>(aa =>
                     aa.First().Name == "ability 1"
                     && aa.Last().Name == "ability 2")
-                )
+                , mundaneWeapon.CriticalMultiplier)
             ).Returns(specialAbilities);
 
             mockCollectionsSelector
@@ -550,15 +549,15 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
             template.Name = WeaponConstants.ShiftersSorrow;
 
             var attributes = new[] { "attribute 1", AttributeConstants.DoubleWeapon, "attribute 2" };
-            var tableName = TableNameConstants.Collections.SpecificITEMTYPEAttributes, ItemTypeConstants.Weapon);
+            var tableName = TableNameConstants.Collections.SpecificITEMTYPEAttributes(ItemTypeConstants.Weapon);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, template.Name)).Returns(attributes);
 
             var traits = new[] { "trait 1", "trait 2" };
-            tableName = TableNameConstants.Collections.SpecificITEMTYPETraits, ItemTypeConstants.Weapon);
+            tableName = TableNameConstants.Collections.SpecificITEMTYPETraits(ItemTypeConstants.Weapon);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, template.Name)).Returns(traits);
 
             var specialAbilityNames = new[] { "ability 1", "ability 2" };
-            tableName = TableNameConstants.Collections.SpecificITEMTYPESpecialAbilities, ItemTypeConstants.Weapon);
+            tableName = TableNameConstants.Collections.SpecificITEMTYPESpecialAbilities(ItemTypeConstants.Weapon);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, template.Name)).Returns(specialAbilityNames);
 
             var specialAbilities = new[]
@@ -571,7 +570,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
                 It.Is<IEnumerable<SpecialAbility>>(aa =>
                     aa.First().Name == "ability 1"
                     && aa.Last().Name == "ability 2")
-                )
+                , mundaneWeapon.CriticalMultiplier)
             ).Returns(specialAbilities);
 
             mockCollectionsSelector
@@ -609,15 +608,15 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
             template.Name = WeaponConstants.HolyAvenger;
 
             var attributes = new[] { "attribute 1", "attribute 2" };
-            var tableName = TableNameConstants.Collections.SpecificITEMTYPEAttributes, ItemTypeConstants.Weapon);
+            var tableName = TableNameConstants.Collections.SpecificITEMTYPEAttributes(ItemTypeConstants.Weapon);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, template.Name)).Returns(attributes);
 
             var traits = new[] { "trait 1", "trait 2" };
-            tableName = TableNameConstants.Collections.SpecificITEMTYPETraits, ItemTypeConstants.Weapon);
+            tableName = TableNameConstants.Collections.SpecificITEMTYPETraits(ItemTypeConstants.Weapon);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, template.Name)).Returns(traits);
 
             var specialAbilityNames = new[] { "ability 1", "ability 2" };
-            tableName = TableNameConstants.Collections.SpecificITEMTYPESpecialAbilities, ItemTypeConstants.Weapon);
+            tableName = TableNameConstants.Collections.SpecificITEMTYPESpecialAbilities(ItemTypeConstants.Weapon);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, template.Name)).Returns(specialAbilityNames);
 
             var specialAbilities = new[]
@@ -626,13 +625,15 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
                 new SpecialAbility(),
             };
 
-            specialAbilities[1].CriticalDamages[mundaneWeapon.CriticalMultiplier] = new List<Damage>();
-            specialAbilities[1].CriticalDamages[mundaneWeapon.CriticalMultiplier].Add(new Damage
-            {
-                Roll = "my ability crit roll",
-                Type = "my ability crit damage type",
-                Condition = "my ability crit condition"
-            });
+            specialAbilities[1].CriticalDamages =
+            [
+                new Damage
+                {
+                    Roll = "my ability crit roll",
+                    Type = "my ability crit damage type",
+                    Condition = "my ability crit condition"
+                },
+            ];
             specialAbilities[1].Damages.Add(new Damage
             {
                 Roll = "my ability roll",
@@ -644,8 +645,12 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
                 It.Is<IEnumerable<SpecialAbility>>(aa =>
                     aa.First().Name == "ability 1"
                     && aa.Last().Name == "ability 2")
-                )
+                , mundaneWeapon.CriticalMultiplier)
             ).Returns(specialAbilities);
+
+            mockSpecialAbilitiesGenerator
+                .Setup(g => g.ApplyAbilitiesToWeapon(It.Is<Weapon>(w => w.Magic.SpecialAbilities == specialAbilities)))
+                .Returns((Weapon w) => w);
 
             mockCollectionsSelector
                 .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.ItemGroups, template.Name))
@@ -664,87 +669,6 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
 
             var weapon = gear as Weapon;
             Assert.That(weapon.CriticalMultiplier, Is.EqualTo(mundaneWeapon.CriticalMultiplier));
-            Assert.That(weapon.Damages, Is.SupersetOf(mundaneWeapon.Damages)
-                .And.Count.EqualTo(2));
-            Assert.That(weapon.Damages[1].Roll, Is.EqualTo(specialAbilities[1].Damages[0].Roll));
-            Assert.That(weapon.Damages[1].Type, Is.EqualTo(specialAbilities[1].Damages[0].Type));
-            Assert.That(weapon.Damages[1].Condition, Is.EqualTo(specialAbilities[1].Damages[0].Condition));
-            Assert.That(weapon.CriticalDamages, Is.EqualTo(mundaneWeapon.CriticalDamages)
-                .And.Count.EqualTo(2));
-            Assert.That(weapon.CriticalDamages[1].Roll, Is.EqualTo(specialAbilities[1].CriticalDamages[mundaneWeapon.CriticalMultiplier][0].Roll));
-            Assert.That(weapon.CriticalDamages[1].Type, Is.EqualTo(specialAbilities[1].CriticalDamages[mundaneWeapon.CriticalMultiplier][0].Type));
-            Assert.That(weapon.CriticalDamages[1].Condition, Is.EqualTo(specialAbilities[1].CriticalDamages[mundaneWeapon.CriticalMultiplier][0].Condition));
-            Assert.That(weapon.Size, Is.EqualTo(mundaneWeapon.Size));
-            Assert.That(weapon.ThreatRangeDescription, Is.EqualTo(mundaneWeapon.ThreatRangeDescription));
-            Assert.That(weapon.Quantity, Is.EqualTo(mundaneWeapon.Quantity));
-            Assert.That(weapon.SecondaryCriticalMultiplier, Is.Empty);
-            Assert.That(weapon.SecondaryDamages, Is.Empty);
-            Assert.That(weapon.SecondaryCriticalDamages, Is.Empty);
-            Assert.That(weapon.SecondaryHasAbilities, Is.False);
-            Assert.That(weapon.SecondaryMagicBonus, Is.Zero);
-        }
-
-        [Test]
-        public void GetSpecificWeapon_WithAbilitiesWithEmptyDamage()
-        {
-            template.Name = WeaponConstants.HolyAvenger;
-
-            var attributes = new[] { "attribute 1", "attribute 2" };
-            var tableName = TableNameConstants.Collections.SpecificITEMTYPEAttributes, ItemTypeConstants.Weapon);
-            mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, template.Name)).Returns(attributes);
-
-            var traits = new[] { "trait 1", "trait 2" };
-            tableName = TableNameConstants.Collections.SpecificITEMTYPETraits, ItemTypeConstants.Weapon);
-            mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, template.Name)).Returns(traits);
-
-            var specialAbilityNames = new[] { "ability 1", "ability 2" };
-            tableName = TableNameConstants.Collections.SpecificITEMTYPESpecialAbilities, ItemTypeConstants.Weapon);
-            mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, template.Name)).Returns(specialAbilityNames);
-
-            var specialAbilities = new[]
-            {
-                new SpecialAbility(),
-                new SpecialAbility(),
-            };
-
-            specialAbilities[1].CriticalDamages[mundaneWeapon.CriticalMultiplier] = new List<Damage>();
-            specialAbilities[1].CriticalDamages[mundaneWeapon.CriticalMultiplier].Add(new Damage { Roll = "my ability crit roll", Type = string.Empty, Condition = "my condition" });
-            specialAbilities[1].Damages.Add(new Damage { Roll = "my ability roll", Type = string.Empty, Condition = "my condition" });
-
-            mockSpecialAbilitiesGenerator.Setup(s => s.GenerateFor(
-                It.Is<IEnumerable<SpecialAbility>>(aa =>
-                    aa.First().Name == "ability 1"
-                    && aa.Last().Name == "ability 2")
-                )
-            ).Returns(specialAbilities);
-
-            mockCollectionsSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.ItemGroups, template.Name))
-                .Returns(baseNames);
-
-            var gear = specificGearGenerator.GenerateFrom(template);
-            Assert.That(gear, Is.Not.EqualTo(template));
-            Assert.That(gear.Name, Is.EqualTo(template.Name));
-            Assert.That(gear.BaseNames, Is.EquivalentTo(baseNames));
-            Assert.That(gear.ItemType, Is.EqualTo(ItemTypeConstants.Weapon));
-            Assert.That(gear.Attributes, Is.EqualTo(attributes));
-            Assert.That(gear.Traits, Is.SupersetOf(traits));
-            Assert.That(gear.Magic.Bonus, Is.EqualTo(selection.Amount));
-            Assert.That(gear.Magic.SpecialAbilities, Is.EqualTo(specialAbilities));
-            Assert.That(gear, Is.InstanceOf<Weapon>());
-
-            var weapon = gear as Weapon;
-            Assert.That(weapon.CriticalMultiplier, Is.EqualTo(mundaneWeapon.CriticalMultiplier));
-            Assert.That(weapon.Damages, Is.SupersetOf(mundaneWeapon.Damages)
-                .And.Count.EqualTo(2));
-            Assert.That(weapon.Damages[1].Roll, Is.EqualTo(specialAbilities[1].Damages[0].Roll));
-            Assert.That(weapon.Damages[1].Type, Is.Not.Empty.And.EqualTo(mundaneWeapon.Damages[0].Type));
-            Assert.That(weapon.Damages[1].Condition, Is.EqualTo(specialAbilities[1].Damages[0].Condition));
-            Assert.That(weapon.CriticalDamages, Is.EqualTo(mundaneWeapon.CriticalDamages)
-                .And.Count.EqualTo(2));
-            Assert.That(weapon.CriticalDamages[1].Roll, Is.EqualTo(specialAbilities[1].CriticalDamages[mundaneWeapon.CriticalMultiplier][0].Roll));
-            Assert.That(weapon.CriticalDamages[1].Type, Is.Not.Empty.And.EqualTo(mundaneWeapon.CriticalDamages[0].Type));
-            Assert.That(weapon.CriticalDamages[1].Condition, Is.EqualTo(specialAbilities[1].CriticalDamages[mundaneWeapon.CriticalMultiplier][0].Condition));
             Assert.That(weapon.Size, Is.EqualTo(mundaneWeapon.Size));
             Assert.That(weapon.ThreatRangeDescription, Is.EqualTo(mundaneWeapon.ThreatRangeDescription));
             Assert.That(weapon.Quantity, Is.EqualTo(mundaneWeapon.Quantity));
@@ -765,15 +689,15 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
             template.Name = WeaponConstants.ShiftersSorrow;
 
             var attributes = new[] { "attribute 1", AttributeConstants.DoubleWeapon, "attribute 2" };
-            var tableName = TableNameConstants.Collections.SpecificITEMTYPEAttributes, ItemTypeConstants.Weapon);
+            var tableName = TableNameConstants.Collections.SpecificITEMTYPEAttributes(ItemTypeConstants.Weapon);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, template.Name)).Returns(attributes);
 
             var traits = new[] { "trait 1", "trait 2" };
-            tableName = TableNameConstants.Collections.SpecificITEMTYPETraits, ItemTypeConstants.Weapon);
+            tableName = TableNameConstants.Collections.SpecificITEMTYPETraits(ItemTypeConstants.Weapon);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, template.Name)).Returns(traits);
 
             var specialAbilityNames = new[] { "ability 1", "ability 2" };
-            tableName = TableNameConstants.Collections.SpecificITEMTYPESpecialAbilities, ItemTypeConstants.Weapon);
+            tableName = TableNameConstants.Collections.SpecificITEMTYPESpecialAbilities(ItemTypeConstants.Weapon);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, template.Name)).Returns(specialAbilityNames);
 
             var specialAbilities = new[]
@@ -782,20 +706,15 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
                 new SpecialAbility()
             };
 
-            specialAbilities[1].CriticalDamages[mundaneWeapon.CriticalMultiplier] = new List<Damage>();
-            specialAbilities[1].CriticalDamages[mundaneWeapon.SecondaryCriticalMultiplier] = new List<Damage>();
-            specialAbilities[1].CriticalDamages[mundaneWeapon.CriticalMultiplier].Add(new Damage
-            {
-                Roll = "my ability crit roll",
-                Type = "my ability crit damage type",
-                Condition = "my ability crit condition"
-            });
-            specialAbilities[1].CriticalDamages[mundaneWeapon.SecondaryCriticalMultiplier].Add(new Damage
-            {
-                Roll = "my 2nd ability crit roll",
-                Type = "my 2nd ability crit damage type",
-                Condition = "my 2nd ability crit condition"
-            });
+            specialAbilities[1].CriticalDamages =
+            [
+                new Damage
+                {
+                    Roll = "my ability crit roll",
+                    Type = "my ability crit damage type",
+                    Condition = "my ability crit condition"
+                },
+            ];
             specialAbilities[1].Damages.Add(new Damage
             {
                 Roll = "my ability roll",
@@ -807,8 +726,12 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
                 It.Is<IEnumerable<SpecialAbility>>(aa =>
                     aa.First().Name == "ability 1"
                     && aa.Last().Name == "ability 2")
-                )
+                , mundaneWeapon.CriticalMultiplier)
             ).Returns(specialAbilities);
+
+            mockSpecialAbilitiesGenerator
+                .Setup(g => g.ApplyAbilitiesToWeapon(It.Is<Weapon>(w => w.Magic.SpecialAbilities == specialAbilities)))
+                .Returns((Weapon w) => w);
 
             mockCollectionsSelector
                 .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.ItemGroups, template.Name))
@@ -827,118 +750,10 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
 
             var weapon = gear as Weapon;
             Assert.That(weapon.CriticalMultiplier, Is.EqualTo(mundaneWeapon.CriticalMultiplier));
-            Assert.That(weapon.Damages, Is.SupersetOf(mundaneWeapon.Damages)
-                .And.Count.EqualTo(2));
-            Assert.That(weapon.Damages[1].Roll, Is.EqualTo(specialAbilities[1].Damages[0].Roll));
-            Assert.That(weapon.Damages[1].Type, Is.EqualTo(specialAbilities[1].Damages[0].Type));
-            Assert.That(weapon.Damages[1].Condition, Is.EqualTo(specialAbilities[1].Damages[0].Condition));
-            Assert.That(weapon.CriticalDamages, Is.EqualTo(mundaneWeapon.CriticalDamages)
-                .And.Count.EqualTo(2));
-            Assert.That(weapon.CriticalDamages[1].Roll, Is.EqualTo(specialAbilities[1].CriticalDamages[mundaneWeapon.CriticalMultiplier][0].Roll));
-            Assert.That(weapon.CriticalDamages[1].Type, Is.EqualTo(specialAbilities[1].CriticalDamages[mundaneWeapon.CriticalMultiplier][0].Type));
-            Assert.That(weapon.CriticalDamages[1].Condition, Is.EqualTo(specialAbilities[1].CriticalDamages[mundaneWeapon.CriticalMultiplier][0].Condition));
             Assert.That(weapon.Size, Is.EqualTo(mundaneWeapon.Size));
             Assert.That(weapon.ThreatRangeDescription, Is.EqualTo(mundaneWeapon.ThreatRangeDescription));
             Assert.That(weapon.Quantity, Is.EqualTo(mundaneWeapon.Quantity));
             Assert.That(weapon.SecondaryCriticalMultiplier, Is.EqualTo(mundaneWeapon.SecondaryCriticalMultiplier));
-            Assert.That(weapon.SecondaryDamages, Is.EqualTo(mundaneWeapon.SecondaryDamages));
-            Assert.That(weapon.SecondaryCriticalDamages, Is.EqualTo(mundaneWeapon.SecondaryCriticalDamages));
-            Assert.That(weapon.SecondaryDamages, Is.SupersetOf(mundaneWeapon.SecondaryDamages)
-                .And.Count.EqualTo(2));
-            Assert.That(weapon.SecondaryDamages[1].Roll, Is.EqualTo(specialAbilities[1].Damages[0].Roll));
-            Assert.That(weapon.SecondaryDamages[1].Type, Is.EqualTo(specialAbilities[1].Damages[0].Type));
-            Assert.That(weapon.SecondaryDamages[1].Condition, Is.EqualTo(specialAbilities[1].Damages[0].Condition));
-            Assert.That(weapon.SecondaryCriticalDamages, Is.EqualTo(mundaneWeapon.SecondaryCriticalDamages)
-                .And.Count.EqualTo(2));
-            Assert.That(weapon.SecondaryCriticalDamages[1].Roll, Is.EqualTo(specialAbilities[1].CriticalDamages[mundaneWeapon.SecondaryCriticalMultiplier][0].Roll));
-            Assert.That(weapon.SecondaryCriticalDamages[1].Type, Is.EqualTo(specialAbilities[1].CriticalDamages[mundaneWeapon.SecondaryCriticalMultiplier][0].Type));
-            Assert.That(weapon.SecondaryCriticalDamages[1].Condition, Is.EqualTo(specialAbilities[1].CriticalDamages[mundaneWeapon.SecondaryCriticalMultiplier][0].Condition));
-            Assert.That(weapon.SecondaryHasAbilities, Is.True);
-            Assert.That(weapon.SecondaryMagicBonus, Is.EqualTo(selection.Amount));
-        }
-
-        [Test]
-        public void GetSpecificWeapon_DoubleWeapon_WithAbilitiesWithEmptyDamage()
-        {
-            mundaneWeapon.SecondaryCriticalDamages.Add(new Damage { Roll = "my secondary crit roll", Type = "my secondary crit damage type" });
-            mundaneWeapon.SecondaryDamages.Add(new Damage { Roll = "my secondary roll", Type = "my secondary damage type" });
-            mundaneWeapon.SecondaryCriticalMultiplier = "secondary crit";
-
-            template.Name = WeaponConstants.ShiftersSorrow;
-
-            var attributes = new[] { "attribute 1", AttributeConstants.DoubleWeapon, "attribute 2" };
-            var tableName = TableNameConstants.Collections.SpecificITEMTYPEAttributes, ItemTypeConstants.Weapon);
-            mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, template.Name)).Returns(attributes);
-
-            var traits = new[] { "trait 1", "trait 2" };
-            tableName = TableNameConstants.Collections.SpecificITEMTYPETraits, ItemTypeConstants.Weapon);
-            mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, template.Name)).Returns(traits);
-
-            var specialAbilityNames = new[] { "ability 1", "ability 2" };
-            tableName = TableNameConstants.Collections.SpecificITEMTYPESpecialAbilities, ItemTypeConstants.Weapon);
-            mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, template.Name)).Returns(specialAbilityNames);
-
-            var specialAbilities = new[]
-            {
-                new SpecialAbility(),
-                new SpecialAbility()
-            };
-
-            specialAbilities[1].CriticalDamages[mundaneWeapon.CriticalMultiplier] = new List<Damage>();
-            specialAbilities[1].CriticalDamages[mundaneWeapon.SecondaryCriticalMultiplier] = new List<Damage>();
-            specialAbilities[1].CriticalDamages[mundaneWeapon.CriticalMultiplier].Add(new Damage { Roll = "my ability crit roll", Type = string.Empty });
-            specialAbilities[1].CriticalDamages[mundaneWeapon.SecondaryCriticalMultiplier].Add(new Damage { Roll = "my 2nd ability crit roll", Type = string.Empty });
-            specialAbilities[1].Damages.Add(new Damage { Roll = "my ability roll", Type = string.Empty });
-
-            mockSpecialAbilitiesGenerator.Setup(s => s.GenerateFor(
-                It.Is<IEnumerable<SpecialAbility>>(aa =>
-                    aa.First().Name == "ability 1"
-                    && aa.Last().Name == "ability 2")
-                )
-            ).Returns(specialAbilities);
-
-            mockCollectionsSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.ItemGroups, template.Name))
-                .Returns(baseNames);
-
-            var gear = specificGearGenerator.GenerateFrom(template);
-            Assert.That(gear, Is.Not.EqualTo(template));
-            Assert.That(gear.Name, Is.EqualTo(template.Name));
-            Assert.That(gear.BaseNames, Is.EquivalentTo(baseNames));
-            Assert.That(gear.ItemType, Is.EqualTo(ItemTypeConstants.Weapon));
-            Assert.That(gear.Attributes, Is.EqualTo(attributes));
-            Assert.That(gear.Traits, Is.SupersetOf(traits));
-            Assert.That(gear.Magic.Bonus, Is.EqualTo(selection.Amount));
-            Assert.That(gear.Magic.SpecialAbilities, Is.EqualTo(specialAbilities));
-            Assert.That(gear, Is.InstanceOf<Weapon>());
-
-            var weapon = gear as Weapon;
-            Assert.That(weapon.CriticalMultiplier, Is.EqualTo(mundaneWeapon.CriticalMultiplier));
-            Assert.That(weapon.Damages, Is.SupersetOf(mundaneWeapon.Damages)
-                .And.Count.EqualTo(2));
-            Assert.That(weapon.Damages[1].Roll, Is.EqualTo(specialAbilities[1].Damages[0].Roll));
-            Assert.That(weapon.Damages[1].Type, Is.Not.Empty.And.EqualTo(mundaneWeapon.Damages[0].Type));
-            Assert.That(weapon.Damages[1].Condition, Is.EqualTo(specialAbilities[1].Damages[0].Condition));
-            Assert.That(weapon.CriticalDamages, Is.EqualTo(mundaneWeapon.CriticalDamages)
-                .And.SupersetOf(specialAbilities[1].CriticalDamages[mundaneWeapon.CriticalMultiplier])
-                .And.Count.EqualTo(2));
-            Assert.That(specialAbilities[1].CriticalDamages[mundaneWeapon.CriticalMultiplier][0].Type, Is.Not.Empty.And.EqualTo(mundaneWeapon.CriticalDamages[0].Type));
-            Assert.That(weapon.Size, Is.EqualTo(mundaneWeapon.Size));
-            Assert.That(weapon.ThreatRangeDescription, Is.EqualTo(mundaneWeapon.ThreatRangeDescription));
-            Assert.That(weapon.Quantity, Is.EqualTo(mundaneWeapon.Quantity));
-            Assert.That(weapon.SecondaryCriticalMultiplier, Is.EqualTo(mundaneWeapon.SecondaryCriticalMultiplier));
-            Assert.That(weapon.SecondaryDamages, Is.EqualTo(mundaneWeapon.SecondaryDamages));
-            Assert.That(weapon.SecondaryCriticalDamages, Is.EqualTo(mundaneWeapon.SecondaryCriticalDamages));
-            Assert.That(weapon.SecondaryDamages, Is.SupersetOf(mundaneWeapon.SecondaryDamages)
-                .And.Count.EqualTo(2));
-            Assert.That(weapon.SecondaryDamages[1].Roll, Is.EqualTo(specialAbilities[1].Damages[0].Roll));
-            Assert.That(weapon.SecondaryDamages[1].Type, Is.Not.Empty.And.EqualTo(mundaneWeapon.SecondaryDamages[0].Type));
-            Assert.That(weapon.SecondaryDamages[1].Condition, Is.EqualTo(specialAbilities[1].Damages[0].Condition));
-            Assert.That(weapon.SecondaryCriticalDamages, Is.EqualTo(mundaneWeapon.SecondaryCriticalDamages)
-                .And.Count.EqualTo(2));
-            Assert.That(weapon.SecondaryCriticalDamages[1].Roll, Is.EqualTo(specialAbilities[1].CriticalDamages[mundaneWeapon.SecondaryCriticalMultiplier][0].Roll));
-            Assert.That(weapon.SecondaryCriticalDamages[1].Type, Is.Not.Empty.And.EqualTo(mundaneWeapon.SecondaryCriticalDamages[0].Type));
-            Assert.That(weapon.SecondaryCriticalDamages[1].Condition, Is.EqualTo(specialAbilities[1].CriticalDamages[mundaneWeapon.SecondaryCriticalMultiplier][0].Condition));
             Assert.That(weapon.SecondaryHasAbilities, Is.True);
             Assert.That(weapon.SecondaryMagicBonus, Is.EqualTo(selection.Amount));
         }
@@ -966,15 +781,15 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.ItemGroups, ItemTypeConstants.Weapon)).Returns(() => new[] { template.Name });
 
             var attributes = new[] { "attribute 1", "attribute 2" };
-            var tableName = TableNameConstants.Collections.SpecificITEMTYPEAttributes, ItemTypeConstants.Weapon);
+            var tableName = TableNameConstants.Collections.SpecificITEMTYPEAttributes(ItemTypeConstants.Weapon);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, template.Name)).Returns(attributes);
 
             var traits = new[] { "trait 1", "trait 2" };
-            tableName = TableNameConstants.Collections.SpecificITEMTYPETraits, ItemTypeConstants.Weapon);
+            tableName = TableNameConstants.Collections.SpecificITEMTYPETraits(ItemTypeConstants.Weapon);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, template.Name)).Returns(traits);
 
             var specialAbilityNames = new[] { "ability 1", "ability 2" };
-            tableName = TableNameConstants.Collections.SpecificITEMTYPESpecialAbilities, ItemTypeConstants.Weapon);
+            tableName = TableNameConstants.Collections.SpecificITEMTYPESpecialAbilities(ItemTypeConstants.Weapon);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, template.Name)).Returns(specialAbilityNames);
 
             var specialAbilities = new[]
@@ -1020,15 +835,15 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
             weaponTemplate.Name = WeaponConstants.HolyAvenger;
 
             var attributes = new[] { "attribute 1", "attribute 2" };
-            var tableName = TableNameConstants.Collections.SpecificITEMTYPEAttributes, ItemTypeConstants.Weapon);
+            var tableName = TableNameConstants.Collections.SpecificITEMTYPEAttributes(ItemTypeConstants.Weapon);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, weaponTemplate.Name)).Returns(attributes);
 
             var traits = new[] { "trait 1", "trait 2" };
-            tableName = TableNameConstants.Collections.SpecificITEMTYPETraits, ItemTypeConstants.Weapon);
+            tableName = TableNameConstants.Collections.SpecificITEMTYPETraits(ItemTypeConstants.Weapon);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, weaponTemplate.Name)).Returns(traits);
 
             var specialAbilityNames = new[] { "ability 1", "ability 2" };
-            tableName = TableNameConstants.Collections.SpecificITEMTYPESpecialAbilities, ItemTypeConstants.Weapon);
+            tableName = TableNameConstants.Collections.SpecificITEMTYPESpecialAbilities(ItemTypeConstants.Weapon);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, weaponTemplate.Name)).Returns(specialAbilityNames);
 
             var specialAbilities = new[]
@@ -1083,7 +898,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
         public void GetSpecialAbilities()
         {
             var specialAbilityNames = new[] { "ability 1", "ability 2" };
-            var tableName = TableNameConstants.Collections.SpecificITEMTYPESpecialAbilities, ItemTypeConstants.Armor);
+            var tableName = TableNameConstants.Collections.SpecificITEMTYPESpecialAbilities(ItemTypeConstants.Armor);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, template.Name)).Returns(specialAbilityNames);
 
             var specialAbilities = new[]
@@ -1107,7 +922,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
         public void IfCharged_GetChargesFromGenerator()
         {
             var attributes = new[] { AttributeConstants.Charged };
-            var tableName = TableNameConstants.Collections.SpecificITEMTYPEAttributes, ItemTypeConstants.Armor);
+            var tableName = TableNameConstants.Collections.SpecificITEMTYPEAttributes(ItemTypeConstants.Armor);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, template.Name)).Returns(attributes);
             mockChargesGenerator.Setup(g => g.GenerateFor(ItemTypeConstants.Armor, template.Name)).Returns(9266);
 
@@ -1119,7 +934,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
         public void IfNotCharged_DoNotGetChargesFromGenerator()
         {
             var attributes = new[] { "not charged" };
-            var tableName = TableNameConstants.Collections.SpecificITEMTYPEAttributes, ItemTypeConstants.Armor);
+            var tableName = TableNameConstants.Collections.SpecificITEMTYPEAttributes(ItemTypeConstants.Armor);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, template.Name)).Returns(attributes);
             mockChargesGenerator.Setup(g => g.GenerateFor(ItemTypeConstants.Armor, template.Name)).Returns(9266);
 
@@ -1339,15 +1154,15 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
             var template = itemVerifier.CreateRandomTemplate(ArmorConstants.AbsorbingShield);
 
             var attributes = new[] { "attribute 1", "attribute 2" };
-            var tableName = TableNameConstants.Collections.SpecificITEMTYPEAttributes, AttributeConstants.Shield);
+            var tableName = TableNameConstants.Collections.SpecificITEMTYPEAttributes(AttributeConstants.Shield);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, ArmorConstants.AbsorbingShield)).Returns(attributes);
 
             var traits = new[] { "trait 1", "trait 2" };
-            tableName = TableNameConstants.Collections.SpecificITEMTYPETraits, AttributeConstants.Shield);
+            tableName = TableNameConstants.Collections.SpecificITEMTYPETraits(AttributeConstants.Shield);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, ArmorConstants.AbsorbingShield)).Returns(traits);
 
             var specialAbilityNames = new[] { "ability 1", "ability 2" };
-            tableName = TableNameConstants.Collections.SpecificITEMTYPESpecialAbilities, AttributeConstants.Shield);
+            tableName = TableNameConstants.Collections.SpecificITEMTYPESpecialAbilities(AttributeConstants.Shield);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, ArmorConstants.AbsorbingShield)).Returns(specialAbilityNames);
 
             var specialAbilities = new[]
@@ -1383,15 +1198,15 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
             var template = itemVerifier.CreateRandomTemplate(ArmorConstants.ArmorOfRage);
 
             var attributes = new[] { "attribute 1", "attribute 2" };
-            var tableName = TableNameConstants.Collections.SpecificITEMTYPEAttributes, ItemTypeConstants.Armor);
+            var tableName = TableNameConstants.Collections.SpecificITEMTYPEAttributes(ItemTypeConstants.Armor);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, ArmorConstants.ArmorOfRage)).Returns(attributes);
 
             var traits = new[] { "trait 1", "trait 2" };
-            tableName = TableNameConstants.Collections.SpecificITEMTYPETraits, ItemTypeConstants.Armor);
+            tableName = TableNameConstants.Collections.SpecificITEMTYPETraits(ItemTypeConstants.Armor);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, ArmorConstants.ArmorOfRage)).Returns(traits);
 
             var specialAbilityNames = new[] { "ability 1", "ability 2" };
-            tableName = TableNameConstants.Collections.SpecificITEMTYPESpecialAbilities, ItemTypeConstants.Armor);
+            tableName = TableNameConstants.Collections.SpecificITEMTYPESpecialAbilities(ItemTypeConstants.Armor);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, ArmorConstants.ArmorOfRage)).Returns(specialAbilityNames);
 
             var specialAbilities = new[]
@@ -1434,15 +1249,15 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
             var template = itemVerifier.CreateRandomTemplate(WeaponConstants.HolyAvenger);
 
             var attributes = new[] { "attribute 1", "attribute 2" };
-            var tableName = TableNameConstants.Collections.SpecificITEMTYPEAttributes, ItemTypeConstants.Weapon);
+            var tableName = TableNameConstants.Collections.SpecificITEMTYPEAttributes(ItemTypeConstants.Weapon);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, WeaponConstants.HolyAvenger)).Returns(attributes);
 
             var traits = new[] { "trait 1", "trait 2" };
-            tableName = TableNameConstants.Collections.SpecificITEMTYPETraits, ItemTypeConstants.Weapon);
+            tableName = TableNameConstants.Collections.SpecificITEMTYPETraits(ItemTypeConstants.Weapon);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, WeaponConstants.HolyAvenger)).Returns(traits);
 
             var specialAbilityNames = new[] { "ability 1", "ability 2" };
-            tableName = TableNameConstants.Collections.SpecificITEMTYPESpecialAbilities, ItemTypeConstants.Weapon);
+            tableName = TableNameConstants.Collections.SpecificITEMTYPESpecialAbilities(ItemTypeConstants.Weapon);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, WeaponConstants.HolyAvenger)).Returns(specialAbilityNames);
 
             var specialAbilities = new[]
@@ -1493,15 +1308,15 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
             var template = itemVerifier.CreateRandomTemplate(WeaponConstants.HolyAvenger);
 
             var attributes = new[] { "attribute 1", "attribute 2" };
-            var tableName = TableNameConstants.Collections.SpecificITEMTYPEAttributes, ItemTypeConstants.Weapon);
+            var tableName = TableNameConstants.Collections.SpecificITEMTYPEAttributes(ItemTypeConstants.Weapon);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, WeaponConstants.HolyAvenger)).Returns(attributes);
 
             var traits = new[] { "trait 1", "trait 2" };
-            tableName = TableNameConstants.Collections.SpecificITEMTYPETraits, ItemTypeConstants.Weapon);
+            tableName = TableNameConstants.Collections.SpecificITEMTYPETraits(ItemTypeConstants.Weapon);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, WeaponConstants.HolyAvenger)).Returns(traits);
 
             var specialAbilityNames = new[] { "ability 1", "ability 2" };
-            tableName = TableNameConstants.Collections.SpecificITEMTYPESpecialAbilities, ItemTypeConstants.Weapon);
+            tableName = TableNameConstants.Collections.SpecificITEMTYPESpecialAbilities(ItemTypeConstants.Weapon);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, WeaponConstants.HolyAvenger)).Returns(specialAbilityNames);
 
             var specialAbilities = new[]
@@ -1565,15 +1380,15 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
             var template = itemVerifier.CreateRandomTemplate(WeaponConstants.HolyAvenger);
 
             var attributes = new[] { "attribute 1", "attribute 2" };
-            var tableName = TableNameConstants.Collections.SpecificITEMTYPEAttributes, ItemTypeConstants.Weapon);
+            var tableName = TableNameConstants.Collections.SpecificITEMTYPEAttributes(ItemTypeConstants.Weapon);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, WeaponConstants.HolyAvenger)).Returns(attributes);
 
             var traits = new[] { "trait 1", "trait 2" };
-            tableName = TableNameConstants.Collections.SpecificITEMTYPETraits, ItemTypeConstants.Weapon);
+            tableName = TableNameConstants.Collections.SpecificITEMTYPETraits(ItemTypeConstants.Weapon);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, WeaponConstants.HolyAvenger)).Returns(traits);
 
             var specialAbilityNames = new[] { "ability 1", "ability 2" };
-            tableName = TableNameConstants.Collections.SpecificITEMTYPESpecialAbilities, ItemTypeConstants.Weapon);
+            tableName = TableNameConstants.Collections.SpecificITEMTYPESpecialAbilities(ItemTypeConstants.Weapon);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, WeaponConstants.HolyAvenger)).Returns(specialAbilityNames);
 
             var specialAbilities = new[]
@@ -1653,15 +1468,15 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
             var template = itemVerifier.CreateRandomTemplate(WeaponConstants.ShiftersSorrow);
 
             var attributes = new[] { "attribute 1", AttributeConstants.DoubleWeapon, "attribute 2" };
-            var tableName = TableNameConstants.Collections.SpecificITEMTYPEAttributes, ItemTypeConstants.Weapon);
+            var tableName = TableNameConstants.Collections.SpecificITEMTYPEAttributes(ItemTypeConstants.Weapon);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, WeaponConstants.ShiftersSorrow)).Returns(attributes);
 
             var traits = new[] { "trait 1", "trait 2" };
-            tableName = TableNameConstants.Collections.SpecificITEMTYPETraits, ItemTypeConstants.Weapon);
+            tableName = TableNameConstants.Collections.SpecificITEMTYPETraits(ItemTypeConstants.Weapon);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, WeaponConstants.ShiftersSorrow)).Returns(traits);
 
             var specialAbilityNames = new[] { "ability 1", "ability 2" };
-            tableName = TableNameConstants.Collections.SpecificITEMTYPESpecialAbilities, ItemTypeConstants.Weapon);
+            tableName = TableNameConstants.Collections.SpecificITEMTYPESpecialAbilities(ItemTypeConstants.Weapon);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, WeaponConstants.ShiftersSorrow)).Returns(specialAbilityNames);
 
             var specialAbilities = new[]
@@ -1716,15 +1531,15 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
             var template = itemVerifier.CreateRandomTemplate(WeaponConstants.ShiftersSorrow);
 
             var attributes = new[] { "attribute 1", AttributeConstants.DoubleWeapon, "attribute 2" };
-            var tableName = TableNameConstants.Collections.SpecificITEMTYPEAttributes, ItemTypeConstants.Weapon);
+            var tableName = TableNameConstants.Collections.SpecificITEMTYPEAttributes(ItemTypeConstants.Weapon);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, WeaponConstants.ShiftersSorrow)).Returns(attributes);
 
             var traits = new[] { "trait 1", "trait 2" };
-            tableName = TableNameConstants.Collections.SpecificITEMTYPETraits, ItemTypeConstants.Weapon);
+            tableName = TableNameConstants.Collections.SpecificITEMTYPETraits(ItemTypeConstants.Weapon);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, WeaponConstants.ShiftersSorrow)).Returns(traits);
 
             var specialAbilityNames = new[] { "ability 1", "ability 2" };
-            tableName = TableNameConstants.Collections.SpecificITEMTYPESpecialAbilities, ItemTypeConstants.Weapon);
+            tableName = TableNameConstants.Collections.SpecificITEMTYPESpecialAbilities(ItemTypeConstants.Weapon);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, WeaponConstants.ShiftersSorrow)).Returns(specialAbilityNames);
 
             var specialAbilities = new[]
@@ -1797,15 +1612,15 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
             var template = itemVerifier.CreateRandomTemplate(WeaponConstants.ScreamingBolt);
 
             var attributes = new[] { "attribute 1", "attribute 2", AttributeConstants.Ammunition };
-            var tableName = TableNameConstants.Collections.SpecificITEMTYPEAttributes, ItemTypeConstants.Weapon);
+            var tableName = TableNameConstants.Collections.SpecificITEMTYPEAttributes(ItemTypeConstants.Weapon);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, WeaponConstants.ScreamingBolt)).Returns(attributes);
 
             var traits = new[] { "trait 1", "trait 2" };
-            tableName = TableNameConstants.Collections.SpecificITEMTYPETraits, ItemTypeConstants.Weapon);
+            tableName = TableNameConstants.Collections.SpecificITEMTYPETraits(ItemTypeConstants.Weapon);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, WeaponConstants.ScreamingBolt)).Returns(traits);
 
             var specialAbilityNames = new[] { "ability 1", "ability 2" };
-            tableName = TableNameConstants.Collections.SpecificITEMTYPESpecialAbilities, ItemTypeConstants.Weapon);
+            tableName = TableNameConstants.Collections.SpecificITEMTYPESpecialAbilities(ItemTypeConstants.Weapon);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, WeaponConstants.ScreamingBolt)).Returns(specialAbilityNames);
 
             var specialAbilities = new[]
@@ -1851,15 +1666,15 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
             var template = itemVerifier.CreateRandomTemplate(WeaponConstants.JavelinOfLightning);
 
             var attributes = new[] { "attribute 1", "attribute 2", AttributeConstants.OneTimeUse };
-            var tableName = TableNameConstants.Collections.SpecificITEMTYPEAttributes, ItemTypeConstants.Weapon);
+            var tableName = TableNameConstants.Collections.SpecificITEMTYPEAttributes(ItemTypeConstants.Weapon);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, WeaponConstants.JavelinOfLightning)).Returns(attributes);
 
             var traits = new[] { "trait 1", "trait 2" };
-            tableName = TableNameConstants.Collections.SpecificITEMTYPETraits, ItemTypeConstants.Weapon);
+            tableName = TableNameConstants.Collections.SpecificITEMTYPETraits(ItemTypeConstants.Weapon);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, WeaponConstants.JavelinOfLightning)).Returns(traits);
 
             var specialAbilityNames = new[] { "ability 1", "ability 2" };
-            tableName = TableNameConstants.Collections.SpecificITEMTYPESpecialAbilities, ItemTypeConstants.Weapon);
+            tableName = TableNameConstants.Collections.SpecificITEMTYPESpecialAbilities(ItemTypeConstants.Weapon);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, WeaponConstants.JavelinOfLightning)).Returns(specialAbilityNames);
 
             var specialAbilities = new[]
@@ -2130,7 +1945,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
         public void GenerateChargesForRenamedItem()
         {
             var attributes = new[] { AttributeConstants.Charged };
-            var tableName = TableNameConstants.Collections.SpecificITEMTYPEAttributes, ItemTypeConstants.Weapon);
+            var tableName = TableNameConstants.Collections.SpecificITEMTYPEAttributes(ItemTypeConstants.Weapon);
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, tableName, WeaponConstants.LuckBlade3)).Returns(attributes);
 
             var item = new Item();
@@ -2160,13 +1975,13 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
                 .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.ItemGroups, "gear type")).
                 Returns(new[] { "another item name", "item name", WeaponConstants.LuckBlade, WeaponConstants.Dagger_Silver });
 
-            var tableName = TableNameConstants.Percentiles.POWERSpecificITEMTYPEs, "power", "gear type");
+            var tableName = TableNameConstants.Percentiles.POWERSpecificITEMTYPEs("power", "gear type");
             var selections = new[]
             {
-                new TypeAndAmountSelection { Type = "other item name", Amount = 9266 },
-                new TypeAndAmountSelection { Type = "item name", Amount = 90210 },
-                new TypeAndAmountSelection { Type = WeaponConstants.LuckBlade0, Amount = 0 },
-                new TypeAndAmountSelection { Type = WeaponConstants.Dagger_Silver, Amount = 600 },
+                new TypeAndAmountDataSelection { Type = "other item name", AmountAsDouble = 9266 },
+                new TypeAndAmountDataSelection { Type = "item name", AmountAsDouble = 90210 },
+                new TypeAndAmountDataSelection { Type = WeaponConstants.LuckBlade0, AmountAsDouble = 0 },
+                new TypeAndAmountDataSelection { Type = WeaponConstants.Dagger_Silver, AmountAsDouble = 600 },
             };
             mockTypeAndAmountPercentileSelector
                 .Setup(s => s.SelectAllFrom(tableName))
@@ -2199,15 +2014,15 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
                 .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.ItemGroups, "gear type")).
                 Returns(new[] { "another item name", "item name", WeaponConstants.LuckBlade, WeaponConstants.Dagger_Silver });
 
-            var tableName = TableNameConstants.Percentiles.POWERSpecificITEMTYPEs, "power", "gear type");
+            var tableName = TableNameConstants.Percentiles.POWERSpecificITEMTYPEs("power", "gear type");
             var selections = new[]
             {
-                new TypeAndAmountSelection { Type = "other item name", Amount = 9266 },
-                new TypeAndAmountSelection { Type = "item name", Amount = 90210 },
-                new TypeAndAmountSelection { Type = WeaponConstants.LuckBlade1, Amount = 1 },
-                new TypeAndAmountSelection { Type = WeaponConstants.LuckBlade2, Amount = 2 },
-                new TypeAndAmountSelection { Type = WeaponConstants.LuckBlade3, Amount = 3 },
-                new TypeAndAmountSelection { Type = WeaponConstants.Dagger_Silver, Amount = 600 },
+                new TypeAndAmountDataSelection { Type = "other item name", AmountAsDouble = 9266 },
+                new TypeAndAmountDataSelection { Type = "item name", AmountAsDouble = 90210 },
+                new TypeAndAmountDataSelection { Type = WeaponConstants.LuckBlade1, AmountAsDouble = 1 },
+                new TypeAndAmountDataSelection { Type = WeaponConstants.LuckBlade2, AmountAsDouble = 2 },
+                new TypeAndAmountDataSelection { Type = WeaponConstants.LuckBlade3, AmountAsDouble = 3 },
+                new TypeAndAmountDataSelection { Type = WeaponConstants.Dagger_Silver, AmountAsDouble = 600 },
             };
             mockTypeAndAmountPercentileSelector
                 .Setup(s => s.SelectAllFrom(tableName))
@@ -2233,13 +2048,13 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
         [Test]
         public void CanBeSpecific_ReturnsTrue_IsSpecific()
         {
-            var tableName = TableNameConstants.Percentiles.POWERSpecificITEMTYPEs, "power", "gear type");
+            var tableName = TableNameConstants.Percentiles.POWERSpecificITEMTYPEs("power", "gear type");
             mockTypeAndAmountPercentileSelector
                 .Setup(s => s.SelectAllFrom(tableName))
                 .Returns(new[]
                 {
-                    new TypeAndAmountSelection { Type = "other item name", Amount = 9266 },
-                    new TypeAndAmountSelection { Type = "item name", Amount = 90210 },
+                    new TypeAndAmountDataSelection { Type = "other item name", AmountAsDouble = 9266 },
+                    new TypeAndAmountDataSelection { Type = "item name", AmountAsDouble = 90210 },
                 });
 
             var canBeSpecific = specificGearGenerator.CanBeSpecific("power", ItemTypeConstants.Weapon, WeaponConstants.SunBlade);
@@ -2251,13 +2066,13 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
         [TestCase(AttributeConstants.Shield)]
         public void CanBeSpecific_ReturnsTrue_BaseNameMatches(string gearType)
         {
-            var tableName = TableNameConstants.Percentiles.POWERSpecificITEMTYPEs, "power", gearType);
+            var tableName = TableNameConstants.Percentiles.POWERSpecificITEMTYPEs("power", gearType);
             mockTypeAndAmountPercentileSelector
                 .Setup(s => s.SelectAllFrom(tableName))
                 .Returns(new[]
                 {
-                    new TypeAndAmountSelection { Type = "another item name", Amount = 9266 },
-                    new TypeAndAmountSelection { Type = "wrong item name", Amount = 90210 },
+                    new TypeAndAmountDataSelection { Type = "another item name", AmountAsDouble = 9266 },
+                    new TypeAndAmountDataSelection { Type = "wrong item name", AmountAsDouble = 90210 },
                 });
 
             mockCollectionsSelector
@@ -2274,13 +2089,13 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
         [Test]
         public void CanBeSpecific_ReturnsFalse()
         {
-            var tableName = TableNameConstants.Percentiles.POWERSpecificITEMTYPEs, "power", "gear type");
+            var tableName = TableNameConstants.Percentiles.POWERSpecificITEMTYPEs("power", "gear type");
             mockTypeAndAmountPercentileSelector
                 .Setup(s => s.SelectAllFrom(tableName))
                 .Returns(new[]
                 {
-                    new TypeAndAmountSelection { Type = "another item name", Amount = 9266 },
-                    new TypeAndAmountSelection { Type = "wrong item name", Amount = 90210 },
+                    new TypeAndAmountDataSelection { Type = "another item name", AmountAsDouble = 9266 },
+                    new TypeAndAmountDataSelection { Type = "wrong item name", AmountAsDouble = 90210 },
                 });
 
             mockCollectionsSelector
@@ -2297,13 +2112,13 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
         [Test]
         public void GenerateNameFrom_1Option()
         {
-            var tableName = TableNameConstants.Percentiles.POWERSpecificITEMTYPEs, "power", "gear type");
+            var tableName = TableNameConstants.Percentiles.POWERSpecificITEMTYPEs("power", "gear type");
             mockTypeAndAmountPercentileSelector
                 .Setup(s => s.SelectAllFrom(tableName))
                 .Returns(new[]
                 {
-                    new TypeAndAmountSelection { Type = "another item name", Amount = 9266 },
-                    new TypeAndAmountSelection { Type = "item name", Amount = 90210 },
+                    new TypeAndAmountDataSelection { Type = "another item name", AmountAsDouble = 9266 },
+                    new TypeAndAmountDataSelection { Type = "item name", AmountAsDouble = 90210 },
                 });
             mockCollectionsSelector
                 .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.ItemGroups, "another item name")).
@@ -2323,13 +2138,13 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
         [Test]
         public void GenerateNameFrom_2Options_SelectsRandomly()
         {
-            var tableName = TableNameConstants.Percentiles.POWERSpecificITEMTYPEs, "power", "gear type");
+            var tableName = TableNameConstants.Percentiles.POWERSpecificITEMTYPEs("power", "gear type");
             mockTypeAndAmountPercentileSelector
                 .Setup(s => s.SelectAllFrom(tableName))
                 .Returns(new[]
                 {
-                    new TypeAndAmountSelection { Type = "item name", Amount = 90210 },
-                    new TypeAndAmountSelection { Type = "another item name", Amount = 9266 },
+                    new TypeAndAmountDataSelection { Type = "item name", AmountAsDouble = 90210 },
+                    new TypeAndAmountDataSelection { Type = "another item name", AmountAsDouble = 9266 },
                 });
             mockCollectionsSelector
                 .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.ItemGroups, "another item name")).
@@ -2349,13 +2164,13 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
         [Test]
         public void GenerateNameFrom_ThrowsArgumentException_WhenCannotBeSpecific()
         {
-            var tableName = TableNameConstants.Percentiles.POWERSpecificITEMTYPEs, "power", "gear type");
+            var tableName = TableNameConstants.Percentiles.POWERSpecificITEMTYPEs("power", "gear type");
             mockTypeAndAmountPercentileSelector
                 .Setup(s => s.SelectAllFrom(tableName))
                 .Returns(new[]
                 {
-                    new TypeAndAmountSelection { Type = "another item name", Amount = 9266 },
-                    new TypeAndAmountSelection { Type = "item name", Amount = 90210 },
+                    new TypeAndAmountDataSelection { Type = "another item name", AmountAsDouble = 9266 },
+                    new TypeAndAmountDataSelection { Type = "item name", AmountAsDouble = 90210 },
                 });
             mockCollectionsSelector
                 .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.ItemGroups, "another item name")).
@@ -2371,10 +2186,10 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
         [Test]
         public void GenerateRandomNameFrom_ReturnsRandomName()
         {
-            var tableName = TableNameConstants.Percentiles.POWERSpecificITEMTYPEs, "power", "gear type");
+            var tableName = TableNameConstants.Percentiles.POWERSpecificITEMTYPEs("power", "gear type");
             mockTypeAndAmountPercentileSelector
                 .Setup(s => s.SelectFrom(tableName))
-                .Returns(new TypeAndAmountSelection { Type = "item name", Amount = 90210 });
+                .Returns(new TypeAndAmountDataSelection { Type = "item name", AmountAsDouble = 90210 });
 
             var name = specificGearGenerator.GenerateRandomNameFrom("power", "gear type");
             Assert.That(name, Is.EqualTo("item name"));

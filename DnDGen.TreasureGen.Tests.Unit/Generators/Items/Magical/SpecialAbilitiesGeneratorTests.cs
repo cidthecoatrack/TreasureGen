@@ -1585,21 +1585,45 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             Assert.That(updatedWeapon, Is.EqualTo(weapon));
             Assert.That(updatedWeapon.Magic.SpecialAbilities, Is.Empty);
             Assert.That(updatedWeapon.Damages, Has.Count.EqualTo(1));
+            Assert.That(updatedWeapon.Damages[0].Roll, Is.EqualTo("my roll"));
+            Assert.That(updatedWeapon.Damages[0].Type, Is.EqualTo(WeaponDamageType));
+            Assert.That(updatedWeapon.Damages[0].Condition, Is.Empty);
             Assert.That(updatedWeapon.CriticalDamages, Has.Count.EqualTo(1));
+            Assert.That(updatedWeapon.CriticalDamages[0].Roll, Is.EqualTo("my crit roll"));
+            Assert.That(updatedWeapon.CriticalDamages[0].Type, Is.EqualTo(WeaponDamageType_Crit));
+            Assert.That(updatedWeapon.CriticalDamages[0].Condition, Is.Empty);
         }
 
-        private Weapon CreateWeapon()
+        private Weapon CreateWeapon(bool isDouble = false)
         {
             var weapon = new Weapon
             {
                 Name = "my weapon",
-                Damages = [new Damage { Type = "my damage type", Roll = "my roll" }],
-                CriticalDamages = [new Damage { Type = "my crit damage type", Roll = "my crit roll" }],
+                Damages = [new Damage { Type = WeaponDamageType, Roll = "my roll" }],
+                CriticalDamages = [new Damage { Type = WeaponDamageType_Crit, Roll = "my crit roll" }],
                 CriticalMultiplier = "x9266",
+                ThreatRange = 1
             };
+
+            weapon.Magic.Bonus = 90210;
+
+            if (isDouble)
+            {
+                weapon.Attributes = ["attribute 1", AttributeConstants.DoubleWeapon, "attribute 3"];
+                weapon.SecondaryCriticalMultiplier = "other crit";
+                weapon.SecondaryDamages.Add(new Damage { Roll = "jab", Type = "punch" });
+                weapon.SecondaryCriticalDamages.Add(new Damage { Roll = "cross", Type = "punch" });
+            }
+            else
+            {
+                weapon.Attributes = ["attribute 1", "attribute 2", "attribute 3"];
+            }
 
             return weapon;
         }
+
+        private const string WeaponDamageType = "my weapon damage type";
+        private const string WeaponDamageType_Crit = "my weapon crit damage type";
 
         [Test]
         public void ApplyAbilitiesToWeapon_NoAbilityDamages()
@@ -1609,9 +1633,15 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
 
             var updatedWeapon = specialAbilitiesGenerator.ApplyAbilitiesToWeapon(weapon);
             Assert.That(updatedWeapon, Is.EqualTo(weapon));
-            Assert.That(updatedWeapon.Magic.SpecialAbilities, Is.Empty);
+            Assert.That(updatedWeapon.Magic.SpecialAbilities.Count(), Is.EqualTo(1));
             Assert.That(updatedWeapon.Damages, Has.Count.EqualTo(1));
+            Assert.That(updatedWeapon.Damages[0].Roll, Is.EqualTo("my roll"));
+            Assert.That(updatedWeapon.Damages[0].Type, Is.EqualTo(WeaponDamageType));
+            Assert.That(updatedWeapon.Damages[0].Condition, Is.Empty);
             Assert.That(updatedWeapon.CriticalDamages, Has.Count.EqualTo(1));
+            Assert.That(updatedWeapon.CriticalDamages[0].Roll, Is.EqualTo("my crit roll"));
+            Assert.That(updatedWeapon.CriticalDamages[0].Type, Is.EqualTo(WeaponDamageType_Crit));
+            Assert.That(updatedWeapon.CriticalDamages[0].Condition, Is.Empty);
         }
 
         [Test]
@@ -1629,7 +1659,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             Assert.That(weapon.Magic.SpecialAbilities.Count(), Is.EqualTo(2));
             Assert.That(weapon.Damages, Has.Count.EqualTo(3));
             Assert.That(weapon.Damages[0].Roll, Is.EqualTo("my roll"));
-            Assert.That(weapon.Damages[0].Type, Is.EqualTo("my damage type"));
+            Assert.That(weapon.Damages[0].Type, Is.EqualTo(WeaponDamageType));
             Assert.That(weapon.Damages[0].Condition, Is.Empty);
             Assert.That(weapon.Damages[1].Roll, Is.EqualTo("some"));
             Assert.That(weapon.Damages[1].Type, Is.EqualTo("plasma"));
@@ -1638,6 +1668,9 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             Assert.That(weapon.Damages[2].Type, Is.EqualTo("ether"));
             Assert.That(weapon.Damages[2].Condition, Is.EqualTo("my other condition"));
             Assert.That(weapon.CriticalDamages, Has.Count.EqualTo(1));
+            Assert.That(weapon.CriticalDamages[0].Roll, Is.EqualTo("my crit roll"));
+            Assert.That(weapon.CriticalDamages[0].Type, Is.EqualTo(WeaponDamageType_Crit));
+            Assert.That(weapon.CriticalDamages[0].Condition, Is.Empty);
             Assert.That(weapon.SecondaryDamages, Is.Empty);
             Assert.That(weapon.SecondaryCriticalDamages, Is.Empty);
         }
@@ -1657,17 +1690,17 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             Assert.That(weapon.Magic.SpecialAbilities.Count(), Is.EqualTo(2));
             Assert.That(weapon.Damages, Has.Count.EqualTo(3));
             Assert.That(weapon.Damages[0].Roll, Is.EqualTo("my roll"));
-            Assert.That(weapon.Damages[0].Type, Is.EqualTo("my damage type"));
+            Assert.That(weapon.Damages[0].Type, Is.EqualTo(WeaponDamageType));
             Assert.That(weapon.Damages[0].Condition, Is.Empty);
             Assert.That(weapon.Damages[1].Roll, Is.EqualTo("some"));
-            Assert.That(weapon.Damages[1].Type, Is.EqualTo("my damage type"));
+            Assert.That(weapon.Damages[1].Type, Is.EqualTo(WeaponDamageType));
             Assert.That(weapon.Damages[1].Condition, Is.EqualTo("my condition"));
             Assert.That(weapon.Damages[2].Roll, Is.EqualTo("a bit"));
-            Assert.That(weapon.Damages[2].Type, Is.EqualTo("my damage type"));
+            Assert.That(weapon.Damages[2].Type, Is.EqualTo(WeaponDamageType));
             Assert.That(weapon.Damages[2].Condition, Is.EqualTo("my other condition"));
             Assert.That(weapon.CriticalDamages, Has.Count.EqualTo(1));
             Assert.That(weapon.CriticalDamages[0].Roll, Is.EqualTo("my crit roll"));
-            Assert.That(weapon.CriticalDamages[0].Type, Is.EqualTo("my crit damage type"));
+            Assert.That(weapon.CriticalDamages[0].Type, Is.EqualTo(WeaponDamageType_Crit));
             Assert.That(weapon.CriticalDamages[0].Condition, Is.Empty);
             Assert.That(weapon.SecondaryDamages, Is.Empty);
             Assert.That(weapon.SecondaryCriticalDamages, Is.Empty);
@@ -1680,20 +1713,32 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             {
                 CriticalDamages =
                 [
-                    new Damage { Roll = "more", Type = "plasma" },
+                    new Damage { Roll = "more", Type = "plasma", Condition = "my crit condition" },
                     new Damage { Roll = "a lot", Type = "ether" },
                 ]
             };
 
-            var abilities = new[] { new SpecialAbility(), ability };
-            mockSpecialAbilitiesGenerator.Setup(p => p.GenerateFor(mundaneWeapon, power, 2)).Returns(abilities);
+            var weapon = CreateWeapon();
+            weapon.Magic.SpecialAbilities = [new SpecialAbility(), ability];
 
             var updatedWeapon = specialAbilitiesGenerator.ApplyAbilitiesToWeapon(weapon);
             Assert.That(updatedWeapon, Is.EqualTo(weapon));
-            Assert.That(weapon.Magic.SpecialAbilities, Is.EqualTo(abilities));
+            Assert.That(weapon.Magic.SpecialAbilities.Count(), Is.EqualTo(2));
             Assert.That(weapon.Damages, Has.Count.EqualTo(1));
+            Assert.That(weapon.Damages[0].Roll, Is.EqualTo("my roll"));
+            Assert.That(weapon.Damages[0].Type, Is.EqualTo(WeaponDamageType));
+            Assert.That(weapon.Damages[0].Condition, Is.Empty);
             Assert.That(weapon.CriticalDamages, Has.Count.EqualTo(3)
                 .And.SupersetOf(ability.CriticalDamages));
+            Assert.That(weapon.CriticalDamages[0].Roll, Is.EqualTo("my crit roll"));
+            Assert.That(weapon.CriticalDamages[0].Type, Is.EqualTo(WeaponDamageType_Crit));
+            Assert.That(weapon.CriticalDamages[0].Condition, Is.Empty);
+            Assert.That(weapon.CriticalDamages[1].Roll, Is.EqualTo("more"));
+            Assert.That(weapon.CriticalDamages[1].Type, Is.EqualTo("plasma"));
+            Assert.That(weapon.CriticalDamages[1].Condition, Is.EqualTo("my crit condition"));
+            Assert.That(weapon.CriticalDamages[2].Roll, Is.EqualTo("a lot"));
+            Assert.That(weapon.CriticalDamages[2].Type, Is.EqualTo("ether"));
+            Assert.That(weapon.CriticalDamages[2].Condition, Is.Empty);
             Assert.That(weapon.SecondaryDamages, Is.Empty);
             Assert.That(weapon.SecondaryCriticalDamages, Is.Empty);
         }
@@ -1705,22 +1750,32 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             {
                 CriticalDamages =
                 [
-                    new Damage { Roll = "more", Type = string.Empty },
+                    new Damage { Roll = "more", Type = string.Empty, Condition = "my crit condition" },
                     new Damage { Roll = "a lot", Type = string.Empty },
                 ]
             };
 
-            var abilities = new[] { new SpecialAbility(), ability };
-            mockSpecialAbilitiesGenerator.Setup(p => p.GenerateFor(mundaneWeapon, power, 2)).Returns(abilities);
+            var weapon = CreateWeapon();
+            weapon.Magic.SpecialAbilities = [new SpecialAbility(), ability];
 
             var updatedWeapon = specialAbilitiesGenerator.ApplyAbilitiesToWeapon(weapon);
             Assert.That(updatedWeapon, Is.EqualTo(weapon));
-            Assert.That(weapon.Magic.SpecialAbilities, Is.EqualTo(abilities));
+            Assert.That(weapon.Magic.SpecialAbilities.Count(), Is.EqualTo(2));
             Assert.That(weapon.Damages, Has.Count.EqualTo(1));
+            Assert.That(weapon.Damages[0].Roll, Is.EqualTo("my roll"));
+            Assert.That(weapon.Damages[0].Type, Is.EqualTo(WeaponDamageType));
+            Assert.That(weapon.Damages[0].Condition, Is.Empty);
             Assert.That(weapon.CriticalDamages, Has.Count.EqualTo(3)
                 .And.SupersetOf(ability.CriticalDamages));
-            Assert.That(ability.CriticalDamages[0].Type, Is.Not.Empty.And.EqualTo(mundaneWeapon.CriticalDamages[0].Type));
-            Assert.That(ability.CriticalDamages[1].Type, Is.Not.Empty.And.EqualTo(mundaneWeapon.CriticalDamages[0].Type));
+            Assert.That(weapon.CriticalDamages[0].Roll, Is.EqualTo("my crit roll"));
+            Assert.That(weapon.CriticalDamages[0].Type, Is.EqualTo(WeaponDamageType_Crit));
+            Assert.That(weapon.CriticalDamages[0].Condition, Is.Empty);
+            Assert.That(weapon.CriticalDamages[1].Roll, Is.EqualTo("more"));
+            Assert.That(weapon.CriticalDamages[1].Type, Is.EqualTo(WeaponDamageType_Crit));
+            Assert.That(weapon.CriticalDamages[1].Condition, Is.EqualTo("my crit condition"));
+            Assert.That(weapon.CriticalDamages[2].Roll, Is.EqualTo("a lot"));
+            Assert.That(weapon.CriticalDamages[2].Type, Is.EqualTo(WeaponDamageType_Crit));
+            Assert.That(weapon.CriticalDamages[2].Condition, Is.Empty);
             Assert.That(weapon.SecondaryDamages, Is.Empty);
             Assert.That(weapon.SecondaryCriticalDamages, Is.Empty);
         }
@@ -1734,18 +1789,20 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
 
             ability.CriticalDamages =
             [
-                new Damage { Roll = "more", Type = "plasma" },
+                new Damage { Roll = "more", Type = "plasma", Condition = "my crit condition" },
                 new Damage { Roll = "a lot", Type = "ether" },
             ];
 
-            var abilities = new[] { new SpecialAbility(), ability };
-            mockSpecialAbilitiesGenerator.Setup(p => p.GenerateFor(mundaneWeapon, power, 2)).Returns(abilities);
+            var weapon = CreateWeapon();
+            weapon.Magic.SpecialAbilities = [new SpecialAbility(), ability];
 
             var updatedWeapon = specialAbilitiesGenerator.ApplyAbilitiesToWeapon(weapon);
             Assert.That(updatedWeapon, Is.EqualTo(weapon));
-            Assert.That(weapon.Magic.SpecialAbilities, Is.EqualTo(abilities));
-            Assert.That(weapon.Damages, Has.Count.EqualTo(3)
-                .And.SupersetOf(mundaneWeapon.Damages));
+            Assert.That(weapon.Magic.SpecialAbilities.Count(), Is.EqualTo(2));
+            Assert.That(weapon.Damages, Has.Count.EqualTo(3));
+            Assert.That(weapon.Damages[0].Roll, Is.EqualTo("my roll"));
+            Assert.That(weapon.Damages[0].Type, Is.EqualTo(WeaponDamageType));
+            Assert.That(weapon.Damages[0].Condition, Is.Empty);
             Assert.That(weapon.Damages[1].Roll, Is.EqualTo("some"));
             Assert.That(weapon.Damages[1].Type, Is.EqualTo("plasma"));
             Assert.That(weapon.Damages[1].Condition, Is.EqualTo("my condition"));
@@ -1754,6 +1811,15 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             Assert.That(weapon.Damages[2].Condition, Is.EqualTo("my other condition"));
             Assert.That(weapon.CriticalDamages, Has.Count.EqualTo(3)
                 .And.SupersetOf(ability.CriticalDamages));
+            Assert.That(weapon.CriticalDamages[0].Roll, Is.EqualTo("my crit roll"));
+            Assert.That(weapon.CriticalDamages[0].Type, Is.EqualTo(WeaponDamageType_Crit));
+            Assert.That(weapon.CriticalDamages[0].Condition, Is.Empty);
+            Assert.That(weapon.CriticalDamages[1].Roll, Is.EqualTo("more"));
+            Assert.That(weapon.CriticalDamages[1].Type, Is.EqualTo("plasma"));
+            Assert.That(weapon.CriticalDamages[1].Condition, Is.EqualTo("my crit condition"));
+            Assert.That(weapon.CriticalDamages[2].Roll, Is.EqualTo("a lot"));
+            Assert.That(weapon.CriticalDamages[2].Type, Is.EqualTo("ether"));
+            Assert.That(weapon.CriticalDamages[2].Condition, Is.Empty);
             Assert.That(weapon.SecondaryDamages, Is.Empty);
             Assert.That(weapon.SecondaryCriticalDamages, Is.Empty);
         }
@@ -1767,28 +1833,37 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
 
             ability.CriticalDamages =
             [
-                new Damage { Roll = "more", Type = string.Empty },
+                new Damage { Roll = "more", Type = string.Empty, Condition = "my crit condition" },
                 new Damage { Roll = "a lot", Type = "ether" },
             ];
 
-            var abilities = new[] { new SpecialAbility(), ability };
-            mockSpecialAbilitiesGenerator.Setup(p => p.GenerateFor(mundaneWeapon, power, 2)).Returns(abilities);
+            var weapon = CreateWeapon();
+            weapon.Magic.SpecialAbilities = [new SpecialAbility(), ability];
 
             var updatedWeapon = specialAbilitiesGenerator.ApplyAbilitiesToWeapon(weapon);
             Assert.That(updatedWeapon, Is.EqualTo(weapon));
-            Assert.That(weapon.Magic.SpecialAbilities, Is.EqualTo(abilities));
-            Assert.That(weapon.Damages, Has.Count.EqualTo(3)
-                .And.SupersetOf(mundaneWeapon.Damages));
+            Assert.That(weapon.Magic.SpecialAbilities.Count(), Is.EqualTo(2));
+            Assert.That(weapon.Damages, Has.Count.EqualTo(3));
+            Assert.That(weapon.Damages[0].Roll, Is.EqualTo("my roll"));
+            Assert.That(weapon.Damages[0].Type, Is.EqualTo(WeaponDamageType));
+            Assert.That(weapon.Damages[0].Condition, Is.Empty);
             Assert.That(weapon.Damages[1].Roll, Is.EqualTo("some"));
-            Assert.That(weapon.Damages[1].Type, Is.EqualTo(mundaneWeapon.Damages[0].Type));
+            Assert.That(weapon.Damages[1].Type, Is.EqualTo(WeaponDamageType));
             Assert.That(weapon.Damages[1].Condition, Is.EqualTo("my condition"));
             Assert.That(weapon.Damages[2].Roll, Is.EqualTo("a bit"));
             Assert.That(weapon.Damages[2].Type, Is.EqualTo("ether"));
             Assert.That(weapon.Damages[2].Condition, Is.EqualTo("my other condition"));
             Assert.That(weapon.CriticalDamages, Has.Count.EqualTo(3)
                 .And.SupersetOf(ability.CriticalDamages));
-            Assert.That(ability.CriticalDamages[0].Type, Is.Not.Empty.And.EqualTo(mundaneWeapon.CriticalDamages[0].Type));
-            Assert.That(ability.CriticalDamages[1].Type, Is.Not.Empty.And.EqualTo("ether"));
+            Assert.That(weapon.CriticalDamages[0].Roll, Is.EqualTo("my crit roll"));
+            Assert.That(weapon.CriticalDamages[0].Type, Is.EqualTo(WeaponDamageType_Crit));
+            Assert.That(weapon.CriticalDamages[0].Condition, Is.Empty);
+            Assert.That(weapon.CriticalDamages[1].Roll, Is.EqualTo("more"));
+            Assert.That(weapon.CriticalDamages[1].Type, Is.EqualTo(WeaponDamageType_Crit));
+            Assert.That(weapon.CriticalDamages[1].Condition, Is.EqualTo("my crit condition"));
+            Assert.That(weapon.CriticalDamages[2].Roll, Is.EqualTo("a lot"));
+            Assert.That(weapon.CriticalDamages[2].Type, Is.EqualTo("ether"));
+            Assert.That(weapon.CriticalDamages[2].Condition, Is.Empty);
             Assert.That(weapon.SecondaryDamages, Is.Empty);
             Assert.That(weapon.SecondaryCriticalDamages, Is.Empty);
         }
@@ -1796,176 +1871,226 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
         [Test]
         public void ApplyAbilitiesToWeapon_Damages_DoubleWeapon_SameEnhancement()
         {
-            mundaneWeapon.Attributes = ["attribute 1", AttributeConstants.DoubleWeapon, "attribute 2"];
-            mundaneWeapon.SecondaryCriticalMultiplier = "other crit";
-            mundaneWeapon.SecondaryDamages.Add(new Damage { Roll = "jab", Type = "punch" });
-            mundaneWeapon.SecondaryCriticalDamages.Add(new Damage { Roll = "cross", Type = "punch" });
-
             mockPercentileSelector.Setup(s => s.SelectFrom(.5)).Returns(true);
 
             var ability = new SpecialAbility();
+            ability.Name = "my name";
             ability.Damages.Add(new Damage { Roll = "some", Type = "plasma", Condition = "my condition" });
             ability.Damages.Add(new Damage { Roll = "a bit", Type = "ether", Condition = "my other condition" });
 
-            var abilities = new[] { new SpecialAbility(), ability };
-            mockSpecialAbilitiesGenerator.Setup(p => p.GenerateFor(mundaneWeapon, power, 2)).Returns(abilities);
+            var weapon = CreateWeapon(true);
+            weapon.Magic.SpecialAbilities = [new SpecialAbility(), ability];
+            weapon.SecondaryMagicBonus = weapon.Magic.Bonus;
+            weapon.SecondaryHasAbilities = true;
 
             var updatedWeapon = specialAbilitiesGenerator.ApplyAbilitiesToWeapon(weapon);
             Assert.That(updatedWeapon, Is.EqualTo(weapon));
-            Assert.That(weapon.Magic.SpecialAbilities, Is.EqualTo(abilities));
-            Assert.That(weapon.Damages, Has.Count.EqualTo(3)
-                .And.SupersetOf(mundaneWeapon.Damages));
+            Assert.That(weapon.Magic.SpecialAbilities.Count(), Is.EqualTo(2));
+            Assert.That(weapon.Damages, Has.Count.EqualTo(3));
+            Assert.That(weapon.Damages[0].Roll, Is.EqualTo("my roll"));
+            Assert.That(weapon.Damages[0].Type, Is.EqualTo(WeaponDamageType));
+            Assert.That(weapon.Damages[0].Condition, Is.Empty);
             Assert.That(weapon.Damages[1].Roll, Is.EqualTo("some"));
             Assert.That(weapon.Damages[1].Type, Is.EqualTo("plasma"));
             Assert.That(weapon.Damages[1].Condition, Is.EqualTo("my condition"));
             Assert.That(weapon.Damages[2].Roll, Is.EqualTo("a bit"));
             Assert.That(weapon.Damages[2].Type, Is.EqualTo("ether"));
             Assert.That(weapon.Damages[2].Condition, Is.EqualTo("my other condition"));
-            Assert.That(weapon.CriticalDamages, Has.Count.EqualTo(1)
-                .And.SupersetOf(mundaneWeapon.CriticalDamages));
-            Assert.That(weapon.SecondaryDamages, Has.Count.EqualTo(3)
-                .And.SupersetOf(mundaneWeapon.SecondaryDamages));
+            Assert.That(weapon.CriticalDamages, Has.Count.EqualTo(1));
+            Assert.That(weapon.CriticalDamages[0].Roll, Is.EqualTo("my crit roll"));
+            Assert.That(weapon.CriticalDamages[0].Type, Is.EqualTo(WeaponDamageType_Crit));
+            Assert.That(weapon.CriticalDamages[0].Condition, Is.Empty);
+            Assert.That(weapon.SecondaryDamages, Has.Count.EqualTo(3));
+            Assert.That(weapon.SecondaryDamages[0].Roll, Is.EqualTo("my roll"));
+            Assert.That(weapon.SecondaryDamages[0].Type, Is.EqualTo(WeaponDamageType));
+            Assert.That(weapon.SecondaryDamages[0].Condition, Is.Empty);
             Assert.That(weapon.SecondaryDamages[1].Roll, Is.EqualTo("some"));
             Assert.That(weapon.SecondaryDamages[1].Type, Is.EqualTo("plasma"));
             Assert.That(weapon.SecondaryDamages[1].Condition, Is.EqualTo("my condition"));
             Assert.That(weapon.SecondaryDamages[2].Roll, Is.EqualTo("a bit"));
             Assert.That(weapon.SecondaryDamages[2].Type, Is.EqualTo("ether"));
             Assert.That(weapon.SecondaryDamages[2].Condition, Is.EqualTo("my other condition"));
-            Assert.That(weapon.SecondaryCriticalDamages, Has.Count.EqualTo(1)
-                .And.SupersetOf(mundaneWeapon.SecondaryCriticalDamages));
+            Assert.That(weapon.SecondaryCriticalDamages, Has.Count.EqualTo(1));
+            Assert.That(weapon.SecondaryCriticalDamages[0].Roll, Is.EqualTo("my crit roll"));
+            Assert.That(weapon.SecondaryCriticalDamages[0].Type, Is.EqualTo(WeaponDamageType_Crit));
+            Assert.That(weapon.SecondaryCriticalDamages[0].Condition, Is.Empty);
         }
 
         [Test]
         public void ApplyAbilitiesToWeapon_Damages_DoubleWeapon_SameEnhancement_EmptyDamageTypes()
         {
-            mundaneWeapon.Attributes = ["attribute 1", AttributeConstants.DoubleWeapon, "attribute 2"];
-            mundaneWeapon.SecondaryCriticalMultiplier = "other crit";
-            mundaneWeapon.SecondaryDamages.Add(new Damage { Roll = "jab", Type = "punch" });
-            mundaneWeapon.SecondaryCriticalDamages.Add(new Damage { Roll = "cross", Type = "punch" });
-
-            mockPercentileSelector.Setup(s => s.SelectFrom(.5)).Returns(true);
-
-            var ability = new SpecialAbility();
+            var ability = new SpecialAbility
+            {
+                Name = "my name"
+            };
             ability.Damages.Add(new Damage { Roll = "some", Type = string.Empty, Condition = "my condition" });
             ability.Damages.Add(new Damage { Roll = "a bit", Type = "ether", Condition = "my other condition" });
 
-            var abilities = new[] { new SpecialAbility(), ability };
-            mockSpecialAbilitiesGenerator.Setup(p => p.GenerateFor(mundaneWeapon, power, 2)).Returns(abilities);
+            var weapon = CreateWeapon(true);
+            weapon.Magic.SpecialAbilities = [new SpecialAbility(), ability];
+            weapon.SecondaryMagicBonus = weapon.Magic.Bonus;
+            weapon.SecondaryHasAbilities = true;
 
             var updatedWeapon = specialAbilitiesGenerator.ApplyAbilitiesToWeapon(weapon);
             Assert.That(updatedWeapon, Is.EqualTo(weapon));
-            Assert.That(weapon.Magic.SpecialAbilities, Is.EqualTo(abilities));
-            Assert.That(weapon.Damages, Has.Count.EqualTo(3)
-                .And.SupersetOf(mundaneWeapon.Damages));
+            Assert.That(weapon.Magic.SpecialAbilities.Count(), Is.EqualTo(2));
+            Assert.That(weapon.Damages, Has.Count.EqualTo(3));
+            Assert.That(weapon.Damages[0].Roll, Is.EqualTo("my roll"));
+            Assert.That(weapon.Damages[0].Type, Is.EqualTo(WeaponDamageType));
+            Assert.That(weapon.Damages[0].Condition, Is.Empty);
             Assert.That(weapon.Damages[1].Roll, Is.EqualTo("some"));
-            Assert.That(weapon.Damages[1].Type, Is.EqualTo(mundaneWeapon.Damages[0].Type));
+            Assert.That(weapon.Damages[1].Type, Is.EqualTo(WeaponDamageType));
             Assert.That(weapon.Damages[1].Condition, Is.EqualTo("my condition"));
             Assert.That(weapon.Damages[2].Roll, Is.EqualTo("a bit"));
             Assert.That(weapon.Damages[2].Type, Is.EqualTo("ether"));
             Assert.That(weapon.Damages[2].Condition, Is.EqualTo("my other condition"));
-            Assert.That(weapon.CriticalDamages, Has.Count.EqualTo(1)
-                .And.SupersetOf(mundaneWeapon.CriticalDamages));
-            Assert.That(weapon.SecondaryDamages, Has.Count.EqualTo(3)
-                .And.SupersetOf(mundaneWeapon.SecondaryDamages));
+            Assert.That(weapon.CriticalDamages, Has.Count.EqualTo(1));
+            Assert.That(weapon.CriticalDamages[0].Roll, Is.EqualTo("my crit roll"));
+            Assert.That(weapon.CriticalDamages[0].Type, Is.EqualTo(WeaponDamageType_Crit));
+            Assert.That(weapon.CriticalDamages[0].Condition, Is.Empty);
+            Assert.That(weapon.SecondaryDamages, Has.Count.EqualTo(3));
+            Assert.That(weapon.SecondaryDamages[0].Roll, Is.EqualTo("my roll"));
+            Assert.That(weapon.SecondaryDamages[0].Type, Is.EqualTo(WeaponDamageType));
+            Assert.That(weapon.SecondaryDamages[0].Condition, Is.Empty);
             Assert.That(weapon.SecondaryDamages[1].Roll, Is.EqualTo("some"));
-            Assert.That(weapon.SecondaryDamages[1].Type, Is.EqualTo(mundaneWeapon.SecondaryDamages[0].Type));
+            Assert.That(weapon.SecondaryDamages[1].Type, Is.EqualTo(WeaponDamageType));
             Assert.That(weapon.SecondaryDamages[1].Condition, Is.EqualTo("my condition"));
             Assert.That(weapon.SecondaryDamages[2].Roll, Is.EqualTo("a bit"));
             Assert.That(weapon.SecondaryDamages[2].Type, Is.EqualTo("ether"));
             Assert.That(weapon.SecondaryDamages[2].Condition, Is.EqualTo("my other condition"));
-            Assert.That(weapon.SecondaryCriticalDamages, Has.Count.EqualTo(1)
-                .And.SupersetOf(mundaneWeapon.SecondaryCriticalDamages));
+            Assert.That(weapon.SecondaryCriticalDamages, Has.Count.EqualTo(1));
+            Assert.That(weapon.SecondaryCriticalDamages[0].Roll, Is.EqualTo("my crit roll"));
+            Assert.That(weapon.SecondaryCriticalDamages[0].Type, Is.EqualTo(WeaponDamageType_Crit));
+            Assert.That(weapon.SecondaryCriticalDamages[0].Condition, Is.Empty);
         }
 
         [Test]
         public void ApplyAbilitiesToWeapon_CriticalDamages_DoubleWeapon_SameEnhancement()
         {
-            mundaneWeapon.Attributes = ["attribute 1", AttributeConstants.DoubleWeapon, "attribute 2"];
-            mundaneWeapon.SecondaryCriticalMultiplier = "other crit";
-            mundaneWeapon.SecondaryDamages.Add(new Damage { Roll = "jab", Type = "punch" });
-            mundaneWeapon.SecondaryCriticalDamages.Add(new Damage { Roll = "cross", Type = "punch" });
+            mockDamageDataSelector
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponDamages, "my nameother crit"))
+                .Returns(
+                [
+                    new DamageDataSelection { Type = "slush", Roll = "additional" },
+                    new DamageDataSelection { Type = "ice", Roll = "too much" },
+                ]);
 
-            mock
-            var ability = new SpecialAbility();
-            ability.CriticalDamages["crit"] = new List<Damage>();
-            ability.CriticalDamages["other crit"] = new List<Damage>();
+            var ability = new SpecialAbility
+            {
+                Name = "my name",
+                CriticalDamages =
+                [
+                    new Damage { Roll = "more", Type = "plasma" },
+                    new Damage { Roll = "a lot", Type = "ether" },
+                ]
+            };
 
-            ability.CriticalDamages["crit"].Add(new Damage { Roll = "more", Type = "plasma" });
-            ability.CriticalDamages["crit"].Add(new Damage { Roll = "a lot", Type = "ether" });
-            ability.CriticalDamages["other crit"].Add(new Damage { Roll = "wrong", Type = "plasma" });
-            ability.CriticalDamages["other crit"].Add(new Damage { Roll = "nope", Type = "ether" });
-
-            var abilities = new[] { new SpecialAbility(), ability };
-            mockSpecialAbilitiesGenerator.Setup(p => p.GenerateFor(mundaneWeapon, power, 2)).Returns(abilities);
+            var weapon = CreateWeapon(true);
+            weapon.Magic.SpecialAbilities = [new SpecialAbility(), ability];
+            weapon.SecondaryMagicBonus = weapon.Magic.Bonus;
+            weapon.SecondaryHasAbilities = true;
 
             var updatedWeapon = specialAbilitiesGenerator.ApplyAbilitiesToWeapon(weapon);
             Assert.That(updatedWeapon, Is.EqualTo(weapon));
-            Assert.That(weapon.Magic.SpecialAbilities, Is.EqualTo(abilities));
+            Assert.That(weapon.Magic.SpecialAbilities.Count(), Is.EqualTo(2));
             Assert.That(weapon.Damages, Has.Count.EqualTo(1));
-            Assert.That(weapon.CriticalDamages, Has.Count.EqualTo(3)
-                .And.SupersetOf(ability.CriticalDamages["crit"]));
+            Assert.That(weapon.Damages[0].Roll, Is.EqualTo("my roll"));
+            Assert.That(weapon.Damages[0].Type, Is.EqualTo(WeaponDamageType));
+            Assert.That(weapon.Damages[0].Condition, Is.Empty);
+            Assert.That(weapon.CriticalDamages, Has.Count.EqualTo(3));
+            Assert.That(weapon.CriticalDamages[0].Roll, Is.EqualTo("my crit roll"));
+            Assert.That(weapon.CriticalDamages[0].Type, Is.EqualTo(WeaponDamageType_Crit));
+            Assert.That(weapon.CriticalDamages[0].Condition, Is.Empty);
+            Assert.That(weapon.CriticalDamages[1].Roll, Is.EqualTo("some"));
+            Assert.That(weapon.CriticalDamages[1].Type, Is.EqualTo(WeaponDamageType));
+            Assert.That(weapon.CriticalDamages[1].Condition, Is.EqualTo("my condition"));
+            Assert.That(weapon.CriticalDamages[2].Roll, Is.EqualTo("a bit"));
+            Assert.That(weapon.CriticalDamages[2].Type, Is.EqualTo("ether"));
+            Assert.That(weapon.CriticalDamages[2].Condition, Is.EqualTo("my other condition"));
             Assert.That(weapon.SecondaryDamages, Has.Count.EqualTo(1));
-            Assert.That(weapon.SecondaryCriticalDamages, Has.Count.EqualTo(3)
-                .And.SupersetOf(ability.CriticalDamages["other crit"]));
+            Assert.That(weapon.SecondaryDamages[0].Roll, Is.EqualTo("my roll"));
+            Assert.That(weapon.SecondaryDamages[0].Type, Is.EqualTo(WeaponDamageType));
+            Assert.That(weapon.SecondaryDamages[0].Condition, Is.Empty);
+            Assert.That(weapon.SecondaryCriticalDamages, Has.Count.EqualTo(3));
+            Assert.That(weapon.SecondaryCriticalDamages[0].Roll, Is.EqualTo("my crit roll"));
+            Assert.That(weapon.SecondaryCriticalDamages[0].Type, Is.EqualTo(WeaponDamageType_Crit));
+            Assert.That(weapon.SecondaryCriticalDamages[0].Condition, Is.Empty);
+            Assert.That(weapon.SecondaryCriticalDamages[1].Roll, Is.EqualTo("some"));
+            Assert.That(weapon.SecondaryCriticalDamages[1].Type, Is.EqualTo(WeaponDamageType));
+            Assert.That(weapon.SecondaryCriticalDamages[1].Condition, Is.EqualTo("my condition"));
+            Assert.That(weapon.SecondaryCriticalDamages[2].Roll, Is.EqualTo("a bit"));
+            Assert.That(weapon.SecondaryCriticalDamages[2].Type, Is.EqualTo("ether"));
+            Assert.That(weapon.SecondaryCriticalDamages[2].Condition, Is.EqualTo("my other condition"));
         }
 
         [Test]
         public void ApplyAbilitiesToWeapon_DamagesAndCriticalDamages_DoubleWeapon_SameEnhancement()
         {
-            mundaneWeapon.Attributes = new[] { "attribute 1", AttributeConstants.DoubleWeapon, "attribute 2" };
-            mundaneWeapon.SecondaryCriticalMultiplier = "other crit";
-            mundaneWeapon.SecondaryDamages.Add(new Damage { Roll = "jab", Type = "punch" });
-            mundaneWeapon.SecondaryCriticalDamages.Add(new Damage { Roll = "cross", Type = "punch" });
+            mockDamageDataSelector
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponDamages, "my nameother crit"))
+                .Returns(
+                [
+                    new DamageDataSelection { Type = "slush", Roll = "additional" },
+                    new DamageDataSelection { Type = "ice", Roll = "too much" },
+                ]);
 
-            mockPercentileSelector.Setup(s => s.SelectFrom(.5)).Returns(true);
+            var ability = new SpecialAbility
+            {
+                Name = "my name",
+                Damages =
+                [
+                    new Damage { Roll = "some", Type = "plasma", Condition = "my condition" },
+                    new Damage { Roll = "a bit", Type = "ether", Condition = "my other condition" },
+                ],
+                CriticalDamages =
+                [
+                    new Damage { Roll = "more", Type = "plasma" },
+                    new Damage { Roll = "a lot", Type = "ether" },
+                ],
+            };
 
-            var ability = new SpecialAbility();
-            ability.Damages.Add(new Damage { Roll = "some", Type = "plasma", Condition = "my condition" });
-            ability.Damages.Add(new Damage { Roll = "a bit", Type = "ether", Condition = "my other condition" });
-
-            ability.CriticalDamages["crit"] = new List<Damage>();
-            ability.CriticalDamages["other crit"] = new List<Damage>();
-            ability.CriticalDamages["wrong crit"] = new List<Damage>();
-
-            ability.CriticalDamages["crit"].Add(new Damage { Roll = "more", Type = "plasma", Condition = "my crit condition" });
-            ability.CriticalDamages["crit"].Add(new Damage { Roll = "a lot", Type = "ether", Condition = "my other crit condition" });
-            ability.CriticalDamages["other crit"].Add(new Damage { Roll = "MORE", Type = "solid", Condition = "my crit condition 2" });
-            ability.CriticalDamages["other crit"].Add(new Damage { Roll = "a ton", Type = "gas", Condition = "my other crit condition 2" });
-            ability.CriticalDamages["wrong crit"].Add(new Damage { Roll = "wrong", Type = "plasma", Condition = "my wrong condition" });
-            ability.CriticalDamages["wrong crit"].Add(new Damage { Roll = "nope", Type = "ether", Condition = "my wrong condition" });
-
-            var abilities = new[] { new SpecialAbility(), ability };
-            mockSpecialAbilitiesGenerator.Setup(p => p.GenerateFor(mundaneWeapon, power, 2)).Returns(abilities);
+            var weapon = CreateWeapon(true);
+            weapon.Magic.SpecialAbilities = [new SpecialAbility(), ability];
+            weapon.SecondaryMagicBonus = weapon.Magic.Bonus;
+            weapon.SecondaryHasAbilities = true;
 
             var updatedWeapon = specialAbilitiesGenerator.ApplyAbilitiesToWeapon(weapon);
             Assert.That(updatedWeapon, Is.EqualTo(weapon));
-            Assert.That(weapon.Magic.SpecialAbilities, Is.EqualTo(abilities));
-            Assert.That(weapon.Damages, Has.Count.EqualTo(3)
-                .And.SupersetOf(mundaneWeapon.Damages));
+            Assert.That(weapon.Magic.SpecialAbilities.Count(), Is.EqualTo(2));
+            Assert.That(weapon.Damages, Has.Count.EqualTo(3));
+            Assert.That(weapon.Damages[0].Roll, Is.EqualTo("my roll"));
+            Assert.That(weapon.Damages[0].Type, Is.EqualTo(WeaponDamageType));
+            Assert.That(weapon.Damages[0].Condition, Is.Empty);
             Assert.That(weapon.Damages[1].Roll, Is.EqualTo("some"));
             Assert.That(weapon.Damages[1].Type, Is.EqualTo("plasma"));
             Assert.That(weapon.Damages[1].Condition, Is.EqualTo("my condition"));
             Assert.That(weapon.Damages[2].Roll, Is.EqualTo("a bit"));
             Assert.That(weapon.Damages[2].Type, Is.EqualTo("ether"));
             Assert.That(weapon.Damages[2].Condition, Is.EqualTo("my other condition"));
-            Assert.That(weapon.CriticalDamages, Has.Count.EqualTo(3)
-                .And.SupersetOf(mundaneWeapon.CriticalDamages));
+            Assert.That(weapon.CriticalDamages, Has.Count.EqualTo(3));
+            Assert.That(weapon.CriticalDamages[0].Roll, Is.EqualTo("my crit roll"));
+            Assert.That(weapon.CriticalDamages[0].Type, Is.EqualTo(WeaponDamageType_Crit));
+            Assert.That(weapon.CriticalDamages[0].Condition, Is.Empty);
             Assert.That(weapon.CriticalDamages[1].Roll, Is.EqualTo("more"));
             Assert.That(weapon.CriticalDamages[1].Type, Is.EqualTo("plasma"));
             Assert.That(weapon.CriticalDamages[1].Condition, Is.EqualTo("my crit condition"));
             Assert.That(weapon.CriticalDamages[2].Roll, Is.EqualTo("a lot"));
             Assert.That(weapon.CriticalDamages[2].Type, Is.EqualTo("ether"));
             Assert.That(weapon.CriticalDamages[2].Condition, Is.EqualTo("my other crit condition"));
-            Assert.That(weapon.SecondaryDamages, Has.Count.EqualTo(3)
-                .And.SupersetOf(mundaneWeapon.SecondaryDamages));
+            Assert.That(weapon.SecondaryDamages, Has.Count.EqualTo(3));
+            Assert.That(weapon.SecondaryDamages[0].Roll, Is.EqualTo("my roll"));
+            Assert.That(weapon.SecondaryDamages[0].Type, Is.EqualTo(WeaponDamageType));
+            Assert.That(weapon.SecondaryDamages[0].Condition, Is.Empty);
             Assert.That(weapon.SecondaryDamages[1].Roll, Is.EqualTo("some"));
             Assert.That(weapon.SecondaryDamages[1].Type, Is.EqualTo("plasma"));
             Assert.That(weapon.SecondaryDamages[1].Condition, Is.EqualTo("my condition"));
             Assert.That(weapon.SecondaryDamages[2].Roll, Is.EqualTo("a bit"));
             Assert.That(weapon.SecondaryDamages[2].Type, Is.EqualTo("ether"));
             Assert.That(weapon.SecondaryDamages[2].Condition, Is.EqualTo("my other condition"));
-            Assert.That(weapon.SecondaryCriticalDamages, Has.Count.EqualTo(3)
-                .And.SupersetOf(mundaneWeapon.SecondaryCriticalDamages));
+            Assert.That(weapon.SecondaryCriticalDamages, Has.Count.EqualTo(3));
+            Assert.That(weapon.SecondaryCriticalDamages[0].Roll, Is.EqualTo("my crit roll"));
+            Assert.That(weapon.SecondaryCriticalDamages[0].Type, Is.EqualTo(WeaponDamageType_Crit));
+            Assert.That(weapon.SecondaryCriticalDamages[0].Condition, Is.Empty);
             Assert.That(weapon.SecondaryCriticalDamages[1].Roll, Is.EqualTo("MORE"));
             Assert.That(weapon.SecondaryCriticalDamages[1].Type, Is.EqualTo("solid"));
             Assert.That(weapon.SecondaryCriticalDamages[1].Condition, Is.EqualTo("my crit condition 2"));
@@ -1977,25 +2102,25 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
         [Test]
         public void ApplyAbilitiesToWeapon_Damages_DoubleWeapon_LesserEnhancement()
         {
-            mundaneWeapon.Attributes = new[] { "attribute 1", AttributeConstants.DoubleWeapon, "attribute 2" };
-            mundaneWeapon.SecondaryCriticalMultiplier = "other crit";
-            mundaneWeapon.SecondaryDamages.Add(new Damage { Roll = "jab", Type = "punch" });
-            mundaneWeapon.SecondaryCriticalDamages.Add(new Damage { Roll = "cross", Type = "punch" });
-
-            mockPercentileSelector.Setup(s => s.SelectFrom(.5)).Returns(false);
-
-            var ability = new SpecialAbility();
+            var ability = new SpecialAbility
+            {
+                Name = "my name"
+            };
             ability.Damages.Add(new Damage { Roll = "some", Type = "plasma", Condition = "my condition" });
             ability.Damages.Add(new Damage { Roll = "a bit", Type = "ether", Condition = "my other condition" });
 
-            var abilities = new[] { new SpecialAbility(), ability };
-            mockSpecialAbilitiesGenerator.Setup(p => p.GenerateFor(mundaneWeapon, power, 2)).Returns(abilities);
+            var weapon = CreateWeapon(true);
+            weapon.Magic.SpecialAbilities = [new SpecialAbility(), ability];
+            weapon.SecondaryMagicBonus = 42;
+            weapon.SecondaryHasAbilities = false;
 
             var updatedWeapon = specialAbilitiesGenerator.ApplyAbilitiesToWeapon(weapon);
             Assert.That(updatedWeapon, Is.EqualTo(weapon));
-            Assert.That(weapon.Magic.SpecialAbilities, Is.EqualTo(abilities));
-            Assert.That(weapon.Damages, Has.Count.EqualTo(3)
-                .And.SupersetOf(mundaneWeapon.Damages));
+            Assert.That(weapon.Magic.SpecialAbilities.Count(), Is.EqualTo(2));
+            Assert.That(weapon.Damages, Has.Count.EqualTo(3));
+            Assert.That(weapon.Damages[0].Roll, Is.EqualTo("my roll"));
+            Assert.That(weapon.Damages[0].Type, Is.EqualTo(WeaponDamageType));
+            Assert.That(weapon.Damages[0].Condition, Is.Empty);
             Assert.That(weapon.Damages[1].Roll, Is.EqualTo("some"));
             Assert.That(weapon.Damages[1].Type, Is.EqualTo("plasma"));
             Assert.That(weapon.Damages[1].Condition, Is.EqualTo("my condition"));
@@ -2003,128 +2128,153 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             Assert.That(weapon.Damages[2].Type, Is.EqualTo("ether"));
             Assert.That(weapon.Damages[2].Condition, Is.EqualTo("my other condition"));
             Assert.That(weapon.CriticalDamages, Has.Count.EqualTo(1));
+            Assert.That(weapon.CriticalDamages[0].Roll, Is.EqualTo("my crit roll"));
+            Assert.That(weapon.CriticalDamages[0].Type, Is.EqualTo(WeaponDamageType_Crit));
+            Assert.That(weapon.CriticalDamages[0].Condition, Is.Empty);
             Assert.That(weapon.SecondaryDamages, Has.Count.EqualTo(1));
+            Assert.That(weapon.SecondaryDamages[0].Roll, Is.EqualTo("my roll"));
+            Assert.That(weapon.SecondaryDamages[0].Type, Is.EqualTo(WeaponDamageType));
+            Assert.That(weapon.SecondaryDamages[0].Condition, Is.Empty);
             Assert.That(weapon.SecondaryCriticalDamages, Has.Count.EqualTo(1));
+            Assert.That(weapon.SecondaryCriticalDamages[0].Roll, Is.EqualTo("my crit roll"));
+            Assert.That(weapon.SecondaryCriticalDamages[0].Type, Is.EqualTo(WeaponDamageType_Crit));
+            Assert.That(weapon.SecondaryCriticalDamages[0].Condition, Is.Empty);
         }
 
         [Test]
         public void ApplyAbilitiesToWeapon_CriticalDamages_DoubleWeapon_LesserEnhancement()
         {
-            mundaneWeapon.Attributes = new[] { "attribute 1", AttributeConstants.DoubleWeapon, "attribute 2" };
-            mundaneWeapon.SecondaryCriticalMultiplier = "other crit";
-            mundaneWeapon.SecondaryDamages.Add(new Damage { Roll = "jab", Type = "punch" });
-            mundaneWeapon.SecondaryCriticalDamages.Add(new Damage { Roll = "cross", Type = "punch" });
+            var ability = new SpecialAbility
+            {
+                Name = "my name",
+                CriticalDamages =
+                [
+                    new Damage { Roll = "more", Type = "plasma" },
+                    new Damage { Roll = "a lot", Type = "ether" },
+                ]
+            };
 
-            mockPercentileSelector.Setup(s => s.SelectFrom(.5)).Returns(false);
-
-            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(power, ItemTypeConstants.Weapon);
-            mockPercentileSelector.SetupSequence(p => p.SelectFrom(Config.Name, tableName)).Returns(MagicalWeaponGenerator.SpecialAbility).Returns(MagicalWeaponGenerator.SpecialAbility).Returns("9266");
-
-            var ability = new SpecialAbility();
-            ability.CriticalDamages["crit"] = new List<Damage>();
-            ability.CriticalDamages["other crit"] = new List<Damage>();
-
-            ability.CriticalDamages["crit"].Add(new Damage { Roll = "more", Type = "plasma" });
-            ability.CriticalDamages["crit"].Add(new Damage { Roll = "a lot", Type = "ether" });
-            ability.CriticalDamages["other crit"].Add(new Damage { Roll = "wrong", Type = "plasma" });
-            ability.CriticalDamages["other crit"].Add(new Damage { Roll = "nope", Type = "ether" });
-
-            var abilities = new[] { new SpecialAbility(), ability };
-            mockSpecialAbilitiesGenerator.Setup(p => p.GenerateFor(mundaneWeapon, power, 2)).Returns(abilities);
+            var weapon = CreateWeapon(true);
+            weapon.Magic.SpecialAbilities = [new SpecialAbility(), ability];
+            weapon.SecondaryMagicBonus = 42;
+            weapon.SecondaryHasAbilities = false;
 
             var updatedWeapon = specialAbilitiesGenerator.ApplyAbilitiesToWeapon(weapon);
             Assert.That(updatedWeapon, Is.EqualTo(weapon));
-            Assert.That(weapon.Magic.SpecialAbilities, Is.EqualTo(abilities));
+            Assert.That(weapon.Magic.SpecialAbilities.Count(), Is.EqualTo(2));
             Assert.That(weapon.Damages, Has.Count.EqualTo(1));
-            Assert.That(weapon.CriticalDamages, Has.Count.EqualTo(3)
-                .And.SupersetOf(ability.CriticalDamages["crit"]));
+            Assert.That(weapon.Damages[0].Roll, Is.EqualTo("my roll"));
+            Assert.That(weapon.Damages[0].Type, Is.EqualTo(WeaponDamageType));
+            Assert.That(weapon.Damages[0].Condition, Is.Empty);
+            Assert.That(weapon.CriticalDamages, Has.Count.EqualTo(3));
+            Assert.That(weapon.CriticalDamages[0].Roll, Is.EqualTo("my crit roll"));
+            Assert.That(weapon.CriticalDamages[0].Type, Is.EqualTo(WeaponDamageType_Crit));
+            Assert.That(weapon.CriticalDamages[0].Condition, Is.Empty);
+            Assert.That(weapon.CriticalDamages[1].Roll, Is.EqualTo("more"));
+            Assert.That(weapon.CriticalDamages[1].Type, Is.EqualTo("plasma"));
+            Assert.That(weapon.CriticalDamages[1].Condition, Is.EqualTo("my crit condition"));
+            Assert.That(weapon.CriticalDamages[2].Roll, Is.EqualTo("a lot"));
+            Assert.That(weapon.CriticalDamages[2].Type, Is.EqualTo("ether"));
+            Assert.That(weapon.CriticalDamages[2].Condition, Is.EqualTo("my other crit condition"));
             Assert.That(weapon.SecondaryDamages, Has.Count.EqualTo(1));
+            Assert.That(weapon.SecondaryDamages[0].Roll, Is.EqualTo("my roll"));
+            Assert.That(weapon.SecondaryDamages[0].Type, Is.EqualTo(WeaponDamageType));
+            Assert.That(weapon.SecondaryDamages[0].Condition, Is.Empty);
             Assert.That(weapon.SecondaryCriticalDamages, Has.Count.EqualTo(1));
+            Assert.That(weapon.SecondaryCriticalDamages[0].Roll, Is.EqualTo("my crit roll"));
+            Assert.That(weapon.SecondaryCriticalDamages[0].Type, Is.EqualTo(WeaponDamageType_Crit));
+            Assert.That(weapon.SecondaryCriticalDamages[0].Condition, Is.Empty);
         }
 
         [Test]
         public void ApplyAbilitiesToWeapon_DamagesAndCriticalDamages_DoubleWeapon_LesserEnhancement()
         {
-            mundaneWeapon.Attributes = new[] { "attribute 1", AttributeConstants.DoubleWeapon, "attribute 2" };
-            mundaneWeapon.SecondaryCriticalMultiplier = "other crit";
-            mundaneWeapon.SecondaryDamages.Add(new Damage { Roll = "jab", Type = "punch" });
-            mundaneWeapon.SecondaryCriticalDamages.Add(new Damage { Roll = "cross", Type = "punch" });
+            var ability = new SpecialAbility
+            {
+                Name = "my name",
+                Damages =
+                [
+                    new Damage { Roll = "some", Type = "plasma", Condition = "my condition" },
+                    new Damage { Roll = "a bit", Type = "ether", Condition = "my other condition" },
+                ],
+                CriticalDamages =
+                [
+                    new Damage { Roll = "more", Type = "plasma" },
+                    new Damage { Roll = "a lot", Type = "ether" },
+                ],
+            };
 
-            mockPercentileSelector.Setup(s => s.SelectFrom(.5)).Returns(false);
-
-            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(power, ItemTypeConstants.Weapon);
-            mockPercentileSelector.SetupSequence(p => p.SelectFrom(Config.Name, tableName)).Returns(MagicalWeaponGenerator.SpecialAbility).Returns(MagicalWeaponGenerator.SpecialAbility).Returns("9266");
-
-            var ability = new SpecialAbility();
-            ability.Damages.Add(new Damage { Roll = "some", Type = "plasma", Condition = "my condition" });
-            ability.Damages.Add(new Damage { Roll = "a bit", Type = "ether", Condition = "my other condition" });
-
-            ability.CriticalDamages["crit"] = new List<Damage>();
-            ability.CriticalDamages["other crit"] = new List<Damage>();
-
-            ability.CriticalDamages["crit"].Add(new Damage { Roll = "more", Type = "plasma" });
-            ability.CriticalDamages["crit"].Add(new Damage { Roll = "a lot", Type = "ether" });
-            ability.CriticalDamages["other crit"].Add(new Damage { Roll = "wrong", Type = "plasma" });
-            ability.CriticalDamages["other crit"].Add(new Damage { Roll = "nope", Type = "ether" });
-
-            var abilities = new[] { new SpecialAbility(), ability };
-            mockSpecialAbilitiesGenerator.Setup(p => p.GenerateFor(mundaneWeapon, power, 2)).Returns(abilities);
+            var weapon = CreateWeapon(true);
+            weapon.Magic.SpecialAbilities = [new SpecialAbility(), ability];
+            weapon.SecondaryMagicBonus = 42;
+            weapon.SecondaryHasAbilities = false;
 
             var updatedWeapon = specialAbilitiesGenerator.ApplyAbilitiesToWeapon(weapon);
             Assert.That(updatedWeapon, Is.EqualTo(weapon));
-            Assert.That(weapon.Magic.SpecialAbilities, Is.EqualTo(abilities));
-            Assert.That(weapon.Damages, Has.Count.EqualTo(3)
-                .And.SupersetOf(mundaneWeapon.Damages));
+            Assert.That(weapon.Magic.SpecialAbilities.Count(), Is.EqualTo(2));
+            Assert.That(weapon.Damages, Has.Count.EqualTo(3));
+            Assert.That(weapon.Damages[0].Roll, Is.EqualTo("my roll"));
+            Assert.That(weapon.Damages[0].Type, Is.EqualTo(WeaponDamageType));
+            Assert.That(weapon.Damages[0].Condition, Is.Empty);
             Assert.That(weapon.Damages[1].Roll, Is.EqualTo("some"));
             Assert.That(weapon.Damages[1].Type, Is.EqualTo("plasma"));
             Assert.That(weapon.Damages[1].Condition, Is.EqualTo("my condition"));
             Assert.That(weapon.Damages[2].Roll, Is.EqualTo("a bit"));
             Assert.That(weapon.Damages[2].Type, Is.EqualTo("ether"));
             Assert.That(weapon.Damages[2].Condition, Is.EqualTo("my other condition"));
-            Assert.That(weapon.CriticalDamages, Has.Count.EqualTo(3)
-                .And.SupersetOf(ability.CriticalDamages["crit"]));
+            Assert.That(weapon.CriticalDamages, Has.Count.EqualTo(3));
+            Assert.That(weapon.CriticalDamages[0].Roll, Is.EqualTo("my crit roll"));
+            Assert.That(weapon.CriticalDamages[0].Type, Is.EqualTo(WeaponDamageType_Crit));
+            Assert.That(weapon.CriticalDamages[0].Condition, Is.Empty);
+            Assert.That(weapon.CriticalDamages[1].Roll, Is.EqualTo("more"));
+            Assert.That(weapon.CriticalDamages[1].Type, Is.EqualTo("plasma"));
+            Assert.That(weapon.CriticalDamages[1].Condition, Is.EqualTo("my crit condition"));
+            Assert.That(weapon.CriticalDamages[2].Roll, Is.EqualTo("a lot"));
+            Assert.That(weapon.CriticalDamages[2].Type, Is.EqualTo("ether"));
+            Assert.That(weapon.CriticalDamages[2].Condition, Is.EqualTo("my other crit condition"));
             Assert.That(weapon.SecondaryDamages, Has.Count.EqualTo(1));
+            Assert.That(weapon.SecondaryDamages[0].Roll, Is.EqualTo("my roll"));
+            Assert.That(weapon.SecondaryDamages[0].Type, Is.EqualTo(WeaponDamageType));
+            Assert.That(weapon.SecondaryDamages[0].Condition, Is.Empty);
             Assert.That(weapon.SecondaryCriticalDamages, Has.Count.EqualTo(1));
+            Assert.That(weapon.SecondaryCriticalDamages[0].Roll, Is.EqualTo("my crit roll"));
+            Assert.That(weapon.SecondaryCriticalDamages[0].Type, Is.EqualTo(WeaponDamageType_Crit));
+            Assert.That(weapon.SecondaryCriticalDamages[0].Condition, Is.Empty);
         }
 
         [Test]
         public void ApplyAbilitiesToWeapon_Damages_MultipleAbilities()
         {
-            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(power, ItemTypeConstants.Weapon);
-            mockPercentileSelector.SetupSequence(p => p.SelectFrom(Config.Name, tableName)).Returns(MagicalWeaponGenerator.SpecialAbility).Returns(MagicalWeaponGenerator.SpecialAbility).Returns("9266");
-
             var ability1 = new SpecialAbility();
             ability1.Damages.Add(new Damage { Roll = "some", Type = "plasma", Condition = "my condition" });
             ability1.Damages.Add(new Damage { Roll = "a bit", Type = "ether", Condition = "my other condition" });
 
-            ability1.CriticalDamages["crit"] = new List<Damage>();
-            ability1.CriticalDamages["other crit"] = new List<Damage>();
-
-            ability1.CriticalDamages["crit"].Add(new Damage { Roll = "more", Type = "plasma", Condition = "my crit condition" });
-            ability1.CriticalDamages["crit"].Add(new Damage { Roll = "a lot", Type = "ether", Condition = "my other crit condition" });
-            ability1.CriticalDamages["other crit"].Add(new Damage { Roll = "wrong", Type = "plasma", Condition = "my wrong condition" });
-            ability1.CriticalDamages["other crit"].Add(new Damage { Roll = "nope", Type = "ether", Condition = "my wrong condition" });
+            ability1.CriticalDamages =
+            [
+                new Damage { Roll = "more", Type = "plasma", Condition = "my crit condition" },
+                new Damage { Roll = "a lot", Type = "ether", Condition = "my other crit condition" },
+            ];
 
             var ability2 = new SpecialAbility();
             ability2.Damages.Add(new Damage { Roll = "a touch", Type = "here", Condition = "my condition 2" });
             ability2.Damages.Add(new Damage { Roll = "another touch", Type = "there", Condition = "my other condition 2" });
 
-            ability2.CriticalDamages["crit"] = new List<Damage>();
-            ability2.CriticalDamages["other crit"] = new List<Damage>();
+            ability2.CriticalDamages =
+            [
+                new Damage { Roll = "MORE", Type = "here", Condition = "my crit condition 2" },
+                new Damage { Roll = "a ton", Type = "there", Condition = "my other crit condition 2" },
+            ];
 
-            ability2.CriticalDamages["crit"].Add(new Damage { Roll = "MORE", Type = "here", Condition = "my crit condition 2" });
-            ability2.CriticalDamages["crit"].Add(new Damage { Roll = "a ton", Type = "there", Condition = "my other crit condition 2" });
-            ability2.CriticalDamages["other crit"].Add(new Damage { Roll = "also wrong", Type = "here", Condition = "my wrong condition 2" });
-            ability2.CriticalDamages["other crit"].Add(new Damage { Roll = "also nope", Type = "there", Condition = "my wrong condition 2" });
-
-            var abilities = new[] { new SpecialAbility(), ability1, ability2 };
-            mockSpecialAbilitiesGenerator.Setup(p => p.GenerateFor(mundaneWeapon, power, 2)).Returns(abilities);
+            var weapon = CreateWeapon();
+            weapon.Magic.SpecialAbilities = [new SpecialAbility(), ability1, ability2];
 
             var updatedWeapon = specialAbilitiesGenerator.ApplyAbilitiesToWeapon(weapon);
             Assert.That(updatedWeapon, Is.EqualTo(weapon));
-            Assert.That(weapon.Magic.SpecialAbilities, Is.EqualTo(abilities));
-            Assert.That(weapon.Damages, Has.Count.EqualTo(5)
-                .And.SupersetOf(mundaneWeapon.Damages));
+            Assert.That(weapon.Magic.SpecialAbilities.Count(), Is.EqualTo(3));
+            Assert.That(weapon.Damages, Has.Count.EqualTo(5));
+            Assert.That(weapon.Damages[0].Roll, Is.EqualTo("my roll"));
+            Assert.That(weapon.Damages[0].Type, Is.EqualTo(WeaponDamageType));
+            Assert.That(weapon.Damages[0].Condition, Is.Empty);
             Assert.That(weapon.Damages[1].Roll, Is.EqualTo("some"));
             Assert.That(weapon.Damages[1].Type, Is.EqualTo("plasma"));
             Assert.That(weapon.Damages[1].Condition, Is.EqualTo("my condition"));
@@ -2137,8 +2287,77 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             Assert.That(weapon.Damages[4].Roll, Is.EqualTo("another touch"));
             Assert.That(weapon.Damages[4].Type, Is.EqualTo("there"));
             Assert.That(weapon.Damages[4].Condition, Is.EqualTo("my other condition 2"));
-            Assert.That(weapon.CriticalDamages, Has.Count.EqualTo(5)
-                .And.SupersetOf(mundaneWeapon.CriticalDamages));
+            Assert.That(weapon.CriticalDamages, Has.Count.EqualTo(5));
+            Assert.That(weapon.CriticalDamages[0].Roll, Is.EqualTo("my crit roll"));
+            Assert.That(weapon.CriticalDamages[0].Type, Is.EqualTo(WeaponDamageType_Crit));
+            Assert.That(weapon.CriticalDamages[0].Condition, Is.Empty);
+            Assert.That(weapon.CriticalDamages[1].Roll, Is.EqualTo("more"));
+            Assert.That(weapon.CriticalDamages[1].Type, Is.EqualTo("plasma"));
+            Assert.That(weapon.CriticalDamages[1].Condition, Is.EqualTo("my crit condition"));
+            Assert.That(weapon.CriticalDamages[2].Roll, Is.EqualTo("a lot"));
+            Assert.That(weapon.CriticalDamages[2].Type, Is.EqualTo("ether"));
+            Assert.That(weapon.CriticalDamages[2].Condition, Is.EqualTo("my other crit condition"));
+            Assert.That(weapon.CriticalDamages[3].Roll, Is.EqualTo("MORE"));
+            Assert.That(weapon.CriticalDamages[3].Type, Is.EqualTo("here"));
+            Assert.That(weapon.CriticalDamages[3].Condition, Is.EqualTo("my crit condition 2"));
+            Assert.That(weapon.CriticalDamages[4].Roll, Is.EqualTo("a ton"));
+            Assert.That(weapon.CriticalDamages[4].Type, Is.EqualTo("there"));
+            Assert.That(weapon.CriticalDamages[4].Condition, Is.EqualTo("my other crit condition 2"));
+            Assert.That(weapon.SecondaryDamages, Is.Empty);
+            Assert.That(weapon.SecondaryCriticalDamages, Is.Empty);
+        }
+
+        [Test]
+        public void ApplyAbilitiesToWeapon_Damages_MultipleAbilities_DoubleWeapon()
+        {
+            var ability1 = new SpecialAbility();
+            ability1.Damages.Add(new Damage { Roll = "some", Type = "plasma", Condition = "my condition" });
+            ability1.Damages.Add(new Damage { Roll = "a bit", Type = "ether", Condition = "my other condition" });
+
+            ability1.CriticalDamages =
+            [
+                new Damage { Roll = "more", Type = "plasma", Condition = "my crit condition" },
+                new Damage { Roll = "a lot", Type = "ether", Condition = "my other crit condition" },
+            ];
+
+            var ability2 = new SpecialAbility();
+            ability2.Damages.Add(new Damage { Roll = "a touch", Type = "here", Condition = "my condition 2" });
+            ability2.Damages.Add(new Damage { Roll = "another touch", Type = "there", Condition = "my other condition 2" });
+
+            ability2.CriticalDamages =
+            [
+                new Damage { Roll = "MORE", Type = "here", Condition = "my crit condition 2" },
+                new Damage { Roll = "a ton", Type = "there", Condition = "my other crit condition 2" },
+            ];
+
+            var weapon = CreateWeapon(true);
+            weapon.Magic.SpecialAbilities = [new SpecialAbility(), ability1, ability2];
+            weapon.SecondaryMagicBonus = weapon.Magic.Bonus;
+            weapon.SecondaryHasAbilities = true;
+
+            var updatedWeapon = specialAbilitiesGenerator.ApplyAbilitiesToWeapon(weapon);
+            Assert.That(updatedWeapon, Is.EqualTo(weapon));
+            Assert.That(weapon.Magic.SpecialAbilities.Count(), Is.EqualTo(3));
+            Assert.That(weapon.Damages, Has.Count.EqualTo(5));
+            Assert.That(weapon.Damages[0].Roll, Is.EqualTo("my roll"));
+            Assert.That(weapon.Damages[0].Type, Is.EqualTo(WeaponDamageType));
+            Assert.That(weapon.Damages[0].Condition, Is.Empty);
+            Assert.That(weapon.Damages[1].Roll, Is.EqualTo("some"));
+            Assert.That(weapon.Damages[1].Type, Is.EqualTo("plasma"));
+            Assert.That(weapon.Damages[1].Condition, Is.EqualTo("my condition"));
+            Assert.That(weapon.Damages[2].Roll, Is.EqualTo("a bit"));
+            Assert.That(weapon.Damages[2].Type, Is.EqualTo("ether"));
+            Assert.That(weapon.Damages[2].Condition, Is.EqualTo("my other condition"));
+            Assert.That(weapon.Damages[3].Roll, Is.EqualTo("a touch"));
+            Assert.That(weapon.Damages[3].Type, Is.EqualTo("here"));
+            Assert.That(weapon.Damages[3].Condition, Is.EqualTo("my condition 2"));
+            Assert.That(weapon.Damages[4].Roll, Is.EqualTo("another touch"));
+            Assert.That(weapon.Damages[4].Type, Is.EqualTo("there"));
+            Assert.That(weapon.Damages[4].Condition, Is.EqualTo("my other condition 2"));
+            Assert.That(weapon.CriticalDamages, Has.Count.EqualTo(5));
+            Assert.That(weapon.CriticalDamages[0].Roll, Is.EqualTo("my crit roll"));
+            Assert.That(weapon.CriticalDamages[0].Type, Is.EqualTo(WeaponDamageType_Crit));
+            Assert.That(weapon.CriticalDamages[0].Condition, Is.Empty);
             Assert.That(weapon.CriticalDamages[1].Roll, Is.EqualTo("more"));
             Assert.That(weapon.CriticalDamages[1].Type, Is.EqualTo("plasma"));
             Assert.That(weapon.CriticalDamages[1].Condition, Is.EqualTo("my crit condition"));
@@ -2160,31 +2379,25 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
         [TestCase(3, "15-20")]
         public void ApplyAbilitiesToWeapon_Keen(int originalThreatRange, string keenDescription)
         {
-            mundaneWeapon.ThreatRange = originalThreatRange;
-
-            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(power, ItemTypeConstants.Weapon);
-            mockPercentileSelector.SetupSequence(p => p.SelectFrom(Config.Name, tableName)).Returns(MagicalWeaponGenerator.SpecialAbility).Returns(MagicalWeaponGenerator.SpecialAbility).Returns("9266");
-
             var keen = new SpecialAbility { Name = SpecialAbilityConstants.Keen };
-            var abilities = new[] { new SpecialAbility(), keen };
-            mockSpecialAbilitiesGenerator.Setup(p => p.GenerateFor(mundaneWeapon, power, 2)).Returns(abilities);
+            var weapon = CreateWeapon();
+            weapon.Magic.SpecialAbilities = [new SpecialAbility(), keen];
+            weapon.ThreatRange = originalThreatRange;
 
             var updatedWeapon = specialAbilitiesGenerator.ApplyAbilitiesToWeapon(weapon);
             Assert.That(updatedWeapon, Is.EqualTo(weapon));
-            Assert.That(weapon.Magic.SpecialAbilities, Is.EqualTo(abilities));
+            Assert.That(weapon.Magic.SpecialAbilities.Count(), Is.EqualTo(2));
             Assert.That(weapon.ThreatRange, Is.EqualTo(originalThreatRange * 2));
             Assert.That(weapon.ThreatRangeDescription, Is.EqualTo(keenDescription));
         }
 
         [Test]
-        public void SpellStoringWeaponHasSpellIfSelectorSaysSo()
+        public void ApplyAbilitiesToWeapon_SpellStoringWeaponHasSpellIfSelectorSaysSo()
         {
             mockPercentileSelector.Setup(s => s.SelectFrom<bool>(Config.Name, TableNameConstants.Percentiles.SpellStoringContainsSpell)).Returns(true);
-            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(power, ItemTypeConstants.Weapon);
-            mockPercentileSelector.SetupSequence(p => p.SelectFrom(Config.Name, tableName)).Returns(MagicalWeaponGenerator.SpecialAbility).Returns("9266");
 
-            var abilities = new[] { new SpecialAbility { Name = SpecialAbilityConstants.SpellStoring } };
-            mockSpecialAbilitiesGenerator.Setup(p => p.GenerateFor(It.IsAny<Item>(), power, 1)).Returns(abilities);
+            var weapon = CreateWeapon();
+            weapon.Magic.SpecialAbilities = [new SpecialAbility { Name = SpecialAbilityConstants.SpellStoring }];
 
             mockSpellGenerator.Setup(g => g.GenerateType()).Returns("spell type");
             mockSpellGenerator.Setup(g => g.GenerateLevel(PowerConstants.Minor)).Returns(1337);
@@ -2196,14 +2409,12 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
         }
 
         [Test]
-        public void SpellStoringWeaponDoesNotHaveSpellIfSelectorSaysSo()
+        public void ApplyAbilitiesToWeapon_SpellStoringWeaponDoesNotHaveSpellIfSelectorSaysSo()
         {
             mockPercentileSelector.Setup(s => s.SelectFrom<bool>(Config.Name, TableNameConstants.Percentiles.SpellStoringContainsSpell)).Returns(false);
-            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(power, ItemTypeConstants.Weapon);
-            mockPercentileSelector.SetupSequence(p => p.SelectFrom(Config.Name, tableName)).Returns(MagicalWeaponGenerator.SpecialAbility).Returns("9266");
 
-            var abilities = new[] { new SpecialAbility { Name = SpecialAbilityConstants.SpellStoring } };
-            mockSpecialAbilitiesGenerator.Setup(p => p.GenerateFor(It.IsAny<Item>(), power, 1)).Returns(abilities);
+            var weapon = CreateWeapon();
+            weapon.Magic.SpecialAbilities = [new SpecialAbility { Name = SpecialAbilityConstants.SpellStoring }];
 
             mockSpellGenerator.Setup(g => g.GenerateType()).Returns("spell type");
             mockSpellGenerator.Setup(g => g.GenerateLevel(PowerConstants.Minor)).Returns(1337);
@@ -2212,6 +2423,170 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             var updatedWeapon = specialAbilitiesGenerator.ApplyAbilitiesToWeapon(weapon);
             Assert.That(updatedWeapon, Is.EqualTo(weapon));
             Assert.That(weapon.Contents, Is.Empty);
+        }
+
+        [Test]
+        public void ApplyAbilitiesToWeapon_AllAbilities()
+        {
+            mockPercentileSelector.Setup(s => s.SelectFrom<bool>(Config.Name, TableNameConstants.Percentiles.SpellStoringContainsSpell)).Returns(true);
+
+            var ability1 = new SpecialAbility();
+            ability1.Damages.Add(new Damage { Roll = "some", Type = "plasma", Condition = "my condition" });
+            ability1.Damages.Add(new Damage { Roll = "a bit", Type = "ether", Condition = "my other condition" });
+
+            ability1.CriticalDamages =
+            [
+                new Damage { Roll = "more", Type = "plasma", Condition = "my crit condition" },
+                new Damage { Roll = "a lot", Type = "ether", Condition = "my other crit condition" },
+            ];
+
+            var ability2 = new SpecialAbility();
+            ability2.Damages.Add(new Damage { Roll = "a touch", Type = "here", Condition = "my condition 2" });
+            ability2.Damages.Add(new Damage { Roll = "another touch", Type = "there", Condition = "my other condition 2" });
+
+            ability2.CriticalDamages =
+            [
+                new Damage { Roll = "MORE", Type = "here", Condition = "my crit condition 2" },
+                new Damage { Roll = "a ton", Type = "there", Condition = "my other crit condition 2" },
+            ];
+
+            mockSpellGenerator.Setup(g => g.GenerateType()).Returns("spell type");
+            mockSpellGenerator.Setup(g => g.GenerateLevel(PowerConstants.Minor)).Returns(1337);
+            mockSpellGenerator.Setup(g => g.Generate("spell type", 1337)).Returns("spell");
+
+            var weapon = CreateWeapon();
+            weapon.Magic.SpecialAbilities =
+            [
+                new SpecialAbility(),
+                ability1,
+                ability2,
+                new SpecialAbility { Name = SpecialAbilityConstants.SpellStoring },
+                new SpecialAbility { Name = SpecialAbilityConstants.Keen },
+            ];
+
+            var updatedWeapon = specialAbilitiesGenerator.ApplyAbilitiesToWeapon(weapon);
+            Assert.That(updatedWeapon, Is.EqualTo(weapon));
+            Assert.That(weapon.Magic.SpecialAbilities.Count(), Is.EqualTo(3));
+            Assert.That(weapon.Damages, Has.Count.EqualTo(5));
+            Assert.That(weapon.Damages[0].Roll, Is.EqualTo("my roll"));
+            Assert.That(weapon.Damages[0].Type, Is.EqualTo(WeaponDamageType));
+            Assert.That(weapon.Damages[0].Condition, Is.Empty);
+            Assert.That(weapon.Damages[1].Roll, Is.EqualTo("some"));
+            Assert.That(weapon.Damages[1].Type, Is.EqualTo("plasma"));
+            Assert.That(weapon.Damages[1].Condition, Is.EqualTo("my condition"));
+            Assert.That(weapon.Damages[2].Roll, Is.EqualTo("a bit"));
+            Assert.That(weapon.Damages[2].Type, Is.EqualTo("ether"));
+            Assert.That(weapon.Damages[2].Condition, Is.EqualTo("my other condition"));
+            Assert.That(weapon.Damages[3].Roll, Is.EqualTo("a touch"));
+            Assert.That(weapon.Damages[3].Type, Is.EqualTo("here"));
+            Assert.That(weapon.Damages[3].Condition, Is.EqualTo("my condition 2"));
+            Assert.That(weapon.Damages[4].Roll, Is.EqualTo("another touch"));
+            Assert.That(weapon.Damages[4].Type, Is.EqualTo("there"));
+            Assert.That(weapon.Damages[4].Condition, Is.EqualTo("my other condition 2"));
+            Assert.That(weapon.CriticalDamages, Has.Count.EqualTo(5));
+            Assert.That(weapon.CriticalDamages[0].Roll, Is.EqualTo("my crit roll"));
+            Assert.That(weapon.CriticalDamages[0].Type, Is.EqualTo(WeaponDamageType_Crit));
+            Assert.That(weapon.CriticalDamages[0].Condition, Is.Empty);
+            Assert.That(weapon.CriticalDamages[1].Roll, Is.EqualTo("more"));
+            Assert.That(weapon.CriticalDamages[1].Type, Is.EqualTo("plasma"));
+            Assert.That(weapon.CriticalDamages[1].Condition, Is.EqualTo("my crit condition"));
+            Assert.That(weapon.CriticalDamages[2].Roll, Is.EqualTo("a lot"));
+            Assert.That(weapon.CriticalDamages[2].Type, Is.EqualTo("ether"));
+            Assert.That(weapon.CriticalDamages[2].Condition, Is.EqualTo("my other crit condition"));
+            Assert.That(weapon.CriticalDamages[3].Roll, Is.EqualTo("MORE"));
+            Assert.That(weapon.CriticalDamages[3].Type, Is.EqualTo("here"));
+            Assert.That(weapon.CriticalDamages[3].Condition, Is.EqualTo("my crit condition 2"));
+            Assert.That(weapon.CriticalDamages[4].Roll, Is.EqualTo("a ton"));
+            Assert.That(weapon.CriticalDamages[4].Type, Is.EqualTo("there"));
+            Assert.That(weapon.CriticalDamages[4].Condition, Is.EqualTo("my other crit condition 2"));
+            Assert.That(weapon.SecondaryDamages, Is.Empty);
+            Assert.That(weapon.SecondaryCriticalDamages, Is.Empty);
+            Assert.That(weapon.Contents, Contains.Item("spell"));
+            Assert.That(weapon.ThreatRange, Is.EqualTo(2));
+            Assert.That(weapon.ThreatRangeDescription, Is.EqualTo("19-20"));
+        }
+
+        [Test]
+        public void ApplyAbilitiesToWeapon_AllAbilities_DoubleWeapon()
+        {
+            mockPercentileSelector.Setup(s => s.SelectFrom<bool>(Config.Name, TableNameConstants.Percentiles.SpellStoringContainsSpell)).Returns(true);
+
+            var ability1 = new SpecialAbility();
+            ability1.Damages.Add(new Damage { Roll = "some", Type = "plasma", Condition = "my condition" });
+            ability1.Damages.Add(new Damage { Roll = "a bit", Type = "ether", Condition = "my other condition" });
+
+            ability1.CriticalDamages =
+            [
+                new Damage { Roll = "more", Type = "plasma", Condition = "my crit condition" },
+                new Damage { Roll = "a lot", Type = "ether", Condition = "my other crit condition" },
+            ];
+
+            var ability2 = new SpecialAbility();
+            ability2.Damages.Add(new Damage { Roll = "a touch", Type = "here", Condition = "my condition 2" });
+            ability2.Damages.Add(new Damage { Roll = "another touch", Type = "there", Condition = "my other condition 2" });
+
+            ability2.CriticalDamages =
+            [
+                new Damage { Roll = "MORE", Type = "here", Condition = "my crit condition 2" },
+                new Damage { Roll = "a ton", Type = "there", Condition = "my other crit condition 2" },
+            ];
+
+            mockSpellGenerator.Setup(g => g.GenerateType()).Returns("spell type");
+            mockSpellGenerator.Setup(g => g.GenerateLevel(PowerConstants.Minor)).Returns(1337);
+            mockSpellGenerator.Setup(g => g.Generate("spell type", 1337)).Returns("spell");
+
+            var weapon = CreateWeapon(true);
+            weapon.Magic.SpecialAbilities =
+            [
+                new SpecialAbility(),
+                ability1,
+                ability2,
+                new SpecialAbility { Name = SpecialAbilityConstants.SpellStoring },
+                new SpecialAbility { Name = SpecialAbilityConstants.Keen },
+            ];
+            weapon.SecondaryMagicBonus = weapon.Magic.Bonus;
+            weapon.SecondaryHasAbilities = true;
+
+            var updatedWeapon = specialAbilitiesGenerator.ApplyAbilitiesToWeapon(weapon);
+            Assert.That(updatedWeapon, Is.EqualTo(weapon));
+            Assert.That(weapon.Magic.SpecialAbilities.Count(), Is.EqualTo(3));
+            Assert.That(weapon.Damages, Has.Count.EqualTo(5));
+            Assert.That(weapon.Damages[0].Roll, Is.EqualTo("my roll"));
+            Assert.That(weapon.Damages[0].Type, Is.EqualTo(WeaponDamageType));
+            Assert.That(weapon.Damages[0].Condition, Is.Empty);
+            Assert.That(weapon.Damages[1].Roll, Is.EqualTo("some"));
+            Assert.That(weapon.Damages[1].Type, Is.EqualTo("plasma"));
+            Assert.That(weapon.Damages[1].Condition, Is.EqualTo("my condition"));
+            Assert.That(weapon.Damages[2].Roll, Is.EqualTo("a bit"));
+            Assert.That(weapon.Damages[2].Type, Is.EqualTo("ether"));
+            Assert.That(weapon.Damages[2].Condition, Is.EqualTo("my other condition"));
+            Assert.That(weapon.Damages[3].Roll, Is.EqualTo("a touch"));
+            Assert.That(weapon.Damages[3].Type, Is.EqualTo("here"));
+            Assert.That(weapon.Damages[3].Condition, Is.EqualTo("my condition 2"));
+            Assert.That(weapon.Damages[4].Roll, Is.EqualTo("another touch"));
+            Assert.That(weapon.Damages[4].Type, Is.EqualTo("there"));
+            Assert.That(weapon.Damages[4].Condition, Is.EqualTo("my other condition 2"));
+            Assert.That(weapon.CriticalDamages, Has.Count.EqualTo(5));
+            Assert.That(weapon.CriticalDamages[0].Roll, Is.EqualTo("my crit roll"));
+            Assert.That(weapon.CriticalDamages[0].Type, Is.EqualTo(WeaponDamageType_Crit));
+            Assert.That(weapon.CriticalDamages[0].Condition, Is.Empty);
+            Assert.That(weapon.CriticalDamages[1].Roll, Is.EqualTo("more"));
+            Assert.That(weapon.CriticalDamages[1].Type, Is.EqualTo("plasma"));
+            Assert.That(weapon.CriticalDamages[1].Condition, Is.EqualTo("my crit condition"));
+            Assert.That(weapon.CriticalDamages[2].Roll, Is.EqualTo("a lot"));
+            Assert.That(weapon.CriticalDamages[2].Type, Is.EqualTo("ether"));
+            Assert.That(weapon.CriticalDamages[2].Condition, Is.EqualTo("my other crit condition"));
+            Assert.That(weapon.CriticalDamages[3].Roll, Is.EqualTo("MORE"));
+            Assert.That(weapon.CriticalDamages[3].Type, Is.EqualTo("here"));
+            Assert.That(weapon.CriticalDamages[3].Condition, Is.EqualTo("my crit condition 2"));
+            Assert.That(weapon.CriticalDamages[4].Roll, Is.EqualTo("a ton"));
+            Assert.That(weapon.CriticalDamages[4].Type, Is.EqualTo("there"));
+            Assert.That(weapon.CriticalDamages[4].Condition, Is.EqualTo("my other crit condition 2"));
+            Assert.That(weapon.SecondaryDamages, Is.Empty);
+            Assert.That(weapon.SecondaryCriticalDamages, Is.Empty);
+            Assert.That(weapon.Contents, Contains.Item("spell"));
+            Assert.That(weapon.ThreatRange, Is.EqualTo(2));
+            Assert.That(weapon.ThreatRangeDescription, Is.EqualTo("19-20"));
         }
     }
 }
