@@ -16,7 +16,4 @@
   <ItemGroup>
     <ProjectReference Include="..\DnDGen.TreasureGen\DnDGen.TreasureGen.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Selectors\Helpers\" />
-  </ItemGroup>
 </Project>

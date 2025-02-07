@@ -1,11 +1,11 @@
 ﻿using DnDGen.Infrastructure.Factories;
+using DnDGen.Infrastructure.Models;
 using DnDGen.Infrastructure.Selectors.Collections;
+using DnDGen.Infrastructure.Selectors.Percentiles;
 using DnDGen.TreasureGen.Generators.Items.Magical;
 using DnDGen.TreasureGen.Items;
 using DnDGen.TreasureGen.Items.Magical;
 using DnDGen.TreasureGen.Items.Mundane;
-using DnDGen.TreasureGen.Selectors.Percentiles;
-using DnDGen.TreasureGen.Selectors.Selections;
 using DnDGen.TreasureGen.Tables;
 using Moq;
 using NUnit.Framework;
@@ -20,18 +20,18 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
     {
         private MagicalItemGenerator staffGenerator;
         private Mock<IChargesGenerator> mockChargesGenerator;
-        private Mock<ITypeAndAmountPercentileSelector> mockTypeAndAmountPercentileSelector;
+        private Mock<IPercentileTypeAndAmountSelector> mockTypeAndAmountPercentileSelector;
         private Mock<ICollectionSelector> mockCollectionsSelector;
         private string power;
         private ItemVerifier itemVerifier;
         private Mock<ISpecialAbilitiesGenerator> mockSpecialAbilitiesGenerator;
         private Mock<MundaneItemGenerator> mockMundaneWeaponGenerator;
-        private TypeAndAmountSelection selection;
+        private TypeAndAmountDataSelection selection;
 
         [SetUp]
         public void Setup()
         {
-            mockTypeAndAmountPercentileSelector = new Mock<ITypeAndAmountPercentileSelector>();
+            mockTypeAndAmountPercentileSelector = new Mock<IPercentileTypeAndAmountSelector>();
             mockChargesGenerator = new Mock<IChargesGenerator>();
             mockCollectionsSelector = new Mock<ICollectionSelector>();
             mockSpecialAbilitiesGenerator = new Mock<ISpecialAbilitiesGenerator>();
@@ -48,13 +48,14 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
                 mockJustInTimeFactory.Object);
             power = "power";
             itemVerifier = new ItemVerifier();
-            selection = new TypeAndAmountSelection();
+            selection = new TypeAndAmountDataSelection
+            {
+                Type = "staffiness",
+                AmountAsDouble = 90210
+            };
 
-            selection.Type = "staffiness";
-            selection.Amount = 90210;
-
-            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs, power, ItemTypeConstants.Staff);
-            mockTypeAndAmountPercentileSelector.Setup(s => s.SelectFrom(tableName)).Returns(selection);
+            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(power, ItemTypeConstants.Staff);
+            mockTypeAndAmountPercentileSelector.Setup(s => s.SelectFrom(Config.Name, tableName)).Returns(selection);
             mockChargesGenerator.Setup(g => g.GenerateFor(ItemTypeConstants.Staff, selection.Type)).Returns(9266);
         }
 
@@ -193,7 +194,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
                 new SpecialAbility { Name = specialAbilityNames.Last() }
             };
 
-            mockSpecialAbilitiesGenerator.Setup(p => p.GenerateFor(template.Magic.SpecialAbilities)).Returns(abilities);
+            mockSpecialAbilitiesGenerator.Setup(p => p.GenerateFor(template.Magic.SpecialAbilities, string.Empty)).Returns(abilities);
 
             var baseNames = new[] { "base name", "other base name" };
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.ItemGroups, name)).Returns(baseNames);
@@ -217,15 +218,6 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             var template = itemVerifier.CreateRandomTemplate(name);
             template.Traits.Clear();
 
-            var specialAbilityNames = template.Magic.SpecialAbilities.Select(a => a.Name);
-
-            var abilities = new[]
-            {
-                new SpecialAbility { Name = specialAbilityNames.First() },
-                new SpecialAbility { Name = specialAbilityNames.Last() }
-            };
-
-            mockSpecialAbilitiesGenerator.Setup(p => p.GenerateFor(template.Magic.SpecialAbilities)).Returns(abilities);
             var baseNames = new[] { "base name", "other base name", WeaponConstants.Dagger };
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.ItemGroups, name)).Returns(baseNames);
 
@@ -236,6 +228,17 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             mockMundaneWeaponGenerator
                 .Setup(g => g.Generate(WeaponConstants.Dagger))
                 .Returns(mundaneWeapon);
+
+            var specialAbilityNames = template.Magic.SpecialAbilities.Select(a => a.Name);
+
+            var abilities = new[]
+            {
+                new SpecialAbility { Name = specialAbilityNames.First() },
+                new SpecialAbility { Name = specialAbilityNames.Last() }
+            };
+
+            mockSpecialAbilitiesGenerator.Setup(p => p.GenerateFor(template.Magic.SpecialAbilities, mundaneWeapon.CriticalMultiplier)).Returns(abilities);
+            mockSpecialAbilitiesGenerator.Setup(g => g.ApplyAbilitiesToWeapon(It.Is<Weapon>(w => w.Magic.SpecialAbilities == abilities))).Returns((Weapon w) => w);
 
             var staff = staffGenerator.Generate(template);
             itemVerifier.AssertMagicalItemFromTemplate(staff, template);
@@ -267,15 +270,6 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             var template = itemVerifier.CreateRandomTemplate(name);
             template.Traits.Clear();
 
-            var specialAbilityNames = template.Magic.SpecialAbilities.Select(a => a.Name);
-
-            var abilities = new[]
-            {
-                new SpecialAbility { Name = specialAbilityNames.First() },
-                new SpecialAbility { Name = specialAbilityNames.Last() }
-            };
-
-            mockSpecialAbilitiesGenerator.Setup(p => p.GenerateFor(template.Magic.SpecialAbilities)).Returns(abilities);
             var baseNames = new[] { "base name", "other base name", WeaponConstants.Quarterstaff };
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.ItemGroups, name)).Returns(baseNames);
 
@@ -287,6 +281,17 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             mockMundaneWeaponGenerator
                 .Setup(g => g.Generate(WeaponConstants.Quarterstaff))
                 .Returns(mundaneWeapon);
+
+            var specialAbilityNames = template.Magic.SpecialAbilities.Select(a => a.Name);
+
+            var abilities = new[]
+            {
+                new SpecialAbility { Name = specialAbilityNames.First() },
+                new SpecialAbility { Name = specialAbilityNames.Last() }
+            };
+
+            mockSpecialAbilitiesGenerator.Setup(p => p.GenerateFor(template.Magic.SpecialAbilities, mundaneWeapon.CriticalMultiplier)).Returns(abilities);
+            mockSpecialAbilitiesGenerator.Setup(g => g.ApplyAbilitiesToWeapon(It.Is<Weapon>(w => w.Magic.SpecialAbilities == abilities))).Returns((Weapon w) => w);
 
             var staff = staffGenerator.Generate(template);
             itemVerifier.AssertMagicalItemFromTemplate(staff, template);
@@ -312,93 +317,10 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
         }
 
         [Test]
-        public void GenerateCustomStaffThatIsAlsoADoubleWeapon_WithAbilityDamages()
-        {
-            var name = Guid.NewGuid().ToString();
-            var template = itemVerifier.CreateRandomTemplate(name);
-            template.Traits.Clear();
-
-            var specialAbilityNames = template.Magic.SpecialAbilities.Select(a => a.Name);
-
-            var baseNames = new[] { "base name", "other base name", WeaponConstants.Quarterstaff };
-            mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.ItemGroups, name)).Returns(baseNames);
-
-            var mundaneWeapon = itemVerifier.CreateRandomWeaponTemplate(WeaponConstants.Quarterstaff);
-            mundaneWeapon.Traits.Clear();
-            mundaneWeapon.Quantity = 1;
-            mundaneWeapon.Attributes = mundaneWeapon.Attributes.Union(new[] { AttributeConstants.DoubleWeapon });
-            mundaneWeapon.SecondaryDamages.Add(new Damage { Roll = "some", Type = "secondary" });
-            mundaneWeapon.SecondaryCriticalDamages.Add(new Damage { Roll = "several", Type = "secondary" });
-
-            mockMundaneWeaponGenerator
-                .Setup(g => g.Generate(WeaponConstants.Quarterstaff))
-                .Returns(mundaneWeapon);
-
-            var abilities = new[]
-            {
-                new SpecialAbility { Name = specialAbilityNames.First() },
-                new SpecialAbility
-                {
-                    Name = specialAbilityNames.Last(),
-                    Damages = new List<Damage> { new Damage { Roll = "some more", Type = "physical" } },
-                    CriticalDamages = new Dictionary<string, List<Damage>>
-                    {
-                        { "wrong", new List<Damage>() },
-                        { mundaneWeapon.CriticalMultiplier, new List<Damage> { new Damage { Roll = "even more", Type = "chemical" } } },
-                        { mundaneWeapon.SecondaryCriticalMultiplier, new List<Damage> { new Damage { Roll = "a lot more", Type = "chemical" } } },
-                    }
-                }
-            };
-
-            mockSpecialAbilitiesGenerator.Setup(p => p.GenerateFor(template.Magic.SpecialAbilities)).Returns(abilities);
-
-            var staff = staffGenerator.Generate(template);
-            itemVerifier.AssertMagicalItemFromTemplate(staff, template);
-            Assert.That(staff.ItemType, Is.EqualTo(ItemTypeConstants.Staff));
-            Assert.That(staff.Attributes, Is.EquivalentTo(mundaneWeapon.Attributes.Union(new[] { AttributeConstants.Charged })));
-            Assert.That(staff.Attributes, Is.All.Not.EqualTo(AttributeConstants.OneTimeUse));
-            Assert.That(staff.Quantity, Is.EqualTo(1));
-            Assert.That(staff.Magic.SpecialAbilities, Is.EquivalentTo(abilities));
-            Assert.That(staff.BaseNames, Is.EqualTo(baseNames));
-            Assert.That(staff, Is.InstanceOf<Weapon>());
-
-            var weapon = staff as Weapon;
-            Assert.That(weapon.Attributes, Is.SupersetOf(mundaneWeapon.Attributes));
-            Assert.That(weapon.CriticalMultiplier, Is.EqualTo(mundaneWeapon.CriticalMultiplier));
-            Assert.That(weapon.Damages.Select(d => d.Description), Is.EqualTo(
-                mundaneWeapon.Damages.Select(d => d.Description)
-                .Union(abilities.SelectMany(a => a.Damages).Select(d => d.Description))));
-            Assert.That(weapon.CriticalDamages.Select(d => d.Description), Is.EqualTo(
-                mundaneWeapon.CriticalDamages.Select(d => d.Description)
-                .Union(abilities.Where(a => a.CriticalDamages.Any()).SelectMany(a => a.CriticalDamages[mundaneWeapon.CriticalMultiplier]).Select(d => d.Description))));
-            Assert.That(weapon.Size, Is.EqualTo(mundaneWeapon.Size));
-            Assert.That(weapon.ThreatRangeDescription, Is.EqualTo(mundaneWeapon.ThreatRangeDescription));
-            Assert.That(weapon.Traits, Contains.Item(TraitConstants.Masterwork).And.Count.EqualTo(1));
-            Assert.That(weapon.IsDoubleWeapon, Is.True);
-            Assert.That(weapon.SecondaryMagicBonus, Is.Positive.And.EqualTo(template.Magic.Bonus));
-            Assert.That(weapon.SecondaryHasAbilities, Is.True);
-            Assert.That(weapon.SecondaryDamages.Select(d => d.Description), Is.EqualTo(
-                mundaneWeapon.SecondaryDamages.Select(d => d.Description)
-                .Union(abilities.SelectMany(a => a.Damages).Select(d => d.Description))));
-            Assert.That(weapon.SecondaryCriticalDamages.Select(d => d.Description), Is.EqualTo(
-                mundaneWeapon.SecondaryCriticalDamages.Select(d => d.Description)
-                .Union(abilities.Where(a => a.CriticalDamages.Any()).SelectMany(a => a.CriticalDamages[mundaneWeapon.SecondaryCriticalMultiplier]).Select(d => d.Description))));
-        }
-
-        [Test]
         public void GenerateCustomStaffThatIsAlsoAWeapon_WithTraits()
         {
             var name = Guid.NewGuid().ToString();
             var template = itemVerifier.CreateRandomTemplate(name);
-            var specialAbilityNames = template.Magic.SpecialAbilities.Select(a => a.Name);
-
-            var abilities = new[]
-            {
-                new SpecialAbility { Name = specialAbilityNames.First() },
-                new SpecialAbility { Name = specialAbilityNames.Last() }
-            };
-
-            mockSpecialAbilitiesGenerator.Setup(p => p.GenerateFor(template.Magic.SpecialAbilities)).Returns(abilities);
             var baseNames = new[] { "base name", "other base name", WeaponConstants.Dagger };
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.ItemGroups, name)).Returns(baseNames);
 
@@ -409,6 +331,17 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             mockMundaneWeaponGenerator
                 .Setup(g => g.Generate(WeaponConstants.Dagger, template.Traits.First(), template.Traits.Last()))
                 .Returns(mundaneWeapon);
+
+            var specialAbilityNames = template.Magic.SpecialAbilities.Select(a => a.Name);
+
+            var abilities = new[]
+            {
+                new SpecialAbility { Name = specialAbilityNames.First() },
+                new SpecialAbility { Name = specialAbilityNames.Last() }
+            };
+
+            mockSpecialAbilitiesGenerator.Setup(p => p.GenerateFor(template.Magic.SpecialAbilities, mundaneWeapon.CriticalMultiplier)).Returns(abilities);
+            mockSpecialAbilitiesGenerator.Setup(g => g.ApplyAbilitiesToWeapon(It.Is<Weapon>(w => w.Magic.SpecialAbilities == abilities))).Returns((Weapon w) => w);
 
             var staff = staffGenerator.Generate(template);
             itemVerifier.AssertMagicalItemFromTemplate(staff, template);
@@ -446,7 +379,8 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
                 new SpecialAbility { Name = specialAbilityNames.Last() }
             };
 
-            mockSpecialAbilitiesGenerator.Setup(p => p.GenerateFor(template.Magic.SpecialAbilities)).Returns(abilities);
+            mockSpecialAbilitiesGenerator.Setup(p => p.GenerateFor(template.Magic.SpecialAbilities, string.Empty)).Returns(abilities);
+            mockSpecialAbilitiesGenerator.Setup(g => g.ApplyAbilitiesToWeapon(It.Is<Weapon>(w => w.Magic.SpecialAbilities == abilities))).Returns((Weapon w) => w);
 
             var baseNames = new[] { "base name", "other base name" };
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.ItemGroups, name)).Returns(baseNames);
@@ -485,15 +419,15 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
         [TestCase(StaffConstants.Woodlands)]
         public void GenerateFromName(string staffName)
         {
-            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs, power, ItemTypeConstants.Staff);
+            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(power, ItemTypeConstants.Staff);
             mockTypeAndAmountPercentileSelector
-                .Setup(s => s.SelectAllFrom(tableName))
-                .Returns(new[]
-                {
-                    new TypeAndAmountSelection { Type = "wrong staff", Amount = 666 },
-                    new TypeAndAmountSelection { Type = staffName, Amount = 42 },
-                    new TypeAndAmountSelection { Type = "other staff", Amount = 600 },
-                });
+                .Setup(s => s.SelectAllFrom(Config.Name, tableName))
+                .Returns(
+                [
+                    new TypeAndAmountDataSelection { Type = "wrong staff", AmountAsDouble = 666 },
+                    new TypeAndAmountDataSelection { Type = staffName, AmountAsDouble = 42 },
+                    new TypeAndAmountDataSelection { Type = "other staff", AmountAsDouble = 600 },
+                ]);
 
             var baseNames = new[] { "base name", "other base name" };
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.ItemGroups, staffName)).Returns(baseNames);
@@ -503,8 +437,8 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             mockChargesGenerator.Setup(g => g.GenerateFor(ItemTypeConstants.Staff, "other staff")).Returns(90210);
 
             mockCollectionsSelector
-                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountSelection>>()))
-                .Returns((IEnumerable<TypeAndAmountSelection> c) => c.Last());
+                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountDataSelection>>()))
+                .Returns((IEnumerable<TypeAndAmountDataSelection> c) => c.Last());
 
             mockCollectionsSelector
                 .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, staffName))
@@ -525,15 +459,15 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
         [Test]
         public void GenerateFromName_WithTraits()
         {
-            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs, power, ItemTypeConstants.Staff);
+            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(power, ItemTypeConstants.Staff);
             mockTypeAndAmountPercentileSelector
-                .Setup(s => s.SelectAllFrom(tableName))
-                .Returns(new[]
-                {
-                    new TypeAndAmountSelection { Type = "wrong staff", Amount = 666 },
-                    new TypeAndAmountSelection { Type = StaffConstants.Abjuration, Amount = 42 },
-                    new TypeAndAmountSelection { Type = "other staff", Amount = 600 },
-                });
+                .Setup(s => s.SelectAllFrom(Config.Name, tableName))
+                .Returns(
+                [
+                    new TypeAndAmountDataSelection { Type = "wrong staff", AmountAsDouble = 666 },
+                    new TypeAndAmountDataSelection { Type = StaffConstants.Abjuration, AmountAsDouble = 42 },
+                    new TypeAndAmountDataSelection { Type = "other staff", AmountAsDouble = 600 },
+                ]);
 
             var baseNames = new[] { "base name", "other base name" };
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.ItemGroups, StaffConstants.Abjuration)).Returns(baseNames);
@@ -543,8 +477,8 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             mockChargesGenerator.Setup(g => g.GenerateFor(ItemTypeConstants.Staff, "other staff")).Returns(90210);
 
             mockCollectionsSelector
-                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountSelection>>()))
-                .Returns((IEnumerable<TypeAndAmountSelection> c) => c.Last());
+                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountDataSelection>>()))
+                .Returns((IEnumerable<TypeAndAmountDataSelection> c) => c.Last());
 
             mockCollectionsSelector
                 .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, StaffConstants.Abjuration))
@@ -568,14 +502,14 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
         [Test]
         public void GenerateStaffAsWeaponFromName()
         {
-            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs, power, ItemTypeConstants.Staff);
+            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(power, ItemTypeConstants.Staff);
             mockTypeAndAmountPercentileSelector
-                .Setup(s => s.SelectAllFrom(tableName))
+                .Setup(s => s.SelectAllFrom(Config.Name, tableName))
                 .Returns(new[]
                 {
-                    new TypeAndAmountSelection { Type = "wrong staff", Amount = 666 },
-                    new TypeAndAmountSelection { Type = StaffConstants.Abjuration, Amount = 42 },
-                    new TypeAndAmountSelection { Type = "other staff", Amount = 600 },
+                    new TypeAndAmountDataSelection { Type = "wrong staff", AmountAsDouble = 666 },
+                    new TypeAndAmountDataSelection { Type = StaffConstants.Abjuration, AmountAsDouble = 42 },
+                    new TypeAndAmountDataSelection { Type = "other staff", AmountAsDouble = 600 },
                 });
 
             var baseNames = new[] { "base name", "other base name", WeaponConstants.Quarterstaff };
@@ -589,8 +523,8 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             mockChargesGenerator.Setup(g => g.GenerateFor(ItemTypeConstants.Staff, "other staff")).Returns(90210);
 
             mockCollectionsSelector
-                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountSelection>>()))
-                .Returns((IEnumerable<TypeAndAmountSelection> c) => c.Last());
+                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountDataSelection>>()))
+                .Returns((IEnumerable<TypeAndAmountDataSelection> c) => c.Last());
 
             mockCollectionsSelector
                 .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, StaffConstants.Abjuration))
@@ -622,14 +556,14 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
         [Test]
         public void GenerateStaffAsDoubleWeaponFromName()
         {
-            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs, power, ItemTypeConstants.Staff);
+            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(power, ItemTypeConstants.Staff);
             mockTypeAndAmountPercentileSelector
-                .Setup(s => s.SelectAllFrom(tableName))
+                .Setup(s => s.SelectAllFrom(Config.Name, tableName))
                 .Returns(new[]
                 {
-                    new TypeAndAmountSelection { Type = "wrong staff", Amount = 666 },
-                    new TypeAndAmountSelection { Type = StaffConstants.Woodlands, Amount = 42 },
-                    new TypeAndAmountSelection { Type = "other staff", Amount = 600 },
+                    new TypeAndAmountDataSelection { Type = "wrong staff", AmountAsDouble = 666 },
+                    new TypeAndAmountDataSelection { Type = StaffConstants.Woodlands, AmountAsDouble = 42 },
+                    new TypeAndAmountDataSelection { Type = "other staff", AmountAsDouble = 600 },
                 });
 
             var baseNames = new[] { "base name", "other base name", WeaponConstants.Quarterstaff };
@@ -645,8 +579,8 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             mockChargesGenerator.Setup(g => g.GenerateFor(ItemTypeConstants.Staff, "other staff")).Returns(90210);
 
             mockCollectionsSelector
-                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountSelection>>()))
-                .Returns((IEnumerable<TypeAndAmountSelection> c) => c.Last());
+                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountDataSelection>>()))
+                .Returns((IEnumerable<TypeAndAmountDataSelection> c) => c.Last());
 
             mockCollectionsSelector
                 .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, StaffConstants.Woodlands))
@@ -678,14 +612,14 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
         [Test]
         public void GenerateStaffAsWeaponFromName_WithTraits()
         {
-            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs, power, ItemTypeConstants.Staff);
+            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(power, ItemTypeConstants.Staff);
             mockTypeAndAmountPercentileSelector
-                .Setup(s => s.SelectAllFrom(tableName))
+                .Setup(s => s.SelectAllFrom(Config.Name, tableName))
                 .Returns(new[]
                 {
-                    new TypeAndAmountSelection { Type = "wrong staff", Amount = 666 },
-                    new TypeAndAmountSelection { Type = StaffConstants.Abjuration, Amount = 42 },
-                    new TypeAndAmountSelection { Type = "other staff", Amount = 600 },
+                    new TypeAndAmountDataSelection { Type = "wrong staff", AmountAsDouble = 666 },
+                    new TypeAndAmountDataSelection { Type = StaffConstants.Abjuration, AmountAsDouble = 42 },
+                    new TypeAndAmountDataSelection { Type = "other staff", AmountAsDouble = 600 },
                 });
 
             var baseNames = new[] { "base name", "other base name", WeaponConstants.Quarterstaff };
@@ -701,8 +635,8 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             mockChargesGenerator.Setup(g => g.GenerateFor(ItemTypeConstants.Staff, "other staff")).Returns(90210);
 
             mockCollectionsSelector
-                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountSelection>>()))
-                .Returns((IEnumerable<TypeAndAmountSelection> c) => c.Last());
+                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountDataSelection>>()))
+                .Returns((IEnumerable<TypeAndAmountDataSelection> c) => c.Last());
 
             mockCollectionsSelector
                 .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, StaffConstants.Abjuration))
@@ -734,14 +668,14 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
         [Test]
         public void GenerateStaffAsWeaponFromBaseName()
         {
-            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs, power, ItemTypeConstants.Staff);
+            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(power, ItemTypeConstants.Staff);
             mockTypeAndAmountPercentileSelector
-                .Setup(s => s.SelectAllFrom(tableName))
+                .Setup(s => s.SelectAllFrom(Config.Name, tableName))
                 .Returns(new[]
                 {
-                    new TypeAndAmountSelection { Type = "wrong staff", Amount = 666 },
-                    new TypeAndAmountSelection { Type = StaffConstants.Abjuration, Amount = 42 },
-                    new TypeAndAmountSelection { Type = "other staff", Amount = 600 },
+                    new TypeAndAmountDataSelection { Type = "wrong staff", AmountAsDouble = 666 },
+                    new TypeAndAmountDataSelection { Type = StaffConstants.Abjuration, AmountAsDouble = 42 },
+                    new TypeAndAmountDataSelection { Type = "other staff", AmountAsDouble = 600 },
                 });
 
             var baseNames = new[] { "base name", "other base name", WeaponConstants.Quarterstaff };
@@ -755,8 +689,8 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             mockChargesGenerator.Setup(g => g.GenerateFor(ItemTypeConstants.Staff, "other staff")).Returns(90210);
 
             mockCollectionsSelector
-                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountSelection>>()))
-                .Returns((IEnumerable<TypeAndAmountSelection> c) => c.Last());
+                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountDataSelection>>()))
+                .Returns((IEnumerable<TypeAndAmountDataSelection> c) => c.Last());
 
             mockCollectionsSelector
                 .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, StaffConstants.Abjuration))
@@ -794,14 +728,14 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
         [Test]
         public void MinorPowerFromNameAdjustsPower()
         {
-            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs, power, ItemTypeConstants.Staff);
+            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(power, ItemTypeConstants.Staff);
             mockTypeAndAmountPercentileSelector
-                .Setup(s => s.SelectAllFrom(tableName))
+                .Setup(s => s.SelectAllFrom(Config.Name, tableName))
                 .Returns(new[]
                 {
-                    new TypeAndAmountSelection { Type = "wrong staff", Amount = 666 },
-                    new TypeAndAmountSelection { Type = StaffConstants.Abjuration, Amount = 42 },
-                    new TypeAndAmountSelection { Type = "other staff", Amount = 600 },
+                    new TypeAndAmountDataSelection { Type = "wrong staff", AmountAsDouble = 666 },
+                    new TypeAndAmountDataSelection { Type = StaffConstants.Abjuration, AmountAsDouble = 42 },
+                    new TypeAndAmountDataSelection { Type = "other staff", AmountAsDouble = 600 },
                 });
 
             var baseNames = new[] { "base name", "other base name" };
@@ -812,8 +746,8 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             mockChargesGenerator.Setup(g => g.GenerateFor(ItemTypeConstants.Staff, "other staff")).Returns(90210);
 
             mockCollectionsSelector
-                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountSelection>>()))
-                .Returns((IEnumerable<TypeAndAmountSelection> c) => c.Last());
+                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountDataSelection>>()))
+                .Returns((IEnumerable<TypeAndAmountDataSelection> c) => c.Last());
 
             mockCollectionsSelector
                 .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, StaffConstants.Abjuration))
@@ -834,14 +768,14 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
         [Test]
         public void GenerateFromName_MultipleOfPower()
         {
-            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs, power, ItemTypeConstants.Staff);
+            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(power, ItemTypeConstants.Staff);
             mockTypeAndAmountPercentileSelector
-                .Setup(s => s.SelectAllFrom(tableName))
+                .Setup(s => s.SelectAllFrom(Config.Name, tableName))
                 .Returns(new[]
                 {
-                    new TypeAndAmountSelection { Type = "wrong staff", Amount = 666 },
-                    new TypeAndAmountSelection { Type = StaffConstants.Abjuration, Amount = 42 },
-                    new TypeAndAmountSelection { Type = StaffConstants.Abjuration, Amount = 600 },
+                    new TypeAndAmountDataSelection { Type = "wrong staff", AmountAsDouble = 666 },
+                    new TypeAndAmountDataSelection { Type = StaffConstants.Abjuration, AmountAsDouble = 42 },
+                    new TypeAndAmountDataSelection { Type = StaffConstants.Abjuration, AmountAsDouble = 600 },
                 });
 
             var baseNames = new[] { "base name", "other base name" };
@@ -852,8 +786,8 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             mockChargesGenerator.Setup(g => g.GenerateFor(ItemTypeConstants.Staff, "other staff")).Returns(90210);
 
             mockCollectionsSelector
-                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountSelection>>()))
-                .Returns((IEnumerable<TypeAndAmountSelection> c) => c.Last());
+                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountDataSelection>>()))
+                .Returns((IEnumerable<TypeAndAmountDataSelection> c) => c.Last());
 
             mockCollectionsSelector
                 .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, StaffConstants.Abjuration))
@@ -874,14 +808,14 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
         [Test]
         public void GenerateFromName_NoneOfPower()
         {
-            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs, power, ItemTypeConstants.Staff);
+            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(power, ItemTypeConstants.Staff);
             mockTypeAndAmountPercentileSelector
-                .Setup(s => s.SelectAllFrom(tableName))
+                .Setup(s => s.SelectAllFrom(Config.Name, tableName))
                 .Returns(new[]
                 {
-                    new TypeAndAmountSelection { Type = "wrong staff", Amount = 666 },
-                    new TypeAndAmountSelection { Type = StaffConstants.Abjuration, Amount = 42 },
-                    new TypeAndAmountSelection { Type = "other staff", Amount = 600 },
+                    new TypeAndAmountDataSelection { Type = "wrong staff", AmountAsDouble = 666 },
+                    new TypeAndAmountDataSelection { Type = StaffConstants.Abjuration, AmountAsDouble = 42 },
+                    new TypeAndAmountDataSelection { Type = "other staff", AmountAsDouble = 600 },
                 });
 
             var baseNames = new[] { "base name", "other base name" };
@@ -892,8 +826,8 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             mockChargesGenerator.Setup(g => g.GenerateFor(ItemTypeConstants.Staff, "other staff")).Returns(90210);
 
             mockCollectionsSelector
-                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountSelection>>()))
-                .Returns((IEnumerable<TypeAndAmountSelection> c) => c.Last());
+                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountDataSelection>>()))
+                .Returns((IEnumerable<TypeAndAmountDataSelection> c) => c.Last());
 
             mockCollectionsSelector
                 .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, StaffConstants.Abjuration))

@@ -106,22 +106,19 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
         [Test]
         public void GetSpecificArmorsFromGenerator()
         {
-            var specificArmor = new Armor();
-            specificArmor.Name = "specific armor";
+            var specificArmor = new Armor
+            {
+                Name = "specific armor"
+            };
 
-            var tableName = TableNameConstants.Percentiles.ARMORTYPETypes("armor type");
-            mockPercentileSelector.Setup(s => s.SelectFrom(Config.Name, tableName)).Returns("armor name");
-
-            tableName = TableNameConstants.Percentiles.POWERITEMTYPEs("power", ItemTypeConstants.Armor);
+            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs("power", ItemTypeConstants.Armor);
             mockTypeAndAmountPercentileSelector
                 .SetupSequence(s => s.SelectFrom(Config.Name, tableName))
                 .Returns(new TypeAndAmountDataSelection { Type = MagicalArmorGenerator.SpecialAbility, AmountAsDouble = 0 })
                 .Returns(new TypeAndAmountDataSelection { Type = MagicalArmorGenerator.SpecialAbility, AmountAsDouble = 0 })
-                .Returns(new TypeAndAmountDataSelection { Type = ItemTypeConstants.Armor, AmountAsDouble = MagicalArmorGenerator.SpecificBonus });
+                .Returns(new TypeAndAmountDataSelection { Type = "armor type", AmountAsDouble = MagicalArmorGenerator.SpecificBonus });
 
-            mockSpecificGearGenerator.Setup(g => g.CanBeSpecific("power", "armor type", "armor name")).Returns(true);
-
-            mockSpecificGearGenerator.Setup(g => g.GenerateNameFrom("power", "armor type", "armor name")).Returns("specific armor");
+            mockSpecificGearGenerator.Setup(g => g.GenerateRandomNameFrom("power", "armor type")).Returns("specific armor");
             mockSpecificGearGenerator.Setup(g => g.GeneratePrototypeFrom("power", "armor type", "specific armor")).Returns(specificArmor);
             mockSpecificGearGenerator.Setup(g => g.IsSpecific(It.Is<Item>(i => i.NameMatches("specific armor")))).Returns(true);
             mockSpecificGearGenerator.Setup(g => g.GenerateFrom(It.Is<Item>(i => i.NameMatches("specific armor")))).Returns(specificArmor);
@@ -563,7 +560,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
                 .Returns(new TypeAndAmountDataSelection { Type = ItemTypeConstants.Armor, AmountAsDouble = MagicalArmorGenerator.SpecificBonus });
 
             tableName = TableNameConstants.Collections.ITEMTYPEAttributes(ItemTypeConstants.Armor);
-            mockCollectionsSelector.Setup(p => p.SelectFrom(Config.Name, tableName, "armor name")).Returns(new[] { "attribute", "other attribute" });
+            mockCollectionsSelector.Setup(p => p.SelectFrom(Config.Name, tableName, "armor name")).Returns(["attribute", "other attribute"]);
 
             tableName = TableNameConstants.Percentiles.ARMORTYPETypes(ItemTypeConstants.Armor);
             mockPercentileSelector.Setup(p => p.SelectFrom(Config.Name, tableName)).Returns("armor name");
@@ -575,11 +572,13 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             var attributes = new[] { "type 1", "type 2" };
             var abilities = new[] { new SpecialAbility(), new SpecialAbility() };
 
-            var specificArmor = new Armor();
-            specificArmor.Name = "specific armor";
-            specificArmor.BaseNames = baseNames;
-            specificArmor.ItemType = ItemTypeConstants.Armor;
-            specificArmor.Attributes = attributes;
+            var specificArmor = new Armor
+            {
+                Name = "specific armor",
+                BaseNames = baseNames,
+                ItemType = ItemTypeConstants.Armor,
+                Attributes = attributes
+            };
             specificArmor.Magic.Bonus = 42;
             specificArmor.Magic.SpecialAbilities = abilities;
 
@@ -591,6 +590,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             mockSpecificGearGenerator.Setup(g => g.GenerateFrom(It.Is<Item>(i => i.Name == specificArmor.Name))).Returns(specificArmor);
 
             var armor = magicalArmorGenerator.Generate("power", "base name");
+            Assert.That(armor, Is.EqualTo(specificArmor), armor.Summary);
             Assert.That(armor.Name, Is.EqualTo("specific armor"));
             Assert.That(armor.BaseNames, Contains.Item("from mundane").And.Contains("base name"));
             Assert.That(armor.Magic.Bonus, Is.EqualTo(42));

@@ -1,7 +1,7 @@
-﻿using NUnit.Framework;
-using DnDGen.TreasureGen.Tables;
-using DnDGen.TreasureGen.Items;
+﻿using DnDGen.TreasureGen.Items;
 using DnDGen.TreasureGen.Items.Magical;
+using DnDGen.TreasureGen.Tables;
+using NUnit.Framework;
 
 namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.WondrousItems
 {
@@ -10,7 +10,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.WondrousItem
     {
         protected override string tableName
         {
-            get { return TableNameConstants.Collections.ITEMTYPEAttributes, ItemTypeConstants.WondrousItem); }
+            get { return TableNameConstants.Collections.ITEMTYPEAttributes(ItemTypeConstants.WondrousItem); }
         }
 
         [TestCase(WondrousItemConstants.BeadOfForce,

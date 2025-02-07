@@ -119,20 +119,28 @@ namespace DnDGen.TreasureGen.Generators.Items.Magical
             while (bonus == 0);
 
             prototype.Traits = new HashSet<string>(traits);
+            var isRandomSpecific = string.IsNullOrEmpty(itemName) && bonus == SpecificBonus;
+            var isRandomGeneral = string.IsNullOrEmpty(itemName) && bonus != SpecificBonus;
+            var isSetSpecific = !string.IsNullOrEmpty(itemName) && bonus == SpecificBonus && specificGearGenerator.CanBeSpecific(power, armorType, itemName);
 
-            if (string.IsNullOrEmpty(itemName))
+            if (isRandomSpecific)
+            {
+                itemName = specificGearGenerator.GenerateRandomNameFrom(power, randomArmorType);
+                armorType = randomArmorType;
+            }
+            else if (isRandomGeneral)
             {
                 itemName = percentileSelector.SelectFrom(Config.Name, TableNameConstants.Percentiles.ARMORTYPETypes(randomArmorType));
                 armorType = randomArmorType;
-                isSpecific = (bonus == SpecificBonus);
+            }
+            else if (isSetSpecific)
+            {
+                itemName = specificGearGenerator.GenerateNameFrom(power, armorType, itemName);
             }
 
-            var canBeSpecific = specificGearGenerator.CanBeSpecific(power, armorType, itemName);
-
-            if (isSpecific && canBeSpecific)
+            if (isRandomSpecific || isSetSpecific)
             {
-                var specificName = specificGearGenerator.GenerateNameFrom(power, armorType, itemName);
-                var specificItem = specificGearGenerator.GeneratePrototypeFrom(power, armorType, specificName, traits);
+                var specificItem = specificGearGenerator.GeneratePrototypeFrom(power, armorType, itemName, traits);
                 specificItem.CloneInto(prototype);
 
                 return prototype;

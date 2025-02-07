@@ -1,10 +1,11 @@
-﻿using DnDGen.Infrastructure.Selectors.Collections;
+﻿using DnDGen.Infrastructure.Models;
+using DnDGen.Infrastructure.Selectors.Collections;
+using DnDGen.Infrastructure.Selectors.Percentiles;
 using DnDGen.RollGen;
 using DnDGen.TreasureGen.Generators.Items.Magical;
 using DnDGen.TreasureGen.Items;
 using DnDGen.TreasureGen.Items.Magical;
 using DnDGen.TreasureGen.Selectors.Percentiles;
-using DnDGen.TreasureGen.Selectors.Selections;
 using DnDGen.TreasureGen.Tables;
 using Moq;
 using NUnit.Framework;
@@ -23,8 +24,8 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
         private Mock<IChargesGenerator> mockChargesGenerator;
         private Mock<Dice> mockDice;
         private Mock<ISpellGenerator> mockSpellGenerator;
-        private Mock<ITypeAndAmountPercentileSelector> mockTypeAndAmountPercentileSelector;
-        private TypeAndAmountSelection selection;
+        private Mock<IPercentileTypeAndAmountSelector> mockTypeAndAmountPercentileSelector;
+        private TypeAndAmountDataSelection selection;
         private string power;
         private ItemVerifier itemVerifier;
 
@@ -36,7 +37,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             mockSpellGenerator = new Mock<ISpellGenerator>();
             mockPercentileSelector = new Mock<ITreasurePercentileSelector>();
             mockDice = new Mock<Dice>();
-            mockTypeAndAmountPercentileSelector = new Mock<ITypeAndAmountPercentileSelector>();
+            mockTypeAndAmountPercentileSelector = new Mock<IPercentileTypeAndAmountSelector>();
             wondrousItemGenerator = new WondrousItemGenerator(
                 mockPercentileSelector.Object,
                 mockCollectionsSelector.Object,
@@ -46,13 +47,13 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
                 mockTypeAndAmountPercentileSelector.Object);
 
             itemVerifier = new ItemVerifier();
-            selection = new TypeAndAmountSelection();
+            selection = new TypeAndAmountDataSelection();
 
             power = "power";
             selection.Type = "wondrous item";
-            selection.Amount = 0;
-            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs, power, ItemTypeConstants.WondrousItem);
-            mockTypeAndAmountPercentileSelector.Setup(p => p.SelectFrom(tableName)).Returns(selection);
+            selection.AmountAsDouble = 0;
+            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(power, ItemTypeConstants.WondrousItem);
+            mockTypeAndAmountPercentileSelector.Setup(p => p.SelectFrom(Config.Name, tableName)).Returns(selection);
         }
 
         [Test]
@@ -69,7 +70,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
         public void GetAttributesFromSelector()
         {
             var attributes = new[] { "type 1", "type 2" };
-            var tableName = TableNameConstants.Collections.ITEMTYPEAttributes, ItemTypeConstants.WondrousItem);
+            var tableName = TableNameConstants.Collections.ITEMTYPEAttributes(ItemTypeConstants.WondrousItem);
             mockCollectionsSelector.Setup(p => p.SelectFrom(Config.Name, tableName, selection.Type)).Returns(attributes);
 
             var item = wondrousItemGenerator.GenerateRandom(power);
@@ -80,7 +81,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
         public void DoNotGetChargesIfNotCharged()
         {
             var attributes = new[] { "type 1", "type 2" };
-            var tableName = TableNameConstants.Collections.ITEMTYPEAttributes, ItemTypeConstants.WondrousItem);
+            var tableName = TableNameConstants.Collections.ITEMTYPEAttributes(ItemTypeConstants.WondrousItem);
             mockCollectionsSelector.Setup(p => p.SelectFrom(Config.Name, tableName, selection.Type)).Returns(attributes);
 
             mockChargesGenerator.Setup(g => g.GenerateFor(ItemTypeConstants.WondrousItem, "wondrous item")).Returns(9266);
@@ -93,7 +94,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
         public void GetChargesIfCharged()
         {
             var attributes = new[] { AttributeConstants.Charged };
-            var tableName = TableNameConstants.Collections.ITEMTYPEAttributes, ItemTypeConstants.WondrousItem);
+            var tableName = TableNameConstants.Collections.ITEMTYPEAttributes(ItemTypeConstants.WondrousItem);
             mockCollectionsSelector.Setup(p => p.SelectFrom(Config.Name, tableName, selection.Type)).Returns(attributes);
 
             mockChargesGenerator.Setup(g => g.GenerateFor(ItemTypeConstants.WondrousItem, selection.Type)).Returns(9266);
@@ -105,7 +106,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
         [Test]
         public void GetBonus()
         {
-            selection.Amount = 90210;
+            selection.AmountAsDouble = 90210;
             var item = wondrousItemGenerator.GenerateRandom(power);
             Assert.That(item.Magic.Bonus, Is.EqualTo(90210));
         }
@@ -371,7 +372,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             var template = itemVerifier.CreateRandomTemplate(name);
 
             var attributes = new[] { "type 1", "type 2" };
-            var tableName = TableNameConstants.Collections.ITEMTYPEAttributes, ItemTypeConstants.WondrousItem);
+            var tableName = TableNameConstants.Collections.ITEMTYPEAttributes(ItemTypeConstants.WondrousItem);
             mockCollectionsSelector.Setup(p => p.SelectFrom(Config.Name, tableName, name)).Returns(attributes);
 
             var wondrousItem = wondrousItemGenerator.Generate(template);
@@ -390,7 +391,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             var template = itemVerifier.CreateRandomTemplate(name);
 
             var attributes = new[] { "type 1", "type 2" };
-            var tableName = TableNameConstants.Collections.ITEMTYPEAttributes, ItemTypeConstants.WondrousItem);
+            var tableName = TableNameConstants.Collections.ITEMTYPEAttributes(ItemTypeConstants.WondrousItem);
             mockCollectionsSelector.Setup(p => p.SelectFrom(Config.Name, tableName, name)).Returns(attributes);
 
             var wondrousItem = wondrousItemGenerator.Generate(template, true);
@@ -405,25 +406,25 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
         [Test]
         public void GenerateFromName()
         {
-            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs, power, ItemTypeConstants.WondrousItem);
+            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(power, ItemTypeConstants.WondrousItem);
             var selections = new[]
             {
-                new TypeAndAmountSelection { Type = "wrong wondrous item", Amount = 666 },
-                new TypeAndAmountSelection { Type = "wondrous item", Amount = 9266 },
-                new TypeAndAmountSelection { Type = "other wondrous item", Amount = 90210 }
+                new TypeAndAmountDataSelection { Type = "wrong wondrous item", AmountAsDouble = 666 },
+                new TypeAndAmountDataSelection { Type = "wondrous item", AmountAsDouble = 9266 },
+                new TypeAndAmountDataSelection { Type = "other wondrous item", AmountAsDouble = 90210 }
             };
 
-            mockTypeAndAmountPercentileSelector.Setup(s => s.SelectAllFrom(tableName)).Returns(selections);
+            mockTypeAndAmountPercentileSelector.Setup(s => s.SelectAllFrom(Config.Name, tableName)).Returns(selections);
 
             var attributes = new[] { "type 1", "type 2" };
-            tableName = TableNameConstants.Collections.ITEMTYPEAttributes, ItemTypeConstants.WondrousItem);
+            tableName = TableNameConstants.Collections.ITEMTYPEAttributes(ItemTypeConstants.WondrousItem);
             mockCollectionsSelector.Setup(p => p.SelectFrom(Config.Name, tableName, "wondrous item")).Returns(attributes);
 
             mockChargesGenerator.Setup(g => g.GenerateFor(ItemTypeConstants.WondrousItem, It.IsAny<string>())).Returns(666);
 
             mockCollectionsSelector
-                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountSelection>>()))
-                .Returns((IEnumerable<TypeAndAmountSelection> c) => c.Last());
+                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountDataSelection>>()))
+                .Returns((IEnumerable<TypeAndAmountDataSelection> c) => c.Last());
 
             mockCollectionsSelector
                 .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, "wondrous item"))
@@ -442,25 +443,25 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
         [Test]
         public void GenerateFromName_WithTraits()
         {
-            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs, power, ItemTypeConstants.WondrousItem);
+            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(power, ItemTypeConstants.WondrousItem);
             var selections = new[]
             {
-                new TypeAndAmountSelection { Type = "wrong wondrous item", Amount = 666 },
-                new TypeAndAmountSelection { Type = "wondrous item", Amount = 9266 },
-                new TypeAndAmountSelection { Type = "other wondrous item", Amount = 90210 }
+                new TypeAndAmountDataSelection { Type = "wrong wondrous item", AmountAsDouble = 666 },
+                new TypeAndAmountDataSelection { Type = "wondrous item", AmountAsDouble = 9266 },
+                new TypeAndAmountDataSelection { Type = "other wondrous item", AmountAsDouble = 90210 }
             };
 
-            mockTypeAndAmountPercentileSelector.Setup(s => s.SelectAllFrom(tableName)).Returns(selections);
+            mockTypeAndAmountPercentileSelector.Setup(s => s.SelectAllFrom(Config.Name, tableName)).Returns(selections);
 
             var attributes = new[] { "type 1", "type 2" };
-            tableName = TableNameConstants.Collections.ITEMTYPEAttributes, ItemTypeConstants.WondrousItem);
+            tableName = TableNameConstants.Collections.ITEMTYPEAttributes(ItemTypeConstants.WondrousItem);
             mockCollectionsSelector.Setup(p => p.SelectFrom(Config.Name, tableName, "wondrous item")).Returns(attributes);
 
             mockChargesGenerator.Setup(g => g.GenerateFor(ItemTypeConstants.WondrousItem, It.IsAny<string>())).Returns(666);
 
             mockCollectionsSelector
-                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountSelection>>()))
-                .Returns((IEnumerable<TypeAndAmountSelection> c) => c.Last());
+                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountDataSelection>>()))
+                .Returns((IEnumerable<TypeAndAmountDataSelection> c) => c.Last());
 
             mockCollectionsSelector
                 .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, "wondrous item"))
@@ -482,25 +483,25 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
         [Test]
         public void GenerateFromName_MultipleOfPower()
         {
-            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs, power, ItemTypeConstants.WondrousItem);
+            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(power, ItemTypeConstants.WondrousItem);
             var selections = new[]
             {
-                new TypeAndAmountSelection { Type = "wrong wondrous item", Amount = 666 },
-                new TypeAndAmountSelection { Type = "wondrous item", Amount = 9266 },
-                new TypeAndAmountSelection { Type = "wondrous item", Amount = 90210 }
+                new TypeAndAmountDataSelection { Type = "wrong wondrous item", AmountAsDouble = 666 },
+                new TypeAndAmountDataSelection { Type = "wondrous item", AmountAsDouble = 9266 },
+                new TypeAndAmountDataSelection { Type = "wondrous item", AmountAsDouble = 90210 }
             };
 
-            mockTypeAndAmountPercentileSelector.Setup(s => s.SelectAllFrom(tableName)).Returns(selections);
+            mockTypeAndAmountPercentileSelector.Setup(s => s.SelectAllFrom(Config.Name, tableName)).Returns(selections);
 
             var attributes = new[] { "type 1", "type 2" };
-            tableName = TableNameConstants.Collections.ITEMTYPEAttributes, ItemTypeConstants.WondrousItem);
+            tableName = TableNameConstants.Collections.ITEMTYPEAttributes(ItemTypeConstants.WondrousItem);
             mockCollectionsSelector.Setup(p => p.SelectFrom(Config.Name, tableName, "wondrous item")).Returns(attributes);
 
             mockChargesGenerator.Setup(g => g.GenerateFor(ItemTypeConstants.WondrousItem, It.IsAny<string>())).Returns(666);
 
             mockCollectionsSelector
-                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountSelection>>()))
-                .Returns((IEnumerable<TypeAndAmountSelection> c) => c.Last());
+                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountDataSelection>>()))
+                .Returns((IEnumerable<TypeAndAmountDataSelection> c) => c.Last());
 
             mockCollectionsSelector
                 .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, "wondrous item"))
@@ -519,25 +520,25 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
         [Test]
         public void GenerateFromName_NoneOfPower()
         {
-            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs, power, ItemTypeConstants.WondrousItem);
+            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(power, ItemTypeConstants.WondrousItem);
             var selections = new[]
             {
-                new TypeAndAmountSelection { Type = "wrong wondrous item", Amount = 666 },
-                new TypeAndAmountSelection { Type = "wondrous item", Amount = 9266 },
-                new TypeAndAmountSelection { Type = "other wondrous item", Amount = 90210 }
+                new TypeAndAmountDataSelection { Type = "wrong wondrous item", AmountAsDouble = 666 },
+                new TypeAndAmountDataSelection { Type = "wondrous item", AmountAsDouble = 9266 },
+                new TypeAndAmountDataSelection { Type = "other wondrous item", AmountAsDouble = 90210 }
             };
 
-            mockTypeAndAmountPercentileSelector.Setup(s => s.SelectAllFrom(tableName)).Returns(selections);
+            mockTypeAndAmountPercentileSelector.Setup(s => s.SelectAllFrom(Config.Name, tableName)).Returns(selections);
 
             var attributes = new[] { "type 1", "type 2" };
-            tableName = TableNameConstants.Collections.ITEMTYPEAttributes, ItemTypeConstants.WondrousItem);
+            tableName = TableNameConstants.Collections.ITEMTYPEAttributes(ItemTypeConstants.WondrousItem);
             mockCollectionsSelector.Setup(p => p.SelectFrom(Config.Name, tableName, "wondrous item")).Returns(attributes);
 
             mockChargesGenerator.Setup(g => g.GenerateFor(ItemTypeConstants.WondrousItem, It.IsAny<string>())).Returns(666);
 
             mockCollectionsSelector
-                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountSelection>>()))
-                .Returns((IEnumerable<TypeAndAmountSelection> c) => c.Last());
+                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountDataSelection>>()))
+                .Returns((IEnumerable<TypeAndAmountDataSelection> c) => c.Last());
 
             mockCollectionsSelector
                 .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, "wondrous item"))
@@ -556,25 +557,25 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
         [Test]
         public void GenerateChargedFromName()
         {
-            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs, power, ItemTypeConstants.WondrousItem);
+            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(power, ItemTypeConstants.WondrousItem);
             var selections = new[]
             {
-                new TypeAndAmountSelection { Type = "wrong wondrous item", Amount = 666 },
-                new TypeAndAmountSelection { Type = "wondrous item", Amount = 9266 },
-                new TypeAndAmountSelection { Type = "other wondrous item", Amount = 90210 }
+                new TypeAndAmountDataSelection { Type = "wrong wondrous item", AmountAsDouble = 666 },
+                new TypeAndAmountDataSelection { Type = "wondrous item", AmountAsDouble = 9266 },
+                new TypeAndAmountDataSelection { Type = "other wondrous item", AmountAsDouble = 90210 }
             };
 
-            mockTypeAndAmountPercentileSelector.Setup(s => s.SelectAllFrom(tableName)).Returns(selections);
+            mockTypeAndAmountPercentileSelector.Setup(s => s.SelectAllFrom(Config.Name, tableName)).Returns(selections);
 
             var attributes = new[] { "type 1", "type 2", AttributeConstants.Charged };
-            tableName = TableNameConstants.Collections.ITEMTYPEAttributes, ItemTypeConstants.WondrousItem);
+            tableName = TableNameConstants.Collections.ITEMTYPEAttributes(ItemTypeConstants.WondrousItem);
             mockCollectionsSelector.Setup(p => p.SelectFrom(Config.Name, tableName, "wondrous item")).Returns(attributes);
 
             mockChargesGenerator.Setup(g => g.GenerateFor(ItemTypeConstants.WondrousItem, It.IsAny<string>())).Returns(42);
 
             mockCollectionsSelector
-                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountSelection>>()))
-                .Returns((IEnumerable<TypeAndAmountSelection> c) => c.Last());
+                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountDataSelection>>()))
+                .Returns((IEnumerable<TypeAndAmountDataSelection> c) => c.Last());
 
             mockCollectionsSelector
                 .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, "wondrous item"))
@@ -595,25 +596,25 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
         {
             mockPercentileSelector.Setup(p => p.SelectFrom(Config.Name, TableNameConstants.Percentiles.HornOfValhallaTypes)).Returns("metallic");
 
-            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs, power, ItemTypeConstants.WondrousItem);
+            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(power, ItemTypeConstants.WondrousItem);
             var selections = new[]
             {
-                new TypeAndAmountSelection { Type = "wrong wondrous item", Amount = 666 },
-                new TypeAndAmountSelection { Type = WondrousItemConstants.HornOfValhalla, Amount = 9266 },
-                new TypeAndAmountSelection { Type = "other wondrous item", Amount = 90210 }
+                new TypeAndAmountDataSelection { Type = "wrong wondrous item", AmountAsDouble = 666 },
+                new TypeAndAmountDataSelection { Type = WondrousItemConstants.HornOfValhalla, AmountAsDouble = 9266 },
+                new TypeAndAmountDataSelection { Type = "other wondrous item", AmountAsDouble = 90210 }
             };
 
-            mockTypeAndAmountPercentileSelector.Setup(s => s.SelectAllFrom(tableName)).Returns(selections);
+            mockTypeAndAmountPercentileSelector.Setup(s => s.SelectAllFrom(Config.Name, tableName)).Returns(selections);
 
             var attributes = new[] { "type 1", "type 2" };
-            tableName = TableNameConstants.Collections.ITEMTYPEAttributes, ItemTypeConstants.WondrousItem);
+            tableName = TableNameConstants.Collections.ITEMTYPEAttributes(ItemTypeConstants.WondrousItem);
             mockCollectionsSelector.Setup(p => p.SelectFrom(Config.Name, tableName, WondrousItemConstants.HornOfValhalla)).Returns(attributes);
 
             mockChargesGenerator.Setup(g => g.GenerateFor(ItemTypeConstants.WondrousItem, It.IsAny<string>())).Returns(666);
 
             mockCollectionsSelector
-                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountSelection>>()))
-                .Returns((IEnumerable<TypeAndAmountSelection> c) => c.Last());
+                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountDataSelection>>()))
+                .Returns((IEnumerable<TypeAndAmountDataSelection> c) => c.Last());
 
             mockCollectionsSelector
                 .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, WondrousItemConstants.HornOfValhalla))
@@ -636,25 +637,25 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
         {
             mockPercentileSelector.Setup(p => p.SelectFrom(Config.Name, TableNameConstants.Percentiles.HornOfValhallaTypes)).Returns("metallic");
 
-            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs, power, ItemTypeConstants.WondrousItem);
+            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(power, ItemTypeConstants.WondrousItem);
             var selections = new[]
             {
-                new TypeAndAmountSelection { Type = "wrong wondrous item", Amount = 666 },
-                new TypeAndAmountSelection { Type = WondrousItemConstants.HornOfValhalla, Amount = 9266 },
-                new TypeAndAmountSelection { Type = "other wondrous item", Amount = 90210 }
+                new TypeAndAmountDataSelection { Type = "wrong wondrous item", AmountAsDouble = 666 },
+                new TypeAndAmountDataSelection { Type = WondrousItemConstants.HornOfValhalla, AmountAsDouble = 9266 },
+                new TypeAndAmountDataSelection { Type = "other wondrous item", AmountAsDouble = 90210 }
             };
 
-            mockTypeAndAmountPercentileSelector.Setup(s => s.SelectAllFrom(tableName)).Returns(selections);
+            mockTypeAndAmountPercentileSelector.Setup(s => s.SelectAllFrom(Config.Name, tableName)).Returns(selections);
 
             var attributes = new[] { "type 1", "type 2" };
-            tableName = TableNameConstants.Collections.ITEMTYPEAttributes, ItemTypeConstants.WondrousItem);
+            tableName = TableNameConstants.Collections.ITEMTYPEAttributes(ItemTypeConstants.WondrousItem);
             mockCollectionsSelector.Setup(p => p.SelectFrom(Config.Name, tableName, WondrousItemConstants.HornOfValhalla)).Returns(attributes);
 
             mockChargesGenerator.Setup(g => g.GenerateFor(ItemTypeConstants.WondrousItem, It.IsAny<string>())).Returns(666);
 
             mockCollectionsSelector
-                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountSelection>>()))
-                .Returns((IEnumerable<TypeAndAmountSelection> c) => c.Last());
+                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountDataSelection>>()))
+                .Returns((IEnumerable<TypeAndAmountDataSelection> c) => c.Last());
 
             mockCollectionsSelector
                 .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, WondrousItemConstants.HornOfValhalla))
@@ -676,25 +677,25 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
         {
             mockPercentileSelector.Setup(p => p.SelectFrom(Config.Name, TableNameConstants.Percentiles.IronFlaskContents)).Returns("contents");
 
-            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs, power, ItemTypeConstants.WondrousItem);
+            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(power, ItemTypeConstants.WondrousItem);
             var selections = new[]
             {
-                new TypeAndAmountSelection { Type = "wrong wondrous item", Amount = 666 },
-                new TypeAndAmountSelection { Type = WondrousItemConstants.IronFlask, Amount = 9266 },
-                new TypeAndAmountSelection { Type = "other wondrous item", Amount = 90210 }
+                new TypeAndAmountDataSelection { Type = "wrong wondrous item", AmountAsDouble = 666 },
+                new TypeAndAmountDataSelection { Type = WondrousItemConstants.IronFlask, AmountAsDouble = 9266 },
+                new TypeAndAmountDataSelection { Type = "other wondrous item", AmountAsDouble = 90210 }
             };
 
-            mockTypeAndAmountPercentileSelector.Setup(s => s.SelectAllFrom(tableName)).Returns(selections);
+            mockTypeAndAmountPercentileSelector.Setup(s => s.SelectAllFrom(Config.Name, tableName)).Returns(selections);
 
             var attributes = new[] { "type 1", "type 2" };
-            tableName = TableNameConstants.Collections.ITEMTYPEAttributes, ItemTypeConstants.WondrousItem);
+            tableName = TableNameConstants.Collections.ITEMTYPEAttributes(ItemTypeConstants.WondrousItem);
             mockCollectionsSelector.Setup(p => p.SelectFrom(Config.Name, tableName, WondrousItemConstants.IronFlask)).Returns(attributes);
 
             mockChargesGenerator.Setup(g => g.GenerateFor(ItemTypeConstants.WondrousItem, It.IsAny<string>())).Returns(666);
 
             mockCollectionsSelector
-                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountSelection>>()))
-                .Returns((IEnumerable<TypeAndAmountSelection> c) => c.Last());
+                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountDataSelection>>()))
+                .Returns((IEnumerable<TypeAndAmountDataSelection> c) => c.Last());
 
             mockCollectionsSelector
                 .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, WondrousItemConstants.IronFlask))
@@ -719,25 +720,25 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WondrousItemContents, WondrousItemConstants.RobeOfUsefulItems)).Returns(items);
             mockPercentileSelector.SetupSequence(p => p.SelectFrom(Config.Name, TableNameConstants.Percentiles.RobeOfUsefulItemsExtraItems)).Returns("extra item 1").Returns("extra item 2");
 
-            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs, power, ItemTypeConstants.WondrousItem);
+            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(power, ItemTypeConstants.WondrousItem);
             var selections = new[]
             {
-                new TypeAndAmountSelection { Type = "wrong wondrous item", Amount = 666 },
-                new TypeAndAmountSelection { Type = WondrousItemConstants.RobeOfUsefulItems, Amount = 9266 },
-                new TypeAndAmountSelection { Type = "other wondrous item", Amount = 90210 }
+                new TypeAndAmountDataSelection { Type = "wrong wondrous item", AmountAsDouble = 666 },
+                new TypeAndAmountDataSelection { Type = WondrousItemConstants.RobeOfUsefulItems, AmountAsDouble = 9266 },
+                new TypeAndAmountDataSelection { Type = "other wondrous item", AmountAsDouble = 90210 }
             };
 
-            mockTypeAndAmountPercentileSelector.Setup(s => s.SelectAllFrom(tableName)).Returns(selections);
+            mockTypeAndAmountPercentileSelector.Setup(s => s.SelectAllFrom(Config.Name, tableName)).Returns(selections);
 
             var attributes = new[] { "type 1", "type 2" };
-            tableName = TableNameConstants.Collections.ITEMTYPEAttributes, ItemTypeConstants.WondrousItem);
+            tableName = TableNameConstants.Collections.ITEMTYPEAttributes(ItemTypeConstants.WondrousItem);
             mockCollectionsSelector.Setup(p => p.SelectFrom(Config.Name, tableName, WondrousItemConstants.RobeOfUsefulItems)).Returns(attributes);
 
             mockChargesGenerator.Setup(g => g.GenerateFor(ItemTypeConstants.WondrousItem, It.IsAny<string>())).Returns(666);
 
             mockCollectionsSelector
-                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountSelection>>()))
-                .Returns((IEnumerable<TypeAndAmountSelection> c) => c.Last());
+                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountDataSelection>>()))
+                .Returns((IEnumerable<TypeAndAmountDataSelection> c) => c.Last());
 
             mockCollectionsSelector
                 .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, WondrousItemConstants.RobeOfUsefulItems))
@@ -766,25 +767,25 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
                 .Returns("plane 4")
                 .Returns("plane 5");
 
-            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs, power, ItemTypeConstants.WondrousItem);
+            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(power, ItemTypeConstants.WondrousItem);
             var selections = new[]
             {
-                new TypeAndAmountSelection { Type = "wrong wondrous item", Amount = 666 },
-                new TypeAndAmountSelection { Type = WondrousItemConstants.CubicGate, Amount = 9266 },
-                new TypeAndAmountSelection { Type = "other wondrous item", Amount = 90210 }
+                new TypeAndAmountDataSelection { Type = "wrong wondrous item", AmountAsDouble = 666 },
+                new TypeAndAmountDataSelection { Type = WondrousItemConstants.CubicGate, AmountAsDouble = 9266 },
+                new TypeAndAmountDataSelection { Type = "other wondrous item", AmountAsDouble = 90210 }
             };
 
-            mockTypeAndAmountPercentileSelector.Setup(s => s.SelectAllFrom(tableName)).Returns(selections);
+            mockTypeAndAmountPercentileSelector.Setup(s => s.SelectAllFrom(Config.Name, tableName)).Returns(selections);
 
             var attributes = new[] { "type 1", "type 2" };
-            tableName = TableNameConstants.Collections.ITEMTYPEAttributes, ItemTypeConstants.WondrousItem);
+            tableName = TableNameConstants.Collections.ITEMTYPEAttributes(ItemTypeConstants.WondrousItem);
             mockCollectionsSelector.Setup(p => p.SelectFrom(Config.Name, tableName, WondrousItemConstants.CubicGate)).Returns(attributes);
 
             mockChargesGenerator.Setup(g => g.GenerateFor(ItemTypeConstants.WondrousItem, It.IsAny<string>())).Returns(666);
 
             mockCollectionsSelector
-                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountSelection>>()))
-                .Returns((IEnumerable<TypeAndAmountSelection> c) => c.Last());
+                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountDataSelection>>()))
+                .Returns((IEnumerable<TypeAndAmountDataSelection> c) => c.Last());
 
             mockCollectionsSelector
                 .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, WondrousItemConstants.CubicGate))
@@ -815,23 +816,23 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WondrousItemContents, WondrousItemConstants.DeckOfIllusions)).Returns(cards);
             SetUpRandomSelections(cards, 0, 1, 3);
 
-            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs, power, ItemTypeConstants.WondrousItem);
+            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(power, ItemTypeConstants.WondrousItem);
             var selections = new[]
             {
-                new TypeAndAmountSelection { Type = "wrong wondrous item", Amount = 666 },
-                new TypeAndAmountSelection { Type = WondrousItemConstants.DeckOfIllusions, Amount = 9266 },
-                new TypeAndAmountSelection { Type = "other wondrous item", Amount = 90210 }
+                new TypeAndAmountDataSelection { Type = "wrong wondrous item", AmountAsDouble = 666 },
+                new TypeAndAmountDataSelection { Type = WondrousItemConstants.DeckOfIllusions, AmountAsDouble = 9266 },
+                new TypeAndAmountDataSelection { Type = "other wondrous item", AmountAsDouble = 90210 }
             };
 
-            mockTypeAndAmountPercentileSelector.Setup(s => s.SelectAllFrom(tableName)).Returns(selections);
+            mockTypeAndAmountPercentileSelector.Setup(s => s.SelectAllFrom(Config.Name, tableName)).Returns(selections);
 
             var attributes = new[] { "type 1", "type 2" };
-            tableName = TableNameConstants.Collections.ITEMTYPEAttributes, ItemTypeConstants.WondrousItem);
+            tableName = TableNameConstants.Collections.ITEMTYPEAttributes(ItemTypeConstants.WondrousItem);
             mockCollectionsSelector.Setup(p => p.SelectFrom(Config.Name, tableName, WondrousItemConstants.DeckOfIllusions)).Returns(attributes);
 
             mockCollectionsSelector
-                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountSelection>>()))
-                .Returns((IEnumerable<TypeAndAmountSelection> c) => c.Last());
+                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountDataSelection>>()))
+                .Returns((IEnumerable<TypeAndAmountDataSelection> c) => c.Last());
 
             mockCollectionsSelector
                 .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, WondrousItemConstants.DeckOfIllusions))
@@ -875,23 +876,23 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WondrousItemContents, name)).Returns(spheres);
             SetUpRandomSelections(spheres, 0, 1, 2, 4);
 
-            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs, power, ItemTypeConstants.WondrousItem);
+            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(power, ItemTypeConstants.WondrousItem);
             var selections = new[]
             {
-                new TypeAndAmountSelection { Type = "wrong wondrous item", Amount = 666 },
-                new TypeAndAmountSelection { Type = name, Amount = 9266 },
-                new TypeAndAmountSelection { Type = "other wondrous item", Amount = 90210 }
+                new TypeAndAmountDataSelection { Type = "wrong wondrous item", AmountAsDouble = 666 },
+                new TypeAndAmountDataSelection { Type = name, AmountAsDouble = 9266 },
+                new TypeAndAmountDataSelection { Type = "other wondrous item", AmountAsDouble = 90210 }
             };
 
-            mockTypeAndAmountPercentileSelector.Setup(s => s.SelectAllFrom(tableName)).Returns(selections);
+            mockTypeAndAmountPercentileSelector.Setup(s => s.SelectAllFrom(Config.Name, tableName)).Returns(selections);
 
             var attributes = new[] { "type 1", "type 2" };
-            tableName = TableNameConstants.Collections.ITEMTYPEAttributes, ItemTypeConstants.WondrousItem);
+            tableName = TableNameConstants.Collections.ITEMTYPEAttributes(ItemTypeConstants.WondrousItem);
             mockCollectionsSelector.Setup(p => p.SelectFrom(Config.Name, tableName, name)).Returns(attributes);
 
             mockCollectionsSelector
-                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountSelection>>()))
-                .Returns((IEnumerable<TypeAndAmountSelection> c) => c.Last());
+                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountDataSelection>>()))
+                .Returns((IEnumerable<TypeAndAmountDataSelection> c) => c.Last());
 
             mockCollectionsSelector
                 .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, name))
@@ -920,23 +921,23 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             mockCollectionsSelector.Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WondrousItemContents, WondrousItemConstants.RobeOfBones)).Returns(items);
             SetUpRandomSelections(items, 0, 1, 2, 4);
 
-            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs, power, ItemTypeConstants.WondrousItem);
+            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(power, ItemTypeConstants.WondrousItem);
             var selections = new[]
             {
-                new TypeAndAmountSelection { Type = "wrong wondrous item", Amount = 666 },
-                new TypeAndAmountSelection { Type = WondrousItemConstants.RobeOfBones, Amount = 9266 },
-                new TypeAndAmountSelection { Type = "other wondrous item", Amount = 90210 }
+                new TypeAndAmountDataSelection { Type = "wrong wondrous item", AmountAsDouble = 666 },
+                new TypeAndAmountDataSelection { Type = WondrousItemConstants.RobeOfBones, AmountAsDouble = 9266 },
+                new TypeAndAmountDataSelection { Type = "other wondrous item", AmountAsDouble = 90210 }
             };
 
-            mockTypeAndAmountPercentileSelector.Setup(s => s.SelectAllFrom(tableName)).Returns(selections);
+            mockTypeAndAmountPercentileSelector.Setup(s => s.SelectAllFrom(Config.Name, tableName)).Returns(selections);
 
             var attributes = new[] { "type 1", "type 2" };
-            tableName = TableNameConstants.Collections.ITEMTYPEAttributes, ItemTypeConstants.WondrousItem);
+            tableName = TableNameConstants.Collections.ITEMTYPEAttributes(ItemTypeConstants.WondrousItem);
             mockCollectionsSelector.Setup(p => p.SelectFrom(Config.Name, tableName, WondrousItemConstants.RobeOfBones)).Returns(attributes);
 
             mockCollectionsSelector
-                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountSelection>>()))
-                .Returns((IEnumerable<TypeAndAmountSelection> c) => c.Last());
+                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountDataSelection>>()))
+                .Returns((IEnumerable<TypeAndAmountDataSelection> c) => c.Last());
 
             mockCollectionsSelector
                 .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, WondrousItemConstants.RobeOfBones))
@@ -962,25 +963,25 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
         {
             mockPercentileSelector.Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Percentiles.IntelligenceAlignments)).Returns("alignment");
 
-            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs, power, ItemTypeConstants.WondrousItem);
+            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(power, ItemTypeConstants.WondrousItem);
             var selections = new[]
             {
-                new TypeAndAmountSelection { Type = "wrong wondrous item", Amount = 666 },
-                new TypeAndAmountSelection { Type = WondrousItemConstants.CandleOfInvocation, Amount = 9266 },
-                new TypeAndAmountSelection { Type = "other wondrous item", Amount = 90210 }
+                new TypeAndAmountDataSelection { Type = "wrong wondrous item", AmountAsDouble = 666 },
+                new TypeAndAmountDataSelection { Type = WondrousItemConstants.CandleOfInvocation, AmountAsDouble = 9266 },
+                new TypeAndAmountDataSelection { Type = "other wondrous item", AmountAsDouble = 90210 }
             };
 
-            mockTypeAndAmountPercentileSelector.Setup(s => s.SelectAllFrom(tableName)).Returns(selections);
+            mockTypeAndAmountPercentileSelector.Setup(s => s.SelectAllFrom(Config.Name, tableName)).Returns(selections);
 
             var attributes = new[] { "type 1", "type 2" };
-            tableName = TableNameConstants.Collections.ITEMTYPEAttributes, ItemTypeConstants.WondrousItem);
+            tableName = TableNameConstants.Collections.ITEMTYPEAttributes(ItemTypeConstants.WondrousItem);
             mockCollectionsSelector.Setup(p => p.SelectFrom(Config.Name, tableName, WondrousItemConstants.CandleOfInvocation)).Returns(attributes);
 
             mockChargesGenerator.Setup(g => g.GenerateFor(ItemTypeConstants.WondrousItem, It.IsAny<string>())).Returns(666);
 
             mockCollectionsSelector
-                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountSelection>>()))
-                .Returns((IEnumerable<TypeAndAmountSelection> c) => c.Last());
+                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountDataSelection>>()))
+                .Returns((IEnumerable<TypeAndAmountDataSelection> c) => c.Last());
 
             mockCollectionsSelector
                 .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, WondrousItemConstants.CandleOfInvocation))
@@ -1003,25 +1004,25 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
         {
             mockPercentileSelector.Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Percentiles.IntelligenceAlignments)).Returns("alignment");
 
-            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs, power, ItemTypeConstants.WondrousItem);
+            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(power, ItemTypeConstants.WondrousItem);
             var selections = new[]
             {
-                new TypeAndAmountSelection { Type = "wrong wondrous item", Amount = 666 },
-                new TypeAndAmountSelection { Type = WondrousItemConstants.CandleOfInvocation, Amount = 9266 },
-                new TypeAndAmountSelection { Type = "other wondrous item", Amount = 90210 }
+                new TypeAndAmountDataSelection { Type = "wrong wondrous item", AmountAsDouble = 666 },
+                new TypeAndAmountDataSelection { Type = WondrousItemConstants.CandleOfInvocation, AmountAsDouble = 9266 },
+                new TypeAndAmountDataSelection { Type = "other wondrous item", AmountAsDouble = 90210 }
             };
 
-            mockTypeAndAmountPercentileSelector.Setup(s => s.SelectAllFrom(tableName)).Returns(selections);
+            mockTypeAndAmountPercentileSelector.Setup(s => s.SelectAllFrom(Config.Name, tableName)).Returns(selections);
 
             var attributes = new[] { "type 1", "type 2" };
-            tableName = TableNameConstants.Collections.ITEMTYPEAttributes, ItemTypeConstants.WondrousItem);
+            tableName = TableNameConstants.Collections.ITEMTYPEAttributes(ItemTypeConstants.WondrousItem);
             mockCollectionsSelector.Setup(p => p.SelectFrom(Config.Name, tableName, WondrousItemConstants.CandleOfInvocation)).Returns(attributes);
 
             mockChargesGenerator.Setup(g => g.GenerateFor(ItemTypeConstants.WondrousItem, It.IsAny<string>())).Returns(666);
 
             mockCollectionsSelector
-                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountSelection>>()))
-                .Returns((IEnumerable<TypeAndAmountSelection> c) => c.Last());
+                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountDataSelection>>()))
+                .Returns((IEnumerable<TypeAndAmountDataSelection> c) => c.Last());
 
             mockCollectionsSelector
                 .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, WondrousItemConstants.CandleOfInvocation))
@@ -1043,25 +1044,25 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
         {
             mockPercentileSelector.Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Percentiles.RobeOfTheArchmagiColors)).Returns("color (alignment)");
 
-            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs, power, ItemTypeConstants.WondrousItem);
+            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(power, ItemTypeConstants.WondrousItem);
             var selections = new[]
             {
-                new TypeAndAmountSelection { Type = "wrong wondrous item", Amount = 666 },
-                new TypeAndAmountSelection { Type = WondrousItemConstants.RobeOfTheArchmagi, Amount = 9266 },
-                new TypeAndAmountSelection { Type = "other wondrous item", Amount = 90210 }
+                new TypeAndAmountDataSelection { Type = "wrong wondrous item", AmountAsDouble = 666 },
+                new TypeAndAmountDataSelection { Type = WondrousItemConstants.RobeOfTheArchmagi, AmountAsDouble = 9266 },
+                new TypeAndAmountDataSelection { Type = "other wondrous item", AmountAsDouble = 90210 }
             };
 
-            mockTypeAndAmountPercentileSelector.Setup(s => s.SelectAllFrom(tableName)).Returns(selections);
+            mockTypeAndAmountPercentileSelector.Setup(s => s.SelectAllFrom(Config.Name, tableName)).Returns(selections);
 
             var attributes = new[] { "type 1", "type 2" };
-            tableName = TableNameConstants.Collections.ITEMTYPEAttributes, ItemTypeConstants.WondrousItem);
+            tableName = TableNameConstants.Collections.ITEMTYPEAttributes(ItemTypeConstants.WondrousItem);
             mockCollectionsSelector.Setup(p => p.SelectFrom(Config.Name, tableName, WondrousItemConstants.RobeOfTheArchmagi)).Returns(attributes);
 
             mockChargesGenerator.Setup(g => g.GenerateFor(ItemTypeConstants.WondrousItem, It.IsAny<string>())).Returns(666);
 
             mockCollectionsSelector
-                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountSelection>>()))
-                .Returns((IEnumerable<TypeAndAmountSelection> c) => c.Last());
+                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountDataSelection>>()))
+                .Returns((IEnumerable<TypeAndAmountDataSelection> c) => c.Last());
 
             mockCollectionsSelector
                 .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, WondrousItemConstants.RobeOfTheArchmagi))
@@ -1084,25 +1085,25 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
         {
             mockPercentileSelector.Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Percentiles.RobeOfTheArchmagiColors)).Returns("color (alignment)");
 
-            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs, power, ItemTypeConstants.WondrousItem);
+            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(power, ItemTypeConstants.WondrousItem);
             var selections = new[]
             {
-                new TypeAndAmountSelection { Type = "wrong wondrous item", Amount = 666 },
-                new TypeAndAmountSelection { Type = WondrousItemConstants.RobeOfTheArchmagi, Amount = 9266 },
-                new TypeAndAmountSelection { Type = "other wondrous item", Amount = 90210 }
+                new TypeAndAmountDataSelection { Type = "wrong wondrous item", AmountAsDouble = 666 },
+                new TypeAndAmountDataSelection { Type = WondrousItemConstants.RobeOfTheArchmagi, AmountAsDouble = 9266 },
+                new TypeAndAmountDataSelection { Type = "other wondrous item", AmountAsDouble = 90210 }
             };
 
-            mockTypeAndAmountPercentileSelector.Setup(s => s.SelectAllFrom(tableName)).Returns(selections);
+            mockTypeAndAmountPercentileSelector.Setup(s => s.SelectAllFrom(Config.Name, tableName)).Returns(selections);
 
             var attributes = new[] { "type 1", "type 2" };
-            tableName = TableNameConstants.Collections.ITEMTYPEAttributes, ItemTypeConstants.WondrousItem);
+            tableName = TableNameConstants.Collections.ITEMTYPEAttributes(ItemTypeConstants.WondrousItem);
             mockCollectionsSelector.Setup(p => p.SelectFrom(Config.Name, tableName, WondrousItemConstants.RobeOfTheArchmagi)).Returns(attributes);
 
             mockChargesGenerator.Setup(g => g.GenerateFor(ItemTypeConstants.WondrousItem, It.IsAny<string>())).Returns(666);
 
             mockCollectionsSelector
-                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountSelection>>()))
-                .Returns((IEnumerable<TypeAndAmountSelection> c) => c.Last());
+                .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountDataSelection>>()))
+                .Returns((IEnumerable<TypeAndAmountDataSelection> c) => c.Last());
 
             mockCollectionsSelector
                 .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, WondrousItemConstants.RobeOfTheArchmagi))

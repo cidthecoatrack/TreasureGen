@@ -47,7 +47,8 @@ namespace DnDGen.TreasureGen.Generators.Items.Magical
             var possiblePowers = collectionsSelector.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, itemName);
             var adjustedPower = PowerHelper.AdjustPower(power, possiblePowers);
 
-            var results = typeAndAmountPercentileSelector.SelectAllFrom(Config.Name, TableNameConstants.Percentiles.POWERITEMTYPEs(power, ItemTypeConstants.Ring));
+            var tableName = TableNameConstants.Percentiles.POWERITEMTYPEs(adjustedPower, ItemTypeConstants.Ring);
+            var results = typeAndAmountPercentileSelector.SelectAllFrom(Config.Name, tableName);
             var matches = results.Where(r => NameMatches(r.Type, itemName));
 
             var result = collectionsSelector.SelectRandomFrom(matches);

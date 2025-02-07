@@ -11,7 +11,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Mundane.Weapons
     {
         protected override string tableName
         {
-            get { return TableNameConstants.Collections.ITEMTYPEAttributes, ItemTypeConstants.Weapon); }
+            get { return TableNameConstants.Collections.ITEMTYPEAttributes(ItemTypeConstants.Weapon); }
         }
 
         [TestCase(WeaponConstants.Dagger,

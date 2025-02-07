@@ -68,8 +68,6 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Goods
         [TestCase(LevelLimits.Minimum + 1)]
         [TestCase(10)]
         [TestCase(20)]
-        [TestCase(30)]
-        [TestCase(42)]
         [TestCase(LevelLimits.Maximum_Standard - 1)]
         [TestCase(LevelLimits.Maximum_Standard)]
         public void GenerateAtLevel_GoodsAreGenerated(int level)
@@ -82,6 +80,10 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Goods
         }
 
         [TestCase(LevelLimits.Maximum_Standard + 1)]
+        [TestCase(LevelLimits.Maximum_Epic - 1)]
+        [TestCase(LevelLimits.Maximum_Epic)]
+        [TestCase(LevelLimits.Maximum_Epic + 1)]
+        [TestCase(42)]
         [TestCase(9266)]
         public void GenerateAtLevel_GoodsAreGenerated_HighLevel(int level)
         {
@@ -104,6 +106,8 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Goods
         public void GenerateAtLevel_EmptyGoodsIfNoGoodType()
         {
             selection.Type = string.Empty;
+            selection.AmountAsDouble = 0;
+
             var goods = generator.GenerateAtLevel(1);
             Assert.That(goods, Is.Empty);
         }
@@ -166,6 +170,8 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Goods
         public async Task GenerateAtLevelAsync_EmptyGoodsIfNoGoodType()
         {
             selection.Type = string.Empty;
+            selection.AmountAsDouble = 0;
+
             var goods = await generator.GenerateAtLevelAsync(1);
             Assert.That(goods, Is.Empty);
         }

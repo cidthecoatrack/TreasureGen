@@ -54,8 +54,8 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
             };
             extraSelection = new TypeAndAmountDataSelection
             {
-                Type = "power",
-                AmountAsDouble = 600
+                Type = string.Empty,
+                AmountAsDouble = 0
             };
             mockTypeAndAmountPercentileSelector.Setup(p => p.SelectFrom(Config.Name, It.IsAny<string>())).Returns(percentileSelection);
             mockTypeAndAmountCollectionSelector.Setup(p => p.SelectOneFrom(Config.Name, It.IsAny<string>(), It.IsAny<string>())).Returns(extraSelection);
@@ -74,7 +74,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
         public void GenerateRandomAtLevel_ThrowsException_LevelTooLow()
         {
             Assert.That(() => itemsGenerator.GenerateRandomAtLevel(LevelLimits.Minimum - 1),
-                Throws.ArgumentException.With.Message.EqualTo($"Level 0 is not a valid level for treasure generation"));
+                Throws.ArgumentException.With.Message.EqualTo("Level 0 is not a valid level for treasure generation"));
         }
 
         [TestCase(LevelLimits.Minimum)]
@@ -248,8 +248,8 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
         [Test]
         public async Task GenerateRandomAtLevelAsync_GetItemTypeFromSelector()
         {
-            await itemsGenerator.GenerateRandomAtLevelAsync(96);
-            var expectedTableName = TableNameConstants.Percentiles.LevelXItems(96);
+            await itemsGenerator.GenerateRandomAtLevelAsync(9);
+            var expectedTableName = TableNameConstants.Percentiles.LevelXItems(9);
             mockTypeAndAmountPercentileSelector.Verify(p => p.SelectFrom(Config.Name, expectedTableName), Times.Once);
         }
 

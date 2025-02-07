@@ -591,7 +591,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
 
             mockCollectionsSelector
                 .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, "ring"))
-                .Returns(new[] { "wrong power", power, "other power" });
+                .Returns(["wrong power", power, "other power"]);
 
             var ring = ringGenerator.Generate(power, "ring");
             Assert.That(ring.Name, Is.EqualTo("ring"));
@@ -624,7 +624,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
 
             mockCollectionsSelector
                 .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.PowerGroups, "ring"))
-                .Returns(new[] { power, "other power" });
+                .Returns([power, "other power"]);
 
             mockCollectionsSelector
                 .Setup(s => s.SelectRandomFrom(It.IsAny<IEnumerable<TypeAndAmountDataSelection>>()))

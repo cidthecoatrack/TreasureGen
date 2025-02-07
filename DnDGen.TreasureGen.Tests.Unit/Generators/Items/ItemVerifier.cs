@@ -50,7 +50,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
                 if (ability.BaseName == SpecialAbilityConstants.Bane)
                 {
                     Assert.That(ability.Damages.Select(d => d.Condition), Is.All.Not.Empty, $"{item.Summary} with {ability.Name}");
-                    Assert.That(ability.CriticalDamages.SelectMany(kvp => kvp.Value).Select(d => d.Condition), Is.All.Not.Empty, $"{item.Summary} with {ability.Name}");
+                    Assert.That(ability.CriticalDamages.Select(d => d.Condition), Is.All.Not.Empty, $"{item.Summary} with {ability.Name}");
                 }
             }
 
@@ -89,7 +89,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
             Assert.That(weapon.CriticalDamages, Is.Not.Empty
                 .And.Count.EqualTo(1 + weapon.Magic.SpecialAbilities
                     .Where(a => a.CriticalDamages.Any())
-                    .SelectMany(a => a.CriticalDamages[weapon.CriticalMultiplier])
+                    .SelectMany(a => a.CriticalDamages)
                     .Count()), $"{weapon.Summary} critical damages: {weapon.CriticalDamageDescription}");
 
             foreach (var damage in weapon.Damages)
@@ -164,7 +164,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
                     Assert.That(weapon.SecondaryCriticalDamages, Is.Not.Empty
                         .And.Count.EqualTo(1 + weapon.Magic.SpecialAbilities
                             .Where(a => a.CriticalDamages.Any())
-                            .SelectMany(a => a.CriticalDamages[weapon.SecondaryCriticalMultiplier])
+                            .SelectMany(a => a.CriticalDamages)
                             .Count()), $"{weapon.Summary} secondary critical damages: {weapon.SecondaryCriticalDamageDescription}");
                 }
                 else if (weapon.Magic.Bonus > 0)
@@ -256,9 +256,10 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
 
         public Armor CreateRandomArmorTemplate(string name)
         {
-            var template = new Armor();
-
-            template.Name = name;
+            var template = new Armor
+            {
+                Name = name
+            };
             template = PopulateItem(template) as Armor;
 
             template.ArmorBonus = random.Next();
@@ -270,9 +271,10 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
 
         public Weapon CreateRandomWeaponTemplate(string name)
         {
-            var template = new Weapon();
-
-            template.Name = name;
+            var template = new Weapon
+            {
+                Name = name
+            };
             template = PopulateItem(template) as Weapon;
 
             var damageTypes = new[] { AttributeConstants.DamageTypes.Bludgeoning, AttributeConstants.DamageTypes.Piercing, AttributeConstants.DamageTypes.Slashing };
@@ -295,9 +297,10 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
 
         public Item CreateRandomTemplate(string name)
         {
-            var template = new Item();
-
-            template.Name = name;
+            var template = new Item
+            {
+                Name = name
+            };
             template = PopulateItem(template);
 
             return template;
@@ -305,7 +308,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items
 
         private Item PopulateItem(Item item)
         {
-            item.BaseNames = new[] { Guid.NewGuid().ToString(), Guid.NewGuid().ToString() };
+            item.BaseNames = [Guid.NewGuid().ToString(), Guid.NewGuid().ToString()];
             item.Quantity = random.Next();
             item.Contents.Add(Guid.NewGuid().ToString());
             item.Contents.Add(Guid.NewGuid().ToString());
