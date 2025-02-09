@@ -33,8 +33,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Stress.Items.Mundane
 
         protected void GenerateAndAssertItemFromName()
         {
-            var names = GetItemNames();
-            var name = GetRandom(names);
+            var name = GetRandomName();
             var item = GenerateItemFromName(name);
             AssertItem(item);
             Assert.That(item.NameMatches(name), Is.True, $"{item.Name} ({string.Join(", ", item.BaseNames)}) from '{name}'");

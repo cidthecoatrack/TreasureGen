@@ -16,6 +16,14 @@ namespace DnDGen.TreasureGen.Tests.Unit.Selectors.Selections
         }
 
         [Test]
+        public void PropertiesHaveDefaultValues()
+        {
+            Assert.That(selection.Type, Is.Empty);
+            Assert.That(selection.Roll, Is.Empty);
+            Assert.That(selection.Condition, Is.Empty);
+        }
+
+        [Test]
         public void SectionCountIs3()
         {
             Assert.That(selection.SectionCount, Is.EqualTo(3));

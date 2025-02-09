@@ -131,7 +131,7 @@ namespace DnDGen.TreasureGen.Generators.Items.Magical
                     if (abilityName == BonusSpecialAbility)
                         continue;
 
-                    var ability = GetSpecialAbility(abilityName, weapon.CriticalMultiplier);
+                    var ability = GetSpecialAbility(abilityName, weapon?.CriticalMultiplier ?? string.Empty);
                     if (ability.RequirementsMet(targetItem) && bonus + ability.BonusEquivalent <= 10)
                         availableAbilities.Add(ability);
                 }
@@ -154,11 +154,14 @@ namespace DnDGen.TreasureGen.Generators.Items.Magical
             ability.BonusEquivalent = abilitySelection.BonusEquivalent;
             ability.Power = abilitySelection.Power;
 
-            var damagesData = damageDataSelector.SelectFrom(Config.Name, TableNameConstants.Collections.AbilityDamages, abilityName).ToArray();
+            var damagesData = damageDataSelector.SelectFrom(Config.Name, TableNameConstants.Collections.AbilityDamages, abilityName);
             ability.Damages.AddRange(damagesData.Select(Damage.From));
 
-            var critDamagesData = damageDataSelector.SelectFrom(Config.Name, TableNameConstants.Collections.AbilityDamages, abilityName + criticalMultiplier).ToArray();
-            ability.CriticalDamages.AddRange(critDamagesData.Select(Damage.From));
+            if (!string.IsNullOrEmpty(criticalMultiplier))
+            {
+                var critDamagesData = damageDataSelector.SelectFrom(Config.Name, TableNameConstants.Collections.AbilityDamages, abilityName + criticalMultiplier);
+                ability.CriticalDamages.AddRange(critDamagesData.Select(Damage.From));
+            }
 
             return ability;
         }
@@ -195,7 +198,7 @@ namespace DnDGen.TreasureGen.Generators.Items.Magical
 
         private bool IsCustomSpecialAbility(string abilityName)
         {
-            return !collectionsSelector.IsCollection(Config.Name, TableNameConstants.Collections.SpecialAbilityData, abilityName);
+            return !specialAbilityDataSelector.IsCollection(Config.Name, TableNameConstants.Collections.SpecialAbilityData, abilityName);
         }
 
         private SpecialAbility GenerateAbilityFrom(IEnumerable<SpecialAbility> availableAbilities, IEnumerable<string> tableNames)

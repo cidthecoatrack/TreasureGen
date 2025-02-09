@@ -15,6 +15,13 @@ namespace DnDGen.TreasureGen.Selectors.Selections
 
         public override int SectionCount => 3;
 
+        public DamageDataSelection()
+        {
+            Roll = string.Empty;
+            Type = string.Empty;
+            Condition = string.Empty;
+        }
+
         public static DamageDataSelection Map(string[] splitData)
         {
             return new DamageDataSelection

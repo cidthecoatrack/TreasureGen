@@ -60,7 +60,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
                 .Returns((IEnumerable<string> ss) => ss.ElementAt(count++ % ss.Count()));
 
             mockDamageDataSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponDamages, It.IsAny<string>()))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.AbilityDamages, It.IsAny<string>()))
                 .Returns([]);
         }
 
@@ -196,7 +196,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             mockPercentileSelector.Setup(p => p.SelectFrom(Config.Name, It.IsAny<string>())).Returns("name");
 
             mockDamageDataSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponDamages, "name"))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.AbilityDamages, "name"))
                 .Returns([new DamageDataSelection { Type = "my damage type", Roll = "my roll" }]);
 
             var abilities = specialAbilitiesGenerator.GenerateFor(item, power, 1);
@@ -223,7 +223,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             mockPercentileSelector.Setup(p => p.SelectFrom(Config.Name, It.IsAny<string>())).Returns("name");
 
             mockDamageDataSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponDamages, "name"))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.AbilityDamages, "name"))
                 .Returns(
                 [
                     new DamageDataSelection { Type = "my damage type", Roll = "my roll" },
@@ -257,7 +257,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             mockPercentileSelector.Setup(p => p.SelectFrom(Config.Name, It.IsAny<string>())).Returns("name");
 
             mockDamageDataSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponDamages, "name"))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.AbilityDamages, "name"))
                 .Returns([new DamageDataSelection { Type = "my damage type", Roll = "my roll", Condition = "my condition" }]);
 
             var abilities = specialAbilitiesGenerator.GenerateFor(item, power, 1);
@@ -284,10 +284,10 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             mockPercentileSelector.Setup(p => p.SelectFrom(Config.Name, It.IsAny<string>())).Returns("name");
 
             mockDamageDataSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponDamages, "name"))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.AbilityDamages, "name"))
                 .Returns(
                 [
-                    new DamageDataSelection { Type = "my damage type", Roll = "my roll", Condition = "my conition" },
+                    new DamageDataSelection { Type = "my damage type", Roll = "my roll", Condition = "my condition" },
                     new DamageDataSelection { Type = "my other damage type", Roll = "my other roll", Condition = "my other condition" },
                 ]);
 
@@ -318,19 +318,21 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             mockPercentileSelector.Setup(p => p.SelectFrom(Config.Name, It.IsAny<string>())).Returns("name");
 
             mockDamageDataSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponDamages, "name"))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.AbilityDamages, "name"))
                 .Returns([]);
 
             mockDamageDataSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponDamages, "namex90210"))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.AbilityDamages, "namex90210"))
                 .Returns([new DamageDataSelection { Type = "my damage type", Roll = "my roll" }]);
 
             var weapon = new Weapon
             {
                 ItemType = ItemTypeConstants.Weapon,
                 Name = "my weapon",
-                CriticalMultiplier = "x90210"
+                CriticalMultiplier = "x90210",
+                Attributes = [AttributeConstants.Melee]
             };
+            weapon.Magic.Bonus = 1;
 
             var abilities = specialAbilitiesGenerator.GenerateFor(weapon, power, 1);
             Assert.That(abilities, Is.Not.Empty);
@@ -356,11 +358,11 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             mockPercentileSelector.Setup(p => p.SelectFrom(Config.Name, It.IsAny<string>())).Returns("name");
 
             mockDamageDataSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponDamages, "name"))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.AbilityDamages, "name"))
                 .Returns([]);
 
             mockDamageDataSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponDamages, "namex90210"))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.AbilityDamages, "namex90210"))
                 .Returns(
                 [
                     new DamageDataSelection { Type = "my damage type", Roll = "my roll" },
@@ -371,8 +373,10 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             {
                 ItemType = ItemTypeConstants.Weapon,
                 Name = "my weapon",
-                CriticalMultiplier = "x90210"
+                CriticalMultiplier = "x90210",
+                Attributes = [AttributeConstants.Melee]
             };
+            weapon.Magic.Bonus = 1;
 
             var abilities = specialAbilitiesGenerator.GenerateFor(weapon, power, 1);
             Assert.That(abilities, Is.Not.Empty);
@@ -401,19 +405,21 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             mockPercentileSelector.Setup(p => p.SelectFrom(Config.Name, It.IsAny<string>())).Returns("name");
 
             mockDamageDataSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponDamages, "name"))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.AbilityDamages, "name"))
                 .Returns([]);
 
             mockDamageDataSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponDamages, "namex90210"))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.AbilityDamages, "namex90210"))
                 .Returns([new DamageDataSelection { Type = "my damage type", Roll = "my roll", Condition = "my condition" }]);
 
             var weapon = new Weapon
             {
                 ItemType = ItemTypeConstants.Weapon,
                 Name = "my weapon",
-                CriticalMultiplier = "x90210"
+                CriticalMultiplier = "x90210",
+                Attributes = [AttributeConstants.Melee]
             };
+            weapon.Magic.Bonus = 1;
 
             var abilities = specialAbilitiesGenerator.GenerateFor(weapon, power, 1);
             Assert.That(abilities, Is.Not.Empty);
@@ -439,11 +445,11 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             mockPercentileSelector.Setup(p => p.SelectFrom(Config.Name, It.IsAny<string>())).Returns("name");
 
             mockDamageDataSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponDamages, "name"))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.AbilityDamages, "name"))
                 .Returns([]);
 
             mockDamageDataSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponDamages, "namex90210"))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.AbilityDamages, "namex90210"))
                 .Returns(
                 [
                     new DamageDataSelection { Type = "my damage type", Roll = "my roll", Condition = "my condition" },
@@ -454,8 +460,10 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             {
                 ItemType = ItemTypeConstants.Weapon,
                 Name = "my weapon",
-                CriticalMultiplier = "x90210"
+                CriticalMultiplier = "x90210",
+                Attributes = [AttributeConstants.Melee]
             };
+            weapon.Magic.Bonus = 1;
 
             var abilities = specialAbilitiesGenerator.GenerateFor(weapon, power, 1);
             Assert.That(abilities, Is.Not.Empty);
@@ -484,19 +492,21 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             mockPercentileSelector.Setup(p => p.SelectFrom(Config.Name, It.IsAny<string>())).Returns("name");
 
             mockDamageDataSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponDamages, "name"))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.AbilityDamages, "name"))
                 .Returns([new DamageDataSelection { Type = "my damage type", Roll = "my roll" }]);
 
             mockDamageDataSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponDamages, "namex90210"))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.AbilityDamages, "namex90210"))
                 .Returns([new DamageDataSelection { Type = "my other damage type", Roll = "my other roll" }]);
 
             var weapon = new Weapon
             {
                 ItemType = ItemTypeConstants.Weapon,
                 Name = "my weapon",
-                CriticalMultiplier = "x90210"
+                CriticalMultiplier = "x90210",
+                Attributes = [AttributeConstants.Melee]
             };
+            weapon.Magic.Bonus = 1;
 
             var abilities = specialAbilitiesGenerator.GenerateFor(weapon, power, 1);
             Assert.That(abilities, Is.Not.Empty);
@@ -525,27 +535,29 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             mockPercentileSelector.Setup(p => p.SelectFrom(Config.Name, It.IsAny<string>())).Returns("name");
 
             mockDamageDataSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponDamages, "name"))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.AbilityDamages, "name"))
                 .Returns(
                 [
-                    new DamageDataSelection { Type = "my damage type", Roll = "my roll" },
-                    new DamageDataSelection { Type = "my damage type 2", Roll = "my roll 2" },
+                    new DamageDataSelection { Type = "my damage type", Roll = "my roll", Condition = "my condition" },
+                    new DamageDataSelection { Type = "my damage type 2", Roll = "my roll 2", Condition = "my condition 2" },
                 ]);
 
             mockDamageDataSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponDamages, "namex90210"))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.AbilityDamages, "namex90210"))
                 .Returns(
                 [
-                    new DamageDataSelection { Type = "my other damage type", Roll = "my other roll" },
-                    new DamageDataSelection { Type = "my other damage type 2", Roll = "my other roll 2" },
+                    new DamageDataSelection { Type = "my other damage type", Roll = "my other roll", Condition = "my other condition" },
+                    new DamageDataSelection { Type = "my other damage type 2", Roll = "my other roll 2", Condition = "my other condition 2" },
                 ]);
 
             var weapon = new Weapon
             {
                 ItemType = ItemTypeConstants.Weapon,
                 Name = "my weapon",
-                CriticalMultiplier = "x90210"
+                CriticalMultiplier = "x90210",
+                Attributes = [AttributeConstants.Melee]
             };
+            weapon.Magic.Bonus = 1;
 
             var abilities = specialAbilitiesGenerator.GenerateFor(weapon, power, 1);
             Assert.That(abilities, Is.Not.Empty);
@@ -647,7 +659,8 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             CreateSpecialAbility("ability 3", bonus: 3);
             CreateSpecialAbility("ability 4", bonus: 0);
 
-            mockPercentileSelector.SetupSequence(p => p.SelectFrom(Config.Name, It.IsAny<string>()))
+            mockPercentileSelector
+                .SetupSequence(p => p.SelectFrom(Config.Name, It.IsAny<string>()))
                 .Returns("ability 1")
                 .Returns("ability 2")
                 .Returns("ability 3")
@@ -1026,14 +1039,14 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
                 .Returns(attributeRequirements[2]);
 
             mockDamageDataSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponDamages, "ability 2"))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.AbilityDamages, "ability 2"))
                 .Returns(
                 [
                     new DamageDataSelection { Type = "my damage type", Roll = "my roll" },
                 ]);
 
             mockDamageDataSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponDamages, "ability 3x90210"))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.AbilityDamages, "ability 3x90210"))
                 .Returns(
                 [
                     new DamageDataSelection { Type = "my crit damage type", Roll = "my crit roll" },
@@ -1109,21 +1122,21 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
                 .Returns(attributeRequirements[2]);
 
             mockDamageDataSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponDamages, "ability 2"))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.AbilityDamages, "ability 2"))
                 .Returns(
                 [
                     new DamageDataSelection { Type = "my damage type", Roll = "my roll" },
                 ]);
 
             mockDamageDataSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponDamages, "ability 2.1"))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.AbilityDamages, "ability 2.1"))
                 .Returns(
                 [
                     new DamageDataSelection { Type = "my higher damage type", Roll = "my higher roll" },
                 ]);
 
             mockDamageDataSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponDamages, "ability 3x90210"))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.AbilityDamages, "ability 3x90210"))
                 .Returns(
                 [
                     new DamageDataSelection { Type = "my crit damage type", Roll = "my crit roll" },
@@ -1198,14 +1211,14 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
                 .Returns(attributeRequirements[2]);
 
             mockDamageDataSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponDamages, "ability 2"))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.AbilityDamages, "ability 2"))
                 .Returns(
                 [
                     new DamageDataSelection { Type = "my damage type", Roll = "my roll" },
                 ]);
 
             mockDamageDataSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponDamages, "ability 3x90210"))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.AbilityDamages, "ability 3x90210"))
                 .Returns(
                 [
                     new DamageDataSelection { Type = "my crit damage type", Roll = "my crit roll" },
@@ -1280,14 +1293,14 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
                 .Returns(attributeRequirements[2]);
 
             mockDamageDataSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponDamages, "ability 2"))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.AbilityDamages, "ability 2"))
                 .Returns(
                 [
                     new DamageDataSelection { Type = "my damage type", Roll = "my roll" },
                 ]);
 
             mockDamageDataSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponDamages, "ability 3x90210"))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.AbilityDamages, "ability 3x90210"))
                 .Returns(
                 [
                     new DamageDataSelection { Type = "my crit damage type", Roll = "my crit roll" },
@@ -1357,14 +1370,14 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
                 .Returns(attributeRequirements[2]);
 
             mockDamageDataSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponDamages, "ability 2"))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.AbilityDamages, "ability 2"))
                 .Returns(
                 [
                     new DamageDataSelection { Type = "my damage type", Roll = "my roll" },
                 ]);
 
             mockDamageDataSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponDamages, "ability 3x90210"))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.AbilityDamages, "ability 3x90210"))
                 .Returns(
                 [
                     new DamageDataSelection { Type = "my crit damage type", Roll = "my crit roll" },
@@ -1438,21 +1451,21 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
                 .Returns(attributeRequirements[2]);
 
             mockDamageDataSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponDamages, "ability 2"))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.AbilityDamages, "ability 2"))
                 .Returns(
                 [
                     new DamageDataSelection { Type = "my damage type", Roll = "my roll" },
                 ]);
 
             mockDamageDataSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponDamages, "ability 3x90210"))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.AbilityDamages, "ability 3x90210"))
                 .Returns(
                 [
                     new DamageDataSelection { Type = "my crit damage type", Roll = "my crit roll" },
                 ]);
 
             mockDamageDataSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponDamages, "ability 3.1x90210"))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.AbilityDamages, "ability 3.1x90210"))
                 .Returns(
                 [
                     new DamageDataSelection { Type = "my higher crit damage type", Roll = "my higher crit roll" },
@@ -1525,14 +1538,14 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
                 .Returns(attributeRequirements[2]);
 
             mockDamageDataSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponDamages, "ability 2"))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.AbilityDamages, "ability 2"))
                 .Returns(
                 [
                     new DamageDataSelection { Type = "my damage type", Roll = "my roll" },
                 ]);
 
             mockDamageDataSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponDamages, "ability 3x90210"))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.AbilityDamages, "ability 3x90210"))
                 .Returns(
                 [
                     new DamageDataSelection { Type = "my crit damage type", Roll = "my crit roll" },
@@ -1728,8 +1741,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             Assert.That(weapon.Damages[0].Roll, Is.EqualTo("my roll"));
             Assert.That(weapon.Damages[0].Type, Is.EqualTo(WeaponDamageType));
             Assert.That(weapon.Damages[0].Condition, Is.Empty);
-            Assert.That(weapon.CriticalDamages, Has.Count.EqualTo(3)
-                .And.SupersetOf(ability.CriticalDamages));
+            Assert.That(weapon.CriticalDamages, Has.Count.EqualTo(3));
             Assert.That(weapon.CriticalDamages[0].Roll, Is.EqualTo("my crit roll"));
             Assert.That(weapon.CriticalDamages[0].Type, Is.EqualTo(WeaponDamageType_Crit));
             Assert.That(weapon.CriticalDamages[0].Condition, Is.Empty);
@@ -1765,8 +1777,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             Assert.That(weapon.Damages[0].Roll, Is.EqualTo("my roll"));
             Assert.That(weapon.Damages[0].Type, Is.EqualTo(WeaponDamageType));
             Assert.That(weapon.Damages[0].Condition, Is.Empty);
-            Assert.That(weapon.CriticalDamages, Has.Count.EqualTo(3)
-                .And.SupersetOf(ability.CriticalDamages));
+            Assert.That(weapon.CriticalDamages, Has.Count.EqualTo(3));
             Assert.That(weapon.CriticalDamages[0].Roll, Is.EqualTo("my crit roll"));
             Assert.That(weapon.CriticalDamages[0].Type, Is.EqualTo(WeaponDamageType_Crit));
             Assert.That(weapon.CriticalDamages[0].Condition, Is.Empty);
@@ -1809,8 +1820,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             Assert.That(weapon.Damages[2].Roll, Is.EqualTo("a bit"));
             Assert.That(weapon.Damages[2].Type, Is.EqualTo("ether"));
             Assert.That(weapon.Damages[2].Condition, Is.EqualTo("my other condition"));
-            Assert.That(weapon.CriticalDamages, Has.Count.EqualTo(3)
-                .And.SupersetOf(ability.CriticalDamages));
+            Assert.That(weapon.CriticalDamages, Has.Count.EqualTo(3));
             Assert.That(weapon.CriticalDamages[0].Roll, Is.EqualTo("my crit roll"));
             Assert.That(weapon.CriticalDamages[0].Type, Is.EqualTo(WeaponDamageType_Crit));
             Assert.That(weapon.CriticalDamages[0].Condition, Is.Empty);
@@ -1853,8 +1863,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             Assert.That(weapon.Damages[2].Roll, Is.EqualTo("a bit"));
             Assert.That(weapon.Damages[2].Type, Is.EqualTo("ether"));
             Assert.That(weapon.Damages[2].Condition, Is.EqualTo("my other condition"));
-            Assert.That(weapon.CriticalDamages, Has.Count.EqualTo(3)
-                .And.SupersetOf(ability.CriticalDamages));
+            Assert.That(weapon.CriticalDamages, Has.Count.EqualTo(3));
             Assert.That(weapon.CriticalDamages[0].Roll, Is.EqualTo("my crit roll"));
             Assert.That(weapon.CriticalDamages[0].Type, Is.EqualTo(WeaponDamageType_Crit));
             Assert.That(weapon.CriticalDamages[0].Condition, Is.Empty);
@@ -1901,8 +1910,8 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             Assert.That(weapon.CriticalDamages[0].Type, Is.EqualTo(WeaponDamageType_Crit));
             Assert.That(weapon.CriticalDamages[0].Condition, Is.Empty);
             Assert.That(weapon.SecondaryDamages, Has.Count.EqualTo(3));
-            Assert.That(weapon.SecondaryDamages[0].Roll, Is.EqualTo("my roll"));
-            Assert.That(weapon.SecondaryDamages[0].Type, Is.EqualTo(WeaponDamageType));
+            Assert.That(weapon.SecondaryDamages[0].Roll, Is.EqualTo("jab"));
+            Assert.That(weapon.SecondaryDamages[0].Type, Is.EqualTo("punch"));
             Assert.That(weapon.SecondaryDamages[0].Condition, Is.Empty);
             Assert.That(weapon.SecondaryDamages[1].Roll, Is.EqualTo("some"));
             Assert.That(weapon.SecondaryDamages[1].Type, Is.EqualTo("plasma"));
@@ -1911,8 +1920,8 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             Assert.That(weapon.SecondaryDamages[2].Type, Is.EqualTo("ether"));
             Assert.That(weapon.SecondaryDamages[2].Condition, Is.EqualTo("my other condition"));
             Assert.That(weapon.SecondaryCriticalDamages, Has.Count.EqualTo(1));
-            Assert.That(weapon.SecondaryCriticalDamages[0].Roll, Is.EqualTo("my crit roll"));
-            Assert.That(weapon.SecondaryCriticalDamages[0].Type, Is.EqualTo(WeaponDamageType_Crit));
+            Assert.That(weapon.SecondaryCriticalDamages[0].Roll, Is.EqualTo("cross"));
+            Assert.That(weapon.SecondaryCriticalDamages[0].Type, Is.EqualTo("punch"));
             Assert.That(weapon.SecondaryCriticalDamages[0].Condition, Is.Empty);
         }
 
@@ -1949,18 +1958,18 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             Assert.That(weapon.CriticalDamages[0].Type, Is.EqualTo(WeaponDamageType_Crit));
             Assert.That(weapon.CriticalDamages[0].Condition, Is.Empty);
             Assert.That(weapon.SecondaryDamages, Has.Count.EqualTo(3));
-            Assert.That(weapon.SecondaryDamages[0].Roll, Is.EqualTo("my roll"));
-            Assert.That(weapon.SecondaryDamages[0].Type, Is.EqualTo(WeaponDamageType));
+            Assert.That(weapon.SecondaryDamages[0].Roll, Is.EqualTo("jab"));
+            Assert.That(weapon.SecondaryDamages[0].Type, Is.EqualTo("punch"));
             Assert.That(weapon.SecondaryDamages[0].Condition, Is.Empty);
             Assert.That(weapon.SecondaryDamages[1].Roll, Is.EqualTo("some"));
-            Assert.That(weapon.SecondaryDamages[1].Type, Is.EqualTo(WeaponDamageType));
+            Assert.That(weapon.SecondaryDamages[1].Type, Is.EqualTo("punch"));
             Assert.That(weapon.SecondaryDamages[1].Condition, Is.EqualTo("my condition"));
             Assert.That(weapon.SecondaryDamages[2].Roll, Is.EqualTo("a bit"));
             Assert.That(weapon.SecondaryDamages[2].Type, Is.EqualTo("ether"));
             Assert.That(weapon.SecondaryDamages[2].Condition, Is.EqualTo("my other condition"));
             Assert.That(weapon.SecondaryCriticalDamages, Has.Count.EqualTo(1));
-            Assert.That(weapon.SecondaryCriticalDamages[0].Roll, Is.EqualTo("my crit roll"));
-            Assert.That(weapon.SecondaryCriticalDamages[0].Type, Is.EqualTo(WeaponDamageType_Crit));
+            Assert.That(weapon.SecondaryCriticalDamages[0].Roll, Is.EqualTo("cross"));
+            Assert.That(weapon.SecondaryCriticalDamages[0].Type, Is.EqualTo("punch"));
             Assert.That(weapon.SecondaryCriticalDamages[0].Condition, Is.Empty);
         }
 
@@ -1968,7 +1977,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
         public void ApplyAbilitiesToWeapon_CriticalDamages_DoubleWeapon_SameEnhancement()
         {
             mockDamageDataSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponDamages, "my nameother crit"))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.AbilityDamages, "my nameother crit"))
                 .Returns(
                 [
                     new DamageDataSelection { Type = "slush", Roll = "additional" },
@@ -1980,7 +1989,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
                 Name = "my name",
                 CriticalDamages =
                 [
-                    new Damage { Roll = "more", Type = "plasma" },
+                    new Damage { Roll = "more", Type = "plasma", Condition = "my crit condition" },
                     new Damage { Roll = "a lot", Type = "ether" },
                 ]
             };
@@ -2001,33 +2010,33 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             Assert.That(weapon.CriticalDamages[0].Roll, Is.EqualTo("my crit roll"));
             Assert.That(weapon.CriticalDamages[0].Type, Is.EqualTo(WeaponDamageType_Crit));
             Assert.That(weapon.CriticalDamages[0].Condition, Is.Empty);
-            Assert.That(weapon.CriticalDamages[1].Roll, Is.EqualTo("some"));
-            Assert.That(weapon.CriticalDamages[1].Type, Is.EqualTo(WeaponDamageType));
-            Assert.That(weapon.CriticalDamages[1].Condition, Is.EqualTo("my condition"));
-            Assert.That(weapon.CriticalDamages[2].Roll, Is.EqualTo("a bit"));
+            Assert.That(weapon.CriticalDamages[1].Roll, Is.EqualTo("more"));
+            Assert.That(weapon.CriticalDamages[1].Type, Is.EqualTo("plasma"));
+            Assert.That(weapon.CriticalDamages[1].Condition, Is.EqualTo("my crit condition"));
+            Assert.That(weapon.CriticalDamages[2].Roll, Is.EqualTo("a lot"));
             Assert.That(weapon.CriticalDamages[2].Type, Is.EqualTo("ether"));
-            Assert.That(weapon.CriticalDamages[2].Condition, Is.EqualTo("my other condition"));
+            Assert.That(weapon.CriticalDamages[2].Condition, Is.Empty);
             Assert.That(weapon.SecondaryDamages, Has.Count.EqualTo(1));
-            Assert.That(weapon.SecondaryDamages[0].Roll, Is.EqualTo("my roll"));
-            Assert.That(weapon.SecondaryDamages[0].Type, Is.EqualTo(WeaponDamageType));
+            Assert.That(weapon.SecondaryDamages[0].Roll, Is.EqualTo("jab"));
+            Assert.That(weapon.SecondaryDamages[0].Type, Is.EqualTo("punch"));
             Assert.That(weapon.SecondaryDamages[0].Condition, Is.Empty);
             Assert.That(weapon.SecondaryCriticalDamages, Has.Count.EqualTo(3));
-            Assert.That(weapon.SecondaryCriticalDamages[0].Roll, Is.EqualTo("my crit roll"));
-            Assert.That(weapon.SecondaryCriticalDamages[0].Type, Is.EqualTo(WeaponDamageType_Crit));
+            Assert.That(weapon.SecondaryCriticalDamages[0].Roll, Is.EqualTo("cross"));
+            Assert.That(weapon.SecondaryCriticalDamages[0].Type, Is.EqualTo("punch"));
             Assert.That(weapon.SecondaryCriticalDamages[0].Condition, Is.Empty);
-            Assert.That(weapon.SecondaryCriticalDamages[1].Roll, Is.EqualTo("some"));
-            Assert.That(weapon.SecondaryCriticalDamages[1].Type, Is.EqualTo(WeaponDamageType));
-            Assert.That(weapon.SecondaryCriticalDamages[1].Condition, Is.EqualTo("my condition"));
-            Assert.That(weapon.SecondaryCriticalDamages[2].Roll, Is.EqualTo("a bit"));
+            Assert.That(weapon.SecondaryCriticalDamages[1].Roll, Is.EqualTo("more"));
+            Assert.That(weapon.SecondaryCriticalDamages[1].Type, Is.EqualTo("plasma"));
+            Assert.That(weapon.SecondaryCriticalDamages[1].Condition, Is.EqualTo("my crit condition"));
+            Assert.That(weapon.SecondaryCriticalDamages[2].Roll, Is.EqualTo("a lot"));
             Assert.That(weapon.SecondaryCriticalDamages[2].Type, Is.EqualTo("ether"));
-            Assert.That(weapon.SecondaryCriticalDamages[2].Condition, Is.EqualTo("my other condition"));
+            Assert.That(weapon.SecondaryCriticalDamages[2].Condition, Is.Empty);
         }
 
         [Test]
         public void ApplyAbilitiesToWeapon_DamagesAndCriticalDamages_DoubleWeapon_SameEnhancement()
         {
             mockDamageDataSelector
-                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.WeaponDamages, "my nameother crit"))
+                .Setup(s => s.SelectFrom(Config.Name, TableNameConstants.Collections.AbilityDamages, "my nameother crit"))
                 .Returns(
                 [
                     new DamageDataSelection { Type = "slush", Roll = "additional" },
@@ -2044,8 +2053,8 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
                 ],
                 CriticalDamages =
                 [
-                    new Damage { Roll = "more", Type = "plasma" },
-                    new Damage { Roll = "a lot", Type = "ether" },
+                    new Damage { Roll = "more", Type = "plasma", Condition = "my crit condition" },
+                    new Damage { Roll = "a lot", Type = "ether", Condition = "my other crit condition" },
                 ],
             };
 
@@ -2078,8 +2087,8 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             Assert.That(weapon.CriticalDamages[2].Type, Is.EqualTo("ether"));
             Assert.That(weapon.CriticalDamages[2].Condition, Is.EqualTo("my other crit condition"));
             Assert.That(weapon.SecondaryDamages, Has.Count.EqualTo(3));
-            Assert.That(weapon.SecondaryDamages[0].Roll, Is.EqualTo("my roll"));
-            Assert.That(weapon.SecondaryDamages[0].Type, Is.EqualTo(WeaponDamageType));
+            Assert.That(weapon.SecondaryDamages[0].Roll, Is.EqualTo("jab"));
+            Assert.That(weapon.SecondaryDamages[0].Type, Is.EqualTo("punch"));
             Assert.That(weapon.SecondaryDamages[0].Condition, Is.Empty);
             Assert.That(weapon.SecondaryDamages[1].Roll, Is.EqualTo("some"));
             Assert.That(weapon.SecondaryDamages[1].Type, Is.EqualTo("plasma"));
@@ -2088,15 +2097,15 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             Assert.That(weapon.SecondaryDamages[2].Type, Is.EqualTo("ether"));
             Assert.That(weapon.SecondaryDamages[2].Condition, Is.EqualTo("my other condition"));
             Assert.That(weapon.SecondaryCriticalDamages, Has.Count.EqualTo(3));
-            Assert.That(weapon.SecondaryCriticalDamages[0].Roll, Is.EqualTo("my crit roll"));
-            Assert.That(weapon.SecondaryCriticalDamages[0].Type, Is.EqualTo(WeaponDamageType_Crit));
+            Assert.That(weapon.SecondaryCriticalDamages[0].Roll, Is.EqualTo("cross"));
+            Assert.That(weapon.SecondaryCriticalDamages[0].Type, Is.EqualTo("punch"));
             Assert.That(weapon.SecondaryCriticalDamages[0].Condition, Is.Empty);
-            Assert.That(weapon.SecondaryCriticalDamages[1].Roll, Is.EqualTo("MORE"));
-            Assert.That(weapon.SecondaryCriticalDamages[1].Type, Is.EqualTo("solid"));
-            Assert.That(weapon.SecondaryCriticalDamages[1].Condition, Is.EqualTo("my crit condition 2"));
-            Assert.That(weapon.SecondaryCriticalDamages[2].Roll, Is.EqualTo("a ton"));
-            Assert.That(weapon.SecondaryCriticalDamages[2].Type, Is.EqualTo("gas"));
-            Assert.That(weapon.SecondaryCriticalDamages[2].Condition, Is.EqualTo("my other crit condition 2"));
+            Assert.That(weapon.SecondaryCriticalDamages[1].Roll, Is.EqualTo("more"));
+            Assert.That(weapon.SecondaryCriticalDamages[1].Type, Is.EqualTo("plasma"));
+            Assert.That(weapon.SecondaryCriticalDamages[1].Condition, Is.EqualTo("my crit condition"));
+            Assert.That(weapon.SecondaryCriticalDamages[2].Roll, Is.EqualTo("a lot"));
+            Assert.That(weapon.SecondaryCriticalDamages[2].Type, Is.EqualTo("ether"));
+            Assert.That(weapon.SecondaryCriticalDamages[2].Condition, Is.EqualTo("my other crit condition"));
         }
 
         [Test]
@@ -2132,12 +2141,12 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             Assert.That(weapon.CriticalDamages[0].Type, Is.EqualTo(WeaponDamageType_Crit));
             Assert.That(weapon.CriticalDamages[0].Condition, Is.Empty);
             Assert.That(weapon.SecondaryDamages, Has.Count.EqualTo(1));
-            Assert.That(weapon.SecondaryDamages[0].Roll, Is.EqualTo("my roll"));
-            Assert.That(weapon.SecondaryDamages[0].Type, Is.EqualTo(WeaponDamageType));
+            Assert.That(weapon.SecondaryDamages[0].Roll, Is.EqualTo("jab"));
+            Assert.That(weapon.SecondaryDamages[0].Type, Is.EqualTo("punch"));
             Assert.That(weapon.SecondaryDamages[0].Condition, Is.Empty);
             Assert.That(weapon.SecondaryCriticalDamages, Has.Count.EqualTo(1));
-            Assert.That(weapon.SecondaryCriticalDamages[0].Roll, Is.EqualTo("my crit roll"));
-            Assert.That(weapon.SecondaryCriticalDamages[0].Type, Is.EqualTo(WeaponDamageType_Crit));
+            Assert.That(weapon.SecondaryCriticalDamages[0].Roll, Is.EqualTo("cross"));
+            Assert.That(weapon.SecondaryCriticalDamages[0].Type, Is.EqualTo("punch"));
             Assert.That(weapon.SecondaryCriticalDamages[0].Condition, Is.Empty);
         }
 
@@ -2149,8 +2158,8 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
                 Name = "my name",
                 CriticalDamages =
                 [
-                    new Damage { Roll = "more", Type = "plasma" },
-                    new Damage { Roll = "a lot", Type = "ether" },
+                    new Damage { Roll = "more", Type = "plasma", Condition = "my crit condition" },
+                    new Damage { Roll = "a lot", Type = "ether", Condition = "my other crit condition" },
                 ]
             };
 
@@ -2177,12 +2186,12 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             Assert.That(weapon.CriticalDamages[2].Type, Is.EqualTo("ether"));
             Assert.That(weapon.CriticalDamages[2].Condition, Is.EqualTo("my other crit condition"));
             Assert.That(weapon.SecondaryDamages, Has.Count.EqualTo(1));
-            Assert.That(weapon.SecondaryDamages[0].Roll, Is.EqualTo("my roll"));
-            Assert.That(weapon.SecondaryDamages[0].Type, Is.EqualTo(WeaponDamageType));
+            Assert.That(weapon.SecondaryDamages[0].Roll, Is.EqualTo("jab"));
+            Assert.That(weapon.SecondaryDamages[0].Type, Is.EqualTo("punch"));
             Assert.That(weapon.SecondaryDamages[0].Condition, Is.Empty);
             Assert.That(weapon.SecondaryCriticalDamages, Has.Count.EqualTo(1));
-            Assert.That(weapon.SecondaryCriticalDamages[0].Roll, Is.EqualTo("my crit roll"));
-            Assert.That(weapon.SecondaryCriticalDamages[0].Type, Is.EqualTo(WeaponDamageType_Crit));
+            Assert.That(weapon.SecondaryCriticalDamages[0].Roll, Is.EqualTo("cross"));
+            Assert.That(weapon.SecondaryCriticalDamages[0].Type, Is.EqualTo("punch"));
             Assert.That(weapon.SecondaryCriticalDamages[0].Condition, Is.Empty);
         }
 
@@ -2199,8 +2208,8 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
                 ],
                 CriticalDamages =
                 [
-                    new Damage { Roll = "more", Type = "plasma" },
-                    new Damage { Roll = "a lot", Type = "ether" },
+                    new Damage { Roll = "more", Type = "plasma", Condition = "my crit condition" },
+                    new Damage { Roll = "a lot", Type = "ether", Condition = "my other crit condition" },
                 ],
             };
 
@@ -2233,12 +2242,12 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             Assert.That(weapon.CriticalDamages[2].Type, Is.EqualTo("ether"));
             Assert.That(weapon.CriticalDamages[2].Condition, Is.EqualTo("my other crit condition"));
             Assert.That(weapon.SecondaryDamages, Has.Count.EqualTo(1));
-            Assert.That(weapon.SecondaryDamages[0].Roll, Is.EqualTo("my roll"));
-            Assert.That(weapon.SecondaryDamages[0].Type, Is.EqualTo(WeaponDamageType));
+            Assert.That(weapon.SecondaryDamages[0].Roll, Is.EqualTo("jab"));
+            Assert.That(weapon.SecondaryDamages[0].Type, Is.EqualTo("punch"));
             Assert.That(weapon.SecondaryDamages[0].Condition, Is.Empty);
             Assert.That(weapon.SecondaryCriticalDamages, Has.Count.EqualTo(1));
-            Assert.That(weapon.SecondaryCriticalDamages[0].Roll, Is.EqualTo("my crit roll"));
-            Assert.That(weapon.SecondaryCriticalDamages[0].Type, Is.EqualTo(WeaponDamageType_Crit));
+            Assert.That(weapon.SecondaryCriticalDamages[0].Roll, Is.EqualTo("cross"));
+            Assert.That(weapon.SecondaryCriticalDamages[0].Type, Is.EqualTo("punch"));
             Assert.That(weapon.SecondaryCriticalDamages[0].Condition, Is.Empty);
         }
 
@@ -2370,8 +2379,38 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             Assert.That(weapon.CriticalDamages[4].Roll, Is.EqualTo("a ton"));
             Assert.That(weapon.CriticalDamages[4].Type, Is.EqualTo("there"));
             Assert.That(weapon.CriticalDamages[4].Condition, Is.EqualTo("my other crit condition 2"));
-            Assert.That(weapon.SecondaryDamages, Is.Empty);
-            Assert.That(weapon.SecondaryCriticalDamages, Is.Empty);
+            Assert.That(weapon.SecondaryDamages, Has.Count.EqualTo(5));
+            Assert.That(weapon.SecondaryDamages[0].Roll, Is.EqualTo("jab"));
+            Assert.That(weapon.SecondaryDamages[0].Type, Is.EqualTo("punch"));
+            Assert.That(weapon.SecondaryDamages[0].Condition, Is.Empty);
+            Assert.That(weapon.SecondaryDamages[1].Roll, Is.EqualTo("some"));
+            Assert.That(weapon.SecondaryDamages[1].Type, Is.EqualTo("plasma"));
+            Assert.That(weapon.SecondaryDamages[1].Condition, Is.EqualTo("my condition"));
+            Assert.That(weapon.SecondaryDamages[2].Roll, Is.EqualTo("a bit"));
+            Assert.That(weapon.SecondaryDamages[2].Type, Is.EqualTo("ether"));
+            Assert.That(weapon.SecondaryDamages[2].Condition, Is.EqualTo("my other condition"));
+            Assert.That(weapon.SecondaryDamages[3].Roll, Is.EqualTo("a touch"));
+            Assert.That(weapon.SecondaryDamages[3].Type, Is.EqualTo("here"));
+            Assert.That(weapon.SecondaryDamages[3].Condition, Is.EqualTo("my condition 2"));
+            Assert.That(weapon.SecondaryDamages[4].Roll, Is.EqualTo("another touch"));
+            Assert.That(weapon.SecondaryDamages[4].Type, Is.EqualTo("there"));
+            Assert.That(weapon.SecondaryDamages[4].Condition, Is.EqualTo("my other condition 2"));
+            Assert.That(weapon.SecondaryCriticalDamages, Has.Count.EqualTo(5));
+            Assert.That(weapon.SecondaryCriticalDamages[0].Roll, Is.EqualTo("cross"));
+            Assert.That(weapon.SecondaryCriticalDamages[0].Type, Is.EqualTo("punch"));
+            Assert.That(weapon.SecondaryCriticalDamages[0].Condition, Is.Empty);
+            Assert.That(weapon.SecondaryCriticalDamages[1].Roll, Is.EqualTo("more"));
+            Assert.That(weapon.SecondaryCriticalDamages[1].Type, Is.EqualTo("plasma"));
+            Assert.That(weapon.SecondaryCriticalDamages[1].Condition, Is.EqualTo("my crit condition"));
+            Assert.That(weapon.SecondaryCriticalDamages[2].Roll, Is.EqualTo("a lot"));
+            Assert.That(weapon.SecondaryCriticalDamages[2].Type, Is.EqualTo("ether"));
+            Assert.That(weapon.SecondaryCriticalDamages[2].Condition, Is.EqualTo("my other crit condition"));
+            Assert.That(weapon.SecondaryCriticalDamages[3].Roll, Is.EqualTo("MORE"));
+            Assert.That(weapon.SecondaryCriticalDamages[3].Type, Is.EqualTo("here"));
+            Assert.That(weapon.SecondaryCriticalDamages[3].Condition, Is.EqualTo("my crit condition 2"));
+            Assert.That(weapon.SecondaryCriticalDamages[4].Roll, Is.EqualTo("a ton"));
+            Assert.That(weapon.SecondaryCriticalDamages[4].Type, Is.EqualTo("there"));
+            Assert.That(weapon.SecondaryCriticalDamages[4].Condition, Is.EqualTo("my other crit condition 2"));
         }
 
         [TestCase(1, "19-20")]
@@ -2466,7 +2505,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
 
             var updatedWeapon = specialAbilitiesGenerator.ApplyAbilitiesToWeapon(weapon);
             Assert.That(updatedWeapon, Is.EqualTo(weapon));
-            Assert.That(weapon.Magic.SpecialAbilities.Count(), Is.EqualTo(3));
+            Assert.That(weapon.Magic.SpecialAbilities.Count(), Is.EqualTo(5));
             Assert.That(weapon.Damages, Has.Count.EqualTo(5));
             Assert.That(weapon.Damages[0].Roll, Is.EqualTo("my roll"));
             Assert.That(weapon.Damages[0].Type, Is.EqualTo(WeaponDamageType));
@@ -2549,7 +2588,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
 
             var updatedWeapon = specialAbilitiesGenerator.ApplyAbilitiesToWeapon(weapon);
             Assert.That(updatedWeapon, Is.EqualTo(weapon));
-            Assert.That(weapon.Magic.SpecialAbilities.Count(), Is.EqualTo(3));
+            Assert.That(weapon.Magic.SpecialAbilities.Count(), Is.EqualTo(5));
             Assert.That(weapon.Damages, Has.Count.EqualTo(5));
             Assert.That(weapon.Damages[0].Roll, Is.EqualTo("my roll"));
             Assert.That(weapon.Damages[0].Type, Is.EqualTo(WeaponDamageType));
@@ -2582,8 +2621,38 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             Assert.That(weapon.CriticalDamages[4].Roll, Is.EqualTo("a ton"));
             Assert.That(weapon.CriticalDamages[4].Type, Is.EqualTo("there"));
             Assert.That(weapon.CriticalDamages[4].Condition, Is.EqualTo("my other crit condition 2"));
-            Assert.That(weapon.SecondaryDamages, Is.Empty);
-            Assert.That(weapon.SecondaryCriticalDamages, Is.Empty);
+            Assert.That(weapon.SecondaryDamages, Has.Count.EqualTo(5));
+            Assert.That(weapon.SecondaryDamages[0].Roll, Is.EqualTo("jab"));
+            Assert.That(weapon.SecondaryDamages[0].Type, Is.EqualTo("punch"));
+            Assert.That(weapon.SecondaryDamages[0].Condition, Is.Empty);
+            Assert.That(weapon.SecondaryDamages[1].Roll, Is.EqualTo("some"));
+            Assert.That(weapon.SecondaryDamages[1].Type, Is.EqualTo("plasma"));
+            Assert.That(weapon.SecondaryDamages[1].Condition, Is.EqualTo("my condition"));
+            Assert.That(weapon.SecondaryDamages[2].Roll, Is.EqualTo("a bit"));
+            Assert.That(weapon.SecondaryDamages[2].Type, Is.EqualTo("ether"));
+            Assert.That(weapon.SecondaryDamages[2].Condition, Is.EqualTo("my other condition"));
+            Assert.That(weapon.SecondaryDamages[3].Roll, Is.EqualTo("a touch"));
+            Assert.That(weapon.SecondaryDamages[3].Type, Is.EqualTo("here"));
+            Assert.That(weapon.SecondaryDamages[3].Condition, Is.EqualTo("my condition 2"));
+            Assert.That(weapon.SecondaryDamages[4].Roll, Is.EqualTo("another touch"));
+            Assert.That(weapon.SecondaryDamages[4].Type, Is.EqualTo("there"));
+            Assert.That(weapon.SecondaryDamages[4].Condition, Is.EqualTo("my other condition 2"));
+            Assert.That(weapon.SecondaryCriticalDamages, Has.Count.EqualTo(5));
+            Assert.That(weapon.SecondaryCriticalDamages[0].Roll, Is.EqualTo("cross"));
+            Assert.That(weapon.SecondaryCriticalDamages[0].Type, Is.EqualTo("punch"));
+            Assert.That(weapon.SecondaryCriticalDamages[0].Condition, Is.Empty);
+            Assert.That(weapon.SecondaryCriticalDamages[1].Roll, Is.EqualTo("more"));
+            Assert.That(weapon.SecondaryCriticalDamages[1].Type, Is.EqualTo("plasma"));
+            Assert.That(weapon.SecondaryCriticalDamages[1].Condition, Is.EqualTo("my crit condition"));
+            Assert.That(weapon.SecondaryCriticalDamages[2].Roll, Is.EqualTo("a lot"));
+            Assert.That(weapon.SecondaryCriticalDamages[2].Type, Is.EqualTo("ether"));
+            Assert.That(weapon.SecondaryCriticalDamages[2].Condition, Is.EqualTo("my other crit condition"));
+            Assert.That(weapon.SecondaryCriticalDamages[3].Roll, Is.EqualTo("MORE"));
+            Assert.That(weapon.SecondaryCriticalDamages[3].Type, Is.EqualTo("here"));
+            Assert.That(weapon.SecondaryCriticalDamages[3].Condition, Is.EqualTo("my crit condition 2"));
+            Assert.That(weapon.SecondaryCriticalDamages[4].Roll, Is.EqualTo("a ton"));
+            Assert.That(weapon.SecondaryCriticalDamages[4].Type, Is.EqualTo("there"));
+            Assert.That(weapon.SecondaryCriticalDamages[4].Condition, Is.EqualTo("my other crit condition 2"));
             Assert.That(weapon.Contents, Contains.Item("spell"));
             Assert.That(weapon.ThreatRange, Is.EqualTo(2));
             Assert.That(weapon.ThreatRangeDescription, Is.EqualTo("19-20"));

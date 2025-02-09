@@ -67,7 +67,7 @@ namespace DnDGen.TreasureGen.Generators.Items
 
             var templateName = gear.Name;
             gear.Name = replacementSelector.SelectSingle(templateName);
-            gear.Magic.SpecialAbilities = GetSpecialAbilities(specificGearType, templateName, prototype.Magic.SpecialAbilities, string.Empty);
+            gear.Magic.SpecialAbilities = GetSpecialAbilities(specificGearType, templateName, prototype.Magic.SpecialAbilities, string.Empty, true);
 
             var tableName = TableNameConstants.Collections.SpecificITEMTYPEAttributes(specificGearType);
             gear.Attributes = collectionsSelector.SelectFrom(Config.Name, tableName, templateName);
@@ -98,7 +98,7 @@ namespace DnDGen.TreasureGen.Generators.Items
                 return GetArmor(gear);
 
             if (gear.ItemType == ItemTypeConstants.Weapon)
-                return GetWeapon(gear);
+                return GetWeapon(gear, false);
 
             if (gear.Quantity == 0)
                 gear.Quantity = 1;
@@ -123,7 +123,7 @@ namespace DnDGen.TreasureGen.Generators.Items
             return armor;
         }
 
-        private Weapon GetWeapon(Item gear)
+        private Weapon GetWeapon(Item gear, bool addDefaultAbilities)
         {
             var name = gear.BaseNames.First();
 
@@ -146,7 +146,12 @@ namespace DnDGen.TreasureGen.Generators.Items
                 weapon.SecondaryMagicBonus = weapon.Magic.Bonus;
             }
 
-            weapon.Magic.SpecialAbilities = GetSpecialAbilities(ItemTypeConstants.Weapon, gear.Name, weapon.Magic.SpecialAbilities, weapon.CriticalMultiplier);
+            weapon.Magic.SpecialAbilities = GetSpecialAbilities(
+                ItemTypeConstants.Weapon,
+                gear.Name,
+                weapon.Magic.SpecialAbilities,
+                weapon.CriticalMultiplier,
+                addDefaultAbilities);
             weapon = specialAbilitiesGenerator.ApplyAbilitiesToWeapon(weapon);
 
             return weapon;
@@ -156,11 +161,18 @@ namespace DnDGen.TreasureGen.Generators.Items
             string specificGearType,
             string name,
             IEnumerable<SpecialAbility> templateSpecialAbilities,
-            string criticalMultiplier)
+            string criticalMultiplier,
+            bool addDefaultAbilities)
         {
-            var tableName = TableNameConstants.Collections.SpecificITEMTYPESpecialAbilities(specificGearType);
-            var abilityNames = collectionsSelector.SelectFrom(Config.Name, tableName, name);
-            var abilityPrototypes = abilityNames.Select(n => new SpecialAbility { Name = n }).Union(templateSpecialAbilities);
+            var abilityPrototypes = templateSpecialAbilities;
+
+            if (addDefaultAbilities)
+            {
+                var tableName = TableNameConstants.Collections.SpecificITEMTYPESpecialAbilities(specificGearType);
+                var abilityNames = collectionsSelector.SelectFrom(Config.Name, tableName, name);
+                abilityPrototypes = abilityNames.Select(n => new SpecialAbility { Name = n }).Union(templateSpecialAbilities);
+            }
+
             var abilities = specialAbilitiesGenerator.GenerateFor(abilityPrototypes, criticalMultiplier);
 
             return abilities;
