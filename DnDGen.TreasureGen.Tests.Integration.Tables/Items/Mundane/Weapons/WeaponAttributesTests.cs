@@ -11,7 +11,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Mundane.Weapons
     {
         protected override string tableName
         {
-            get { return string.Format(TableNameConstants.Collections.Formattable.ITEMTYPEAttributes, ItemTypeConstants.Weapon); }
+            get { return TableNameConstants.Collections.ITEMTYPEAttributes(ItemTypeConstants.Weapon); }
         }
 
         [TestCase(WeaponConstants.Dagger,
@@ -407,7 +407,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Mundane.Weapons
             AttributeConstants.TwoHanded)]
         public void WeaponAttributes(string name, params string[] attributes)
         {
-            base.Collections(name, attributes);
+            base.AssertCollection(name, attributes);
         }
 
         [Test]

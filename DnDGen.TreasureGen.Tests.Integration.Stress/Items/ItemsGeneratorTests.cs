@@ -1,5 +1,4 @@
-﻿using DnDGen.Infrastructure.Selectors.Collections;
-using DnDGen.TreasureGen.Items;
+﻿using DnDGen.TreasureGen.Items;
 using DnDGen.TreasureGen.Items.Magical;
 using DnDGen.TreasureGen.Items.Mundane;
 using DnDGen.TreasureGen.Tests.Unit.Generators.Items;
@@ -15,14 +14,12 @@ namespace DnDGen.TreasureGen.Tests.Integration.Stress.Items
     {
         private IItemsGenerator itemsGenerator;
         private ItemVerifier itemVerifier;
-        private ICollectionSelector collectionSelector;
 
         [SetUp]
         public void Setup()
         {
             itemsGenerator = GetNewInstanceOf<IItemsGenerator>();
             itemVerifier = new ItemVerifier();
-            collectionSelector = GetNewInstanceOf<ICollectionSelector>();
         }
 
         [Test]
