@@ -276,7 +276,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             var mundaneWeapon = itemVerifier.CreateRandomWeaponTemplate(WeaponConstants.Quarterstaff);
             mundaneWeapon.Traits.Clear();
             mundaneWeapon.Quantity = 1;
-            mundaneWeapon.Attributes = mundaneWeapon.Attributes.Union(new[] { AttributeConstants.DoubleWeapon });
+            mundaneWeapon.Attributes = mundaneWeapon.Attributes.Union([AttributeConstants.DoubleWeapon]);
 
             mockMundaneWeaponGenerator
                 .Setup(g => g.Generate(WeaponConstants.Quarterstaff))
@@ -296,7 +296,7 @@ namespace DnDGen.TreasureGen.Tests.Unit.Generators.Items.Magical
             var staff = staffGenerator.Generate(template);
             itemVerifier.AssertMagicalItemFromTemplate(staff, template);
             Assert.That(staff.ItemType, Is.EqualTo(ItemTypeConstants.Staff));
-            Assert.That(staff.Attributes, Is.EquivalentTo(mundaneWeapon.Attributes.Union(new[] { AttributeConstants.Charged })));
+            Assert.That(staff.Attributes, Is.EquivalentTo(mundaneWeapon.Attributes.Union([AttributeConstants.Charged])));
             Assert.That(staff.Attributes, Is.All.Not.EqualTo(AttributeConstants.OneTimeUse));
             Assert.That(staff.Quantity, Is.EqualTo(1));
             Assert.That(staff.Magic.SpecialAbilities, Is.EquivalentTo(abilities));

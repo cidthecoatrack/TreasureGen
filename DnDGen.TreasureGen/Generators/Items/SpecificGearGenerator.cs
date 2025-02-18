@@ -98,7 +98,7 @@ namespace DnDGen.TreasureGen.Generators.Items
                 return GetArmor(gear);
 
             if (gear.ItemType == ItemTypeConstants.Weapon)
-                return GetWeapon(gear, false);
+                return GetWeapon(gear);
 
             if (gear.Quantity == 0)
                 gear.Quantity = 1;
@@ -123,7 +123,7 @@ namespace DnDGen.TreasureGen.Generators.Items
             return armor;
         }
 
-        private Weapon GetWeapon(Item gear, bool addDefaultAbilities)
+        private Weapon GetWeapon(Item gear)
         {
             var name = gear.BaseNames.First();
 
@@ -151,7 +151,7 @@ namespace DnDGen.TreasureGen.Generators.Items
                 gear.Name,
                 weapon.Magic.SpecialAbilities,
                 weapon.CriticalMultiplier,
-                addDefaultAbilities);
+                false);
             weapon = specialAbilitiesGenerator.ApplyAbilitiesToWeapon(weapon);
 
             return weapon;
