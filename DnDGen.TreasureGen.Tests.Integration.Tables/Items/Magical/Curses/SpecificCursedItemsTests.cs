@@ -35,7 +35,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Curses
         [TestCase(WondrousItemConstants.DustOfSneezingAndChoking, 53, 54)]
         [TestCase(WondrousItemConstants.HelmOfOppositeAlignment, 55, 55)]
         [TestCase(PotionConstants.Poison, 56, 60)]
-        [TestCase(WondrousItemConstants.BroomOfAnimatedAttack, 61)]
+        [TestCase(WondrousItemConstants.BroomOfAnimatedAttack, 61, 61)]
         [TestCase(WondrousItemConstants.RobeOfPowerlessness, 62, 63)]
         [TestCase(WondrousItemConstants.VacousGrimoire, 64, 64)]
         [TestCase(WeaponConstants.CursedBackbiterSpear, 65, 68)]

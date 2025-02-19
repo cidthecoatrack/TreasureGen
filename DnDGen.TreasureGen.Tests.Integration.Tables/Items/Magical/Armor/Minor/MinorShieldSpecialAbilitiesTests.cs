@@ -30,7 +30,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Armor.Minor
         [TestCase(SpecialAbilityConstants.ArrowDeflection, 76, 92)]
         [TestCase(SpecialAbilityConstants.Animated, 93, 97)]
         [TestCase(SpecialAbilityConstants.SpellResistance13, 98, 99)]
-        [TestCase(SpecialAbilitiesGenerator.BonusSpecialAbility, 100)]
+        [TestCase(SpecialAbilitiesGenerator.BonusSpecialAbility, 100, 100)]
         public void MinorShieldSpecialAbilitiesPercentile(string content, int lower, int upper)
         {
             AssertPercentile(content, lower, upper);

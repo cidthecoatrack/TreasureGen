@@ -38,7 +38,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Mundane.Armors
                 MaxDexterityBonus = maxDexterityBonus,
             });
 
-            base.AssertOrderedCollections(name, data);
+            AssertOrderedCollections(name, data);
         }
     }
 }

@@ -51,7 +51,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Mundane.Weapons
                 AssertDoubleWeaponsHaveMultipleDamages(weapon, key);
 
                 Assert.That(weaponDamages, Contains.Key(key));
-                base.AssertCollection(key, [.. weaponDamages[key]]);
+                AssertCollection(key, [.. weaponDamages[key]]);
             }
         }
 

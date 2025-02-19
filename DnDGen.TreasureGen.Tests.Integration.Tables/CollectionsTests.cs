@@ -1,7 +1,6 @@
 ﻿using DnDGen.Infrastructure.Mappers.Collections;
 using NUnit.Framework;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace DnDGen.TreasureGen.Tests.Integration.Tables
 {
@@ -36,14 +35,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables
 
         protected void AssertCollection(IEnumerable<string> actual, IEnumerable<string> expected, string message = null)
         {
-            Assert.That(actual, Is.EquivalentTo(expected));
-
-            foreach (var item in expected)
-            {
-                var actualCount = actual.Count(a => a == item);
-                var expectedCount = expected.Count(a => a == item);
-                Assert.That(actualCount, Is.EqualTo(expectedCount), item);
-            }
+            Assert.That(actual, Is.EquivalentTo(expected), message);
         }
 
         protected void AssertOrderedCollections(string name, params string[] items)
@@ -55,20 +47,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables
         protected void AssertOrderedCollection(IEnumerable<string> actual, IEnumerable<string> expected)
         {
             AssertCollection(actual, expected);
-
-            if (actual.Count() <= 10 && expected.Count() <= 10)
-            {
-                Assert.That(actual, Is.EqualTo(expected));
-                return;
-            }
-
-            var expectedArray = expected.ToArray();
-            var actualArray = actual.ToArray();
-
-            for (var i = 0; i < expectedArray.Length; i++)
-            {
-                Assert.That(actualArray[i], Is.EqualTo(expectedArray[i]), $"Index {i}");
-            }
+            Assert.That(actual, Is.EqualTo(expected));
         }
     }
 }

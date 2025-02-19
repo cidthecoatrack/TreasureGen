@@ -63,7 +63,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Mundane.Weapons
                 AssertWeaponCriticalDamagesHaveCorrectMultiplier(weapon, key, weaponData);
 
                 Assert.That(weaponDamages, Contains.Key(key));
-                base.AssertCollection(key, [.. weaponDamages[key]]);
+                AssertCollection(key, [.. weaponDamages[key]]);
             }
         }
 

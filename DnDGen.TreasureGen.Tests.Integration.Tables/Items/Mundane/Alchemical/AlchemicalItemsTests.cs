@@ -1,5 +1,5 @@
-﻿using NUnit.Framework;
-using DnDGen.TreasureGen.Tables;
+﻿using DnDGen.TreasureGen.Tables;
+using NUnit.Framework;
 
 namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Mundane.Alchemical
 {
@@ -33,7 +33,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Mundane.Alchemical
         [TestCase("Thunderstone", "1d4", 89, 100)]
         public void TypeAndAmountPercentile(string type, string amount, int lower, int upper)
         {
-            base.AssertTypeAndAmountPercentile(type, amount, lower, upper);
+            AssertTypeAndAmountPercentile(type, amount, lower, upper);
         }
     }
 }
