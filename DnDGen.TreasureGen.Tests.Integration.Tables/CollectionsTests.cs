@@ -31,10 +31,10 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables
         protected void AssertCollection(string name, params string[] items)
         {
             Assert.That(table.Keys, Contains.Item(name), tableName);
-            AssertCollection(table[name], items);
+            AssertCollection(table[name], items, name);
         }
 
-        protected void AssertCollection(IEnumerable<string> actual, IEnumerable<string> expected)
+        protected void AssertCollection(IEnumerable<string> actual, IEnumerable<string> expected, string message = null)
         {
             Assert.That(actual, Is.EquivalentTo(expected));
 

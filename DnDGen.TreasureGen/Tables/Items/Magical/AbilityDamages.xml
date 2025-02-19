@@ -1,0 +1,724 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<collections>
+  <collection>
+    <name>Aberrationbane</name>
+    <entry>2d6@@Against Aberrations</entry>
+  </collection>
+	<collection>
+		<name>Aberrationbanex2</name>
+		<entry>2d6@@Against Aberrations</entry>
+	</collection>
+	<collection>
+		<name>Aberrationbanex3</name>
+		<entry>2d6@@Against Aberrations</entry>
+	</collection>
+	<collection>
+		<name>Aberrationbanex4</name>
+		<entry>2d6@@Against Aberrations</entry>
+	</collection>
+  <collection>
+    <name>Acid Resistance</name>
+  </collection>
+  <collection>
+    <name>Air-outsiderbane</name>
+    <entry>2d6@@Against Air Outsiders</entry>
+  </collection>
+	<collection>
+		<name>Air-outsiderbanex2</name>
+		<entry>2d6@@Against Air Outsiders</entry>
+	</collection>
+	<collection>
+		<name>Air-outsiderbanex3</name>
+		<entry>2d6@@Against Air Outsiders</entry>
+	</collection>
+	<collection>
+		<name>Air-outsiderbanex4</name>
+		<entry>2d6@@Against Air Outsiders</entry>
+	</collection>
+  <collection>
+    <name>Anarchic</name>
+    <entry>2d6@@Against Lawful alignment</entry>
+  </collection>
+	<collection>
+		<name>Anarchicx2</name>
+		<entry>2d6@@Against Lawful alignment</entry>
+	</collection>
+	<collection>
+		<name>Anarchicx3</name>
+		<entry>2d6@@Against Lawful alignment</entry>
+	</collection>
+	<collection>
+		<name>Anarchicx4</name>
+		<entry>2d6@@Against Lawful alignment</entry>
+	</collection>
+  <collection>
+    <name>Animalbane</name>
+    <entry>2d6@@Against Animals</entry>
+  </collection>
+	<collection>
+		<name>Animalbanex2</name>
+		<entry>2d6@@Against Animals</entry>
+	</collection>
+	<collection>
+		<name>Animalbanex3</name>
+		<entry>2d6@@Against Animals</entry>
+	</collection>
+	<collection>
+		<name>Animalbanex4</name>
+		<entry>2d6@@Against Animals</entry>
+	</collection>
+  <collection>
+    <name>Animated</name>
+  </collection>
+  <collection>
+    <name>Aquatic-humanoidbane</name>
+    <entry>2d6@@Against Aquatic Humanoids</entry>
+  </collection>
+	<collection>
+		<name>Aquatic-humanoidbanex2</name>
+		<entry>2d6@@Against Aquatic Humanoids</entry>
+	</collection>
+	<collection>
+		<name>Aquatic-humanoidbanex3</name>
+		<entry>2d6@@Against Aquatic Humanoids</entry>
+	</collection>
+	<collection>
+		<name>Aquatic-humanoidbanex4</name>
+		<entry>2d6@@Against Aquatic Humanoids</entry>
+	</collection>
+  <collection>
+    <name>Arrow Catching</name>
+  </collection>
+  <collection>
+    <name>Arrow Deflection</name>
+  </collection>
+  <collection>
+    <name>Axiomatic</name>
+    <entry>2d6@@Against Chaotic alignment</entry>
+  </collection>
+	<collection>
+		<name>Axiomaticx2</name>
+		<entry>2d6@@Against Chaotic alignment</entry>
+	</collection>
+	<collection>
+		<name>Axiomaticx3</name>
+		<entry>2d6@@Against Chaotic alignment</entry>
+	</collection>
+	<collection>
+		<name>Axiomaticx4</name>
+		<entry>2d6@@Against Chaotic alignment</entry>
+	</collection>
+  <collection>
+    <name>Bane</name>
+    <entry>2d6@@Against DESIGNATEDFOE</entry>
+  </collection>
+	<collection>
+		<name>Banex2</name>
+		<entry>2d6@@Against DESIGNATEDFOE</entry>
+	</collection>
+	<collection>
+		<name>Banex3</name>
+		<entry>2d6@@Against DESIGNATEDFOE</entry>
+	</collection>
+	<collection>
+		<name>Banex4</name>
+		<entry>2d6@@Against DESIGNATEDFOE</entry>
+	</collection>
+  <collection>
+    <name>Bashing</name>
+  </collection>
+  <collection>
+    <name>Blinding</name>
+  </collection>
+  <collection>
+    <name>Brilliant Energy</name>
+  </collection>
+  <collection>
+    <name>Chaotic-outsiderbane</name>
+    <entry>2d6@@Against Chaotic Outsiders</entry>
+  </collection>
+	<collection>
+		<name>Chaotic-outsiderbanex2</name>
+		<entry>2d6@@Against Chaotic Outsiders</entry>
+	</collection>
+	<collection>
+		<name>Chaotic-outsiderbanex3</name>
+		<entry>2d6@@Against Chaotic Outsiders</entry>
+	</collection>
+	<collection>
+		<name>Chaotic-outsiderbanex4</name>
+		<entry>2d6@@Against Chaotic Outsiders</entry>
+	</collection>
+  <collection>
+    <name>Cold Resistance</name>
+  </collection>
+  <collection>
+    <name>Constructbane</name>
+    <entry>2d6@@Against Constructs</entry>
+  </collection>
+	<collection>
+		<name>Constructbanex2</name>
+		<entry>2d6@@Against Constructs</entry>
+	</collection>
+	<collection>
+		<name>Constructbanex3</name>
+		<entry>2d6@@Against Constructs</entry>
+	</collection>
+	<collection>
+		<name>Constructbanex4</name>
+		<entry>2d6@@Against Constructs</entry>
+	</collection>
+  <collection>
+    <name>DESIGNATEDFOEbane</name>
+    <entry>2d6@@Against DESIGNATEDFOE</entry>
+  </collection>
+	<collection>
+		<name>DESIGNATEDFOEbanex2</name>
+		<entry>2d6@@Against DESIGNATEDFOE</entry>
+	</collection>
+	<collection>
+		<name>DESIGNATEDFOEbanex3</name>
+		<entry>2d6@@Against DESIGNATEDFOE</entry>
+	</collection>
+	<collection>
+		<name>DESIGNATEDFOEbanex4</name>
+		<entry>2d6@@Against DESIGNATEDFOE</entry>
+	</collection>
+  <collection>
+    <name>Dancing</name>
+  </collection>
+  <collection>
+    <name>Defending</name>
+  </collection>
+  <collection>
+    <name>Disruption</name>
+  </collection>
+  <collection>
+    <name>Distance</name>
+  </collection>
+  <collection>
+    <name>Dragonbane</name>
+    <entry>2d6@@Against Dragons</entry>
+  </collection>
+	<collection>
+		<name>Dragonbanex2</name>
+		<entry>2d6@@Against Dragons</entry>
+	</collection>
+	<collection>
+		<name>Dragonbanex3</name>
+		<entry>2d6@@Against Dragons</entry>
+	</collection>
+	<collection>
+		<name>Dragonbanex4</name>
+		<entry>2d6@@Against Dragons</entry>
+	</collection>
+  <collection>
+    <name>Dwarfbane</name>
+    <entry>2d6@@Against Dwarfs</entry>
+  </collection>
+	<collection>
+		<name>Dwarfbanex2</name>
+		<entry>2d6@@Against Dwarfs</entry>
+	</collection>
+	<collection>
+		<name>Dwarfbanex3</name>
+		<entry>2d6@@Against Dwarfs</entry>
+	</collection>
+	<collection>
+		<name>Dwarfbanex4</name>
+		<entry>2d6@@Against Dwarfs</entry>
+	</collection>
+  <collection>
+    <name>Earth-outsiderbane</name>
+    <entry>2d6@@Against Earth Outsiders</entry>
+  </collection>
+	<collection>
+		<name>Earth-outsiderbanex2</name>
+		<entry>2d6@@Against Earth Outsiders</entry>
+	</collection>
+	<collection>
+		<name>Earth-outsiderbanex3</name>
+		<entry>2d6@@Against Earth Outsiders</entry>
+	</collection>
+	<collection>
+		<name>Earth-outsiderbanex4</name>
+		<entry>2d6@@Against Earth Outsiders</entry>
+	</collection>
+  <collection>
+    <name>Electricity Resistance</name>
+  </collection>
+  <collection>
+    <name>Elementalbane</name>
+    <entry>2d6@@Against Elementals</entry>
+  </collection>
+	<collection>
+		<name>Elementalbanex2</name>
+		<entry>2d6@@Against Elementals</entry>
+	</collection>
+	<collection>
+		<name>Elementalbanex3</name>
+		<entry>2d6@@Against Elementals</entry>
+	</collection>
+	<collection>
+		<name>Elementalbanex4</name>
+		<entry>2d6@@Against Elementals</entry>
+	</collection>
+  <collection>
+    <name>Elfbane</name>
+    <entry>2d6@@Against Elfs</entry>
+  </collection>
+	<collection>
+		<name>Elfbanex2</name>
+		<entry>2d6@@Against Elfs</entry>
+	</collection>
+	<collection>
+		<name>Elfbanex3</name>
+		<entry>2d6@@Against Elfs</entry>
+	</collection>
+	<collection>
+		<name>Elfbanex4</name>
+		<entry>2d6@@Against Elfs</entry>
+	</collection>
+  <collection>
+    <name>Etherealness</name>
+  </collection>
+  <collection>
+    <name>Evil-outsiderbane</name>
+    <entry>2d6@@Against Evil Outsiders</entry>
+  </collection>
+	<collection>
+		<name>Evil-outsiderbanex2</name>
+		<entry>2d6@@Against Evil Outsiders</entry>
+	</collection>
+	<collection>
+		<name>Evil-outsiderbanex3</name>
+		<entry>2d6@@Against Evil Outsiders</entry>
+	</collection>
+	<collection>
+		<name>Evil-outsiderbanex4</name>
+		<entry>2d6@@Against Evil Outsiders</entry>
+	</collection>
+  <collection>
+    <name>Feybane</name>
+    <entry>2d6@@Against Feys</entry>
+  </collection>
+	<collection>
+		<name>Feybanex2</name>
+		<entry>2d6@@Against Feys</entry>
+	</collection>
+	<collection>
+		<name>Feybanex3</name>
+		<entry>2d6@@Against Feys</entry>
+	</collection>
+	<collection>
+		<name>Feybanex4</name>
+		<entry>2d6@@Against Feys</entry>
+	</collection>
+  <collection>
+    <name>Fire Resistance</name>
+  </collection>
+  <collection>
+    <name>Fire-outsiderbane</name>
+    <entry>2d6@@Against Fire Outsiders</entry>
+  </collection>
+	<collection>
+		<name>Fire-outsiderbanex2</name>
+		<entry>2d6@@Against Fire Outsiders</entry>
+	</collection>
+	<collection>
+		<name>Fire-outsiderbanex3</name>
+		<entry>2d6@@Against Fire Outsiders</entry>
+	</collection>
+	<collection>
+		<name>Fire-outsiderbanex4</name>
+		<entry>2d6@@Against Fire Outsiders</entry>
+	</collection>
+  <collection>
+    <name>Flaming Burst</name>
+    <entry>1d6@Fire@</entry>
+  </collection>
+	<collection>
+		<name>Flaming Burstx2</name>
+		<entry>1d6@Fire@</entry>
+		<entry>1d10@Fire@</entry>
+	</collection>
+	<collection>
+		<name>Flaming Burstx3</name>
+		<entry>1d6@Fire@</entry>
+		<entry>2d10@Fire@</entry>
+	</collection>
+	<collection>
+		<name>Flaming Burstx4</name>
+		<entry>1d6@Fire@</entry>
+		<entry>3d10@Fire@</entry>
+	</collection>
+  <collection>
+    <name>Flaming</name>
+    <entry>1d6@Fire@</entry>
+  </collection>
+	<collection>
+		<name>Flamingx2</name>
+		<entry>1d6@Fire@</entry>
+	</collection>
+	<collection>
+		<name>Flamingx3</name>
+		<entry>1d6@Fire@</entry>
+	</collection>
+	<collection>
+		<name>Flamingx4</name>
+		<entry>1d6@Fire@</entry>
+	</collection>
+  <collection>
+    <name>Fortification</name>
+  </collection>
+  <collection>
+    <name>Frost</name>
+    <entry>1d6@Cold@</entry>
+  </collection>
+	<collection>
+		<name>Frostx2</name>
+		<entry>1d6@Cold@</entry>
+	</collection>
+	<collection>
+		<name>Frostx3</name>
+		<entry>1d6@Cold@</entry>
+	</collection>
+	<collection>
+		<name>Frostx4</name>
+		<entry>1d6@Cold@</entry>
+	</collection>
+  <collection>
+    <name>Ghost Touch (armor)</name>
+  </collection>
+  <collection>
+    <name>Ghost Touch (weapon)</name>
+  </collection>
+  <collection>
+    <name>Ghost Touch</name>
+  </collection>
+  <collection>
+    <name>Giantbane</name>
+    <entry>2d6@@Against Giants</entry>
+  </collection>
+	<collection>
+		<name>Giantbanex2</name>
+		<entry>2d6@@Against Giants</entry>
+	</collection>
+	<collection>
+		<name>Giantbanex3</name>
+		<entry>2d6@@Against Giants</entry>
+	</collection>
+	<collection>
+		<name>Giantbanex4</name>
+		<entry>2d6@@Against Giants</entry>
+	</collection>
+  <collection>
+    <name>Glamered</name>
+  </collection>
+  <collection>
+    <name>Gnollbane</name>
+    <entry>2d6@@Against Gnolls</entry>
+    <entry>2d6@@Against Gnolls</entry>
+    <entry>2d6@@Against Gnolls</entry>
+    <entry>2d6@@Against Gnolls</entry>
+  </collection>
+  <collection>
+    <name>Gnomebane</name>
+    <entry>2d6@@Against Gnomes</entry>
+    <entry>2d6@@Against Gnomes</entry>
+    <entry>2d6@@Against Gnomes</entry>
+    <entry>2d6@@Against Gnomes</entry>
+  </collection>
+  <collection>
+    <name>Goblinoidbane</name>
+    <entry>2d6@@Against Goblinoids</entry>
+    <entry>2d6@@Against Goblinoids</entry>
+    <entry>2d6@@Against Goblinoids</entry>
+    <entry>2d6@@Against Goblinoids</entry>
+  </collection>
+  <collection>
+    <name>Good-outsiderbane</name>
+    <entry>2d6@@Against Good Outsiders</entry>
+    <entry>2d6@@Against Good Outsiders</entry>
+    <entry>2d6@@Against Good Outsiders</entry>
+    <entry>2d6@@Against Good Outsiders</entry>
+  </collection>
+  <collection>
+    <name>Greater Acid Resistance</name>
+  </collection>
+  <collection>
+    <name>Greater Cold Resistance</name>
+  </collection>
+  <collection>
+    <name>Greater Electricity Resistance</name>
+  </collection>
+  <collection>
+    <name>Greater Fire Resistance</name>
+  </collection>
+  <collection>
+    <name>Greater Shadow</name>
+  </collection>
+  <collection>
+    <name>Greater Silent Moves</name>
+  </collection>
+  <collection>
+    <name>Greater Slick</name>
+  </collection>
+  <collection>
+    <name>Greater Sonic Resistance</name>
+  </collection>
+  <collection>
+    <name>Halflingbane</name>
+    <entry>2d6@@Against Halflings</entry>
+    <entry>2d6@@Against Halflings</entry>
+    <entry>2d6@@Against Halflings</entry>
+    <entry>2d6@@Against Halflings</entry>
+  </collection>
+  <collection>
+    <name>Heavy Fortification</name>
+  </collection>
+  <collection>
+    <name>Holy</name>
+    <entry>2d6@@Against Evil alignment</entry>
+    <entry>2d6@@Against Evil alignment</entry>
+    <entry>2d6@@Against Evil alignment</entry>
+    <entry>2d6@@Against Evil alignment</entry>
+  </collection>
+  <collection>
+    <name>Humanbane</name>
+    <entry>2d6@@Against Humans</entry>
+    <entry>2d6@@Against Humans</entry>
+    <entry>2d6@@Against Humans</entry>
+    <entry>2d6@@Against Humans</entry>
+  </collection>
+  <collection>
+    <name>Shapeshifterbane</name>
+    <entry>2d6@@Against Shapeshifters</entry>
+    <entry>2d6@@Against Shapeshifters</entry>
+    <entry>2d6@@Against Shapeshifters</entry>
+    <entry>2d6@@Against Shapeshifters</entry>
+  </collection>
+  <collection>
+    <name>Icy Burst</name>
+    <entry>1d6@Cold@</entry>
+    <entry>1d6@Cold@,1d10@Cold@</entry>
+    <entry>1d6@Cold@,2d10@Cold@</entry>
+    <entry>1d6@Cold@,3d10@Cold@</entry>
+  </collection>
+  <collection>
+    <name>Improved Acid Resistance</name>
+  </collection>
+  <collection>
+    <name>Improved Cold Resistance</name>
+  </collection>
+  <collection>
+    <name>Improved Electricity Resistance</name>
+  </collection>
+  <collection>
+    <name>Improved Fire Resistance</name>
+  </collection>
+  <collection>
+    <name>Improved Shadow</name>
+  </collection>
+  <collection>
+    <name>Improved Silent Moves</name>
+  </collection>
+  <collection>
+    <name>Improved Slick</name>
+  </collection>
+  <collection>
+    <name>Improved Sonic Resistance</name>
+  </collection>
+  <collection>
+    <name>Invulnerability</name>
+  </collection>
+  <collection>
+    <name>Keen</name>
+  </collection>
+  <collection>
+    <name>Ki Focus</name>
+  </collection>
+  <collection>
+    <name>Lawful-outsiderbane</name>
+    <entry>2d6@@Against Lawful Outsiders</entry>
+    <entry>2d6@@Against Lawful Outsiders</entry>
+    <entry>2d6@@Against Lawful Outsiders</entry>
+    <entry>2d6@@Against Lawful Outsiders</entry>
+  </collection>
+  <collection>
+    <name>Light Fortification</name>
+  </collection>
+  <collection>
+    <name>Magical-beastbane</name>
+    <entry>2d6@@Against Magical Beasts</entry>
+    <entry>2d6@@Against Magical Beasts</entry>
+    <entry>2d6@@Against Magical Beasts</entry>
+    <entry>2d6@@Against Magical Beasts</entry>
+  </collection>
+  <collection>
+    <name>Merciful</name>
+    <entry>1d6@@</entry>
+    <entry>1d6@@</entry>
+    <entry>1d6@@</entry>
+    <entry>1d6@@</entry>
+  </collection>
+  <collection>
+    <name>Mighty Cleaving</name>
+  </collection>
+  <collection>
+    <name>Moderate Fortification</name>
+  </collection>
+  <collection>
+    <name>Monstrous-humanoidbane</name>
+    <entry>2d6@@Against Monstrous Humanoids</entry>
+    <entry>2d6@@Against Monstrous Humanoids</entry>
+    <entry>2d6@@Against Monstrous Humanoids</entry>
+    <entry>2d6@@Against Monstrous Humanoids</entry>
+  </collection>
+  <collection>
+    <name>Oozebane</name>
+    <entry>2d6@@Against Oozes</entry>
+    <entry>2d6@@Against Oozes</entry>
+    <entry>2d6@@Against Oozes</entry>
+    <entry>2d6@@Against Oozes</entry>
+  </collection>
+  <collection>
+    <name>Orcbane</name>
+    <entry>2d6@@Against Orcs</entry>
+    <entry>2d6@@Against Orcs</entry>
+    <entry>2d6@@Against Orcs</entry>
+    <entry>2d6@@Against Orcs</entry>
+  </collection>
+  <collection>
+    <name>Plantbane</name>
+    <entry>2d6@@Against Plants</entry>
+    <entry>2d6@@Against Plants</entry>
+    <entry>2d6@@Against Plants</entry>
+    <entry>2d6@@Against Plants</entry>
+  </collection>
+  <collection>
+    <name>Reflecting</name>
+  </collection>
+  <collection>
+    <name>Reptilian-humanoidbane</name>
+    <entry>2d6@@Against Reptilian Humanoids</entry>
+    <entry>2d6@@Against Reptilian Humanoids</entry>
+    <entry>2d6@@Against Reptilian Humanoids</entry>
+    <entry>2d6@@Against Reptilian Humanoids</entry>
+  </collection>
+  <collection>
+    <name>Returning</name>
+  </collection>
+  <collection>
+    <name>Seeking</name>
+  </collection>
+  <collection>
+    <name>Shadow</name>
+  </collection>
+  <collection>
+    <name>Shock</name>
+    <entry>1d6@Electricity@</entry>
+    <entry>1d6@Electricity@</entry>
+    <entry>1d6@Electricity@</entry>
+    <entry>1d6@Electricity@</entry>
+  </collection>
+  <collection>
+    <name>Shocking Burst</name>
+    <entry>1d6@Electricity@</entry>
+    <entry>1d6@Electricity@,1d10@Electricity@</entry>
+    <entry>1d6@Electricity@,2d10@Electricity@</entry>
+    <entry>1d6@Electricity@,3d10@Electricity@</entry>
+  </collection>
+  <collection>
+    <name>Silent Moves</name>
+  </collection>
+  <collection>
+    <name>Slick</name>
+  </collection>
+  <collection>
+    <name>Sonic Resistance</name>
+  </collection>
+  <collection>
+    <name>Speed</name>
+  </collection>
+  <collection>
+    <name>Spell Resistance (13)</name>
+  </collection>
+  <collection>
+    <name>Spell Resistance (15)</name>
+  </collection>
+  <collection>
+    <name>Spell Resistance (17)</name>
+  </collection>
+  <collection>
+    <name>Spell Resistance (19)</name>
+  </collection>
+  <collection>
+    <name>Spell Resistance</name>
+  </collection>
+  <collection>
+    <name>Spell Storing</name>
+  </collection>
+  <collection>
+    <name>Throwing</name>
+  </collection>
+  <collection>
+    <name>Thundering</name>
+    <entry></entry>
+    <entry>1d8@Sonic@</entry>
+    <entry>2d8@Sonic@</entry>
+    <entry>3d8@Sonic@</entry>
+  </collection>
+  <collection>
+    <name>Undead Controlling</name>
+  </collection>
+  <collection>
+    <name>Undeadbane</name>
+    <entry>2d6@@Against Undead</entry>
+    <entry>2d6@@Against Undead</entry>
+    <entry>2d6@@Against Undead</entry>
+    <entry>2d6@@Against Undead</entry>
+  </collection>
+  <collection>
+    <name>Unholy</name>
+    <entry>2d6@@Against Good alignment</entry>
+    <entry>2d6@@Against Good alignment</entry>
+    <entry>2d6@@Against Good alignment</entry>
+    <entry>2d6@@Against Good alignment</entry>
+  </collection>
+  <collection>
+    <name>Verminbane</name>
+    <entry>2d6@@Against Vermin</entry>
+    <entry>2d6@@Against Vermin</entry>
+    <entry>2d6@@Against Vermin</entry>
+    <entry>2d6@@Against Vermin</entry>
+  </collection>
+  <collection>
+    <name>Vicious</name>
+    <entry>2d6@@,1d6@@To the wielder</entry>
+    <entry>2d6@@,1d6@@To the wielder</entry>
+    <entry>2d6@@,1d6@@To the wielder</entry>
+    <entry>2d6@@,1d6@@To the wielder</entry>
+  </collection>
+  <collection>
+    <name>Vorpal</name>
+  </collection>
+  <collection>
+    <name>Water-outsiderbane</name>
+    <entry>2d6@@Against Water Outsiders</entry>
+    <entry>2d6@@Against Water Outsiders</entry>
+    <entry>2d6@@Against Water Outsiders</entry>
+    <entry>2d6@@Against Water Outsiders</entry>
+  </collection>
+  <collection>
+    <name>Wild</name>
+  </collection>
+  <collection>
+    <name>Wounding</name>
+    <entry>1@Constitution@</entry>
+    <entry>1@Constitution@</entry>
+    <entry>1@Constitution@</entry>
+    <entry>1@Constitution@</entry>
+  </collection>
+</collections>

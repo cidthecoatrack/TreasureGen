@@ -311,6 +311,7 @@
     <EmbeddedResource Include="Tables\Goods\Levels\Level8Goods.xml" />
     <EmbeddedResource Include="Tables\Goods\Levels\Level9Goods.xml" />
     <EmbeddedResource Include="Tables\Items\HasSpecialMaterial.xml" />
+    <EmbeddedResource Include="Tables\Items\Magical\AbilityDamages.xml" />
     <EmbeddedResource Include="Tables\Items\PowerGroups.xml" />
     <EmbeddedResource Include="Tables\Items\ItemGroups.xml" />
     <EmbeddedResource Include="Tables\Items\Levels\Level10Items.xml" />
