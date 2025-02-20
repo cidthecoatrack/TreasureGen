@@ -37,7 +37,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Stress.Items.Mundane
             Assert.That(item.Attributes, Contains.Item(AttributeConstants.Melee)
                 .Or.Contains(AttributeConstants.Ranged), item.Name);
 
-            var sizes = TraitConstants.Sizes.All();
+            var sizes = TraitConstants.Sizes.GetAll();
             Assert.That(item.Traits.Intersect(sizes), Is.Empty);
             Assert.That(item, Is.InstanceOf<Weapon>(), item.Name);
 
