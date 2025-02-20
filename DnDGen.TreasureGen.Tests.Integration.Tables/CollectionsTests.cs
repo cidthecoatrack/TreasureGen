@@ -17,16 +17,6 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables
             table = CollectionMapper.Map(Name, tableName);
         }
 
-        protected IEnumerable<string> GetKeys()
-        {
-            return table.Keys;
-        }
-
-        protected IEnumerable<string> GetCollection(string name)
-        {
-            return table[name];
-        }
-
         protected void AssertCollection(string name, params string[] items)
         {
             Assert.That(table.Keys, Contains.Item(name), tableName);

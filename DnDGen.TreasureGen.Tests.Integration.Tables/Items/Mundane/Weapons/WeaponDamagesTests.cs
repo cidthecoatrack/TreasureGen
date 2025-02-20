@@ -29,12 +29,10 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Mundane.Weapons
         {
             var weapons = WeaponConstants.GetAllWeapons(false, false);
             var sizes = TraitConstants.Sizes.GetAll();
-
             var expectedKeys = weapons.SelectMany(w => sizes.Select(s => w + s));
-            var actualKeys = GetKeys();
 
             Assert.That(weaponDamages.Keys, Is.EquivalentTo(expectedKeys));
-            AssertCollection(actualKeys, expectedKeys);
+            AssertCollection(table.Keys, expectedKeys);
         }
 
         [TestCaseSource(nameof(Weapons))]

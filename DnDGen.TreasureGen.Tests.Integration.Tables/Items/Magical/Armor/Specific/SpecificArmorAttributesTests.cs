@@ -62,9 +62,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Armor
         public void SpecificCursedArmorMatchesAttributes(string item)
         {
             var specificCursedAttributes = CollectionMapper.Map(Name, TableNameConstants.Collections.SpecificCursedItemAttributes);
-            var specificAttributes = GetCollection(item);
-
-            Assert.That(specificAttributes, Is.EquivalentTo(specificCursedAttributes[item]));
+            Assert.That(table[item], Is.EquivalentTo(specificCursedAttributes[item]));
         }
     }
 }

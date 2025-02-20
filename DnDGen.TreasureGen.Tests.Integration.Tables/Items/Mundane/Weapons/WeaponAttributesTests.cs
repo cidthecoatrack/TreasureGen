@@ -414,8 +414,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Mundane.Weapons
         public void AllWeaponsAreInTable()
         {
             var weapons = WeaponConstants.GetAllWeapons(false, false);
-            var keys = GetKeys();
-            AssertCollection(keys, weapons);
+            AssertCollection(table.Keys, weapons);
         }
 
         [Test]
@@ -427,8 +426,6 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Mundane.Weapons
 
         private void VerifyAttribute(IEnumerable<string> weaponsWith, string attribute)
         {
-            var keys = GetKeys();
-
             var entriesWith = table.Where(kvp => kvp.Value.Contains(attribute));
             var entriesWithout = table.Except(entriesWith);
 

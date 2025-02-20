@@ -293,9 +293,7 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Magical.Weapons.Spec
         public void SpecificCursedWeaponMatchesAttributes(string item)
         {
             var specificCursedAttributes = CollectionMapper.Map(Name, TableNameConstants.Collections.SpecificCursedItemAttributes);
-            var specificAttributes = GetCollection(item);
-
-            Assert.That(specificAttributes, Is.EquivalentTo(specificCursedAttributes[item]));
+            Assert.That(table[item], Is.EquivalentTo(specificCursedAttributes[item]));
         }
 
         [TestCase(WeaponConstants.Battleaxe_Adamantine, WeaponConstants.Battleaxe)]

@@ -31,9 +31,8 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Mundane.Weapons
                 .Union(specialAbilities.Select(a => a + "x2"))
                 .Union(specialAbilities.Select(a => a + "x3"))
                 .Union(specialAbilities.Select(a => a + "x4"));
-            var actualKeys = GetKeys();
 
-            AssertCollection(actualKeys, expectedKeys);
+            AssertCollection(table.Keys, expectedKeys);
         }
 
         [TestCaseSource(nameof(Abilities))]

@@ -104,15 +104,14 @@ namespace DnDGen.TreasureGen.Tests.Integration.Tables.Items.Mundane.Weapons
                 ThreatRange = threatRange,
                 Ammunition = ammunition,
             });
-            base.AssertOrderedCollections(weapon, data);
+            AssertOrderedCollections(weapon, data);
         }
 
         [Test]
         public void AllWeaponsAreInTable()
         {
             var weapons = WeaponConstants.GetAllWeapons(false, false);
-            var keys = GetKeys();
-            AssertCollection(keys, weapons);
+            AssertCollection(table.Keys, weapons);
         }
     }
 }
